@@ -1,6 +1,6 @@
-console.log('Current API URL:', import.meta.env.VITE_API_URL || 'https://himateappbackend.vercel.app');
+console.log('Current API URL:', import.meta.env.VITE_API_URL || 'https://himateappbackend.vercel.app/api');
 export const env = {
-    apiUrl: import.meta.env.VITE_API_URL || 'https://himateappbackend.vercel.app',
+    apiUrl: import.meta.env.VITE_API_URL || 'https://himateappbackend.vercel.app/api',
     socketUrl: import.meta.env.VITE_SOCKET_URL || 'https://himateappbackend.vercel.app',
     appName: import.meta.env.VITE_APP_NAME || 'Himate',
     isDev: import.meta.env.VITE_APP_ENV === 'development',
