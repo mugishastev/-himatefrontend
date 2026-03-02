@@ -1,12 +1,13 @@
+import { RouterProvider } from 'react-router-dom';
+import { router } from './app/router';
+import { Providers } from './app/providers';
 
 function App() {
   return (
-    <div>
-      <h1 className="font-bold text-3xl bg-red-500">Himate</h1>
-
-
-    </div>
-  )
+    <Providers>
+      <RouterProvider router={router} />
+    </Providers>
+  );
 }
 
-export default App
+export default App;

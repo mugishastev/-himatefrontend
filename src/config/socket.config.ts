@@ -1,0 +1,11 @@
+import { env } from './env';
+
+export const socketConfig = {
+    url: env.socketUrl,
+    options: {
+        autoConnect: false,
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+    },
+};
