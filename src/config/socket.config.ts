@@ -6,6 +6,6 @@ export const socketConfig = {
         autoConnect: false,
         reconnection: true,
         reconnectionAttempts: 5,
-        reconnectionDelay: 1000,
+        reconnectionDelay: 3000,
     },
 };

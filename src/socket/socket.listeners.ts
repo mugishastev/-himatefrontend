@@ -12,17 +12,8 @@ export const setupSocketListeners = () => {
         updateConversationLastMessage(message.conversationId, message);
     });
 
-    socketService.on(SOCKET_EVENTS.TYPING_START, ({ conversationId, userId }) => {
+    socketService.on(SOCKET_EVENTS.USER_TYPING, ({ conversationId, userId, isTyping }) => {
         const { setTyping } = useConversationStore.getState();
-        setTyping(conversationId, userId, true);
-    });
-
-    socketService.on(SOCKET_EVENTS.TYPING_STOP, ({ conversationId, userId }) => {
-        const { setTyping } = useConversationStore.getState();
-        setTyping(conversationId, userId, false);
-    });
-
-    socketService.on(SOCKET_EVENTS.USER_ONLINE, (userId) => {
-        // Handle user online status
+        setTyping(conversationId, userId, !!isTyping);
     });
 };

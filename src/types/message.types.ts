@@ -8,12 +8,14 @@ export type MessageStatus = 'SENDING' | 'SENT' | 'RECEIVED' | 'READ' | 'FAILED';
 export interface Message extends BaseEntity {
     content: string;
     type: MessageType;
-    senderId: string;
+    senderId: string | number;
     sender: User;
-    conversationId: string;
+    conversationId: string | number;
     isRead: boolean;
     status: MessageStatus;
     fileUrl?: string;
+    mediaUrl?: string;
+    timestamp?: string;
 }
 
 export interface SendMessageDto {

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { socket } from '../../../socket';
+import { socketService } from '../../../socket';
 import { useNotificationStore } from '../../../store/notification.store';
 import type { Notification } from '../../../api/notifications.api';
 
@@ -11,10 +11,10 @@ export const useNotificationListener = () => {
             addNotification(notification);
         };
 
-        socket.on('notification:new', handleNewNotification);
+        socketService.on('notification', handleNewNotification);
 
         return () => {
-            socket.off('notification:new', handleNewNotification);
+            socketService.off('notification', handleNewNotification);
         };
     }, [addNotification]);
 };

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { socket } from '../../../socket';
+import { socketService, SOCKET_EVENTS } from '../../../socket';
 import { useMessageStore } from '../../../store/message.store';
 import { useConversationStore } from '../../../store/conversation.store';
 import type { Message } from '../../../types/message.types';
@@ -10,14 +10,14 @@ export const useMessageListener = () => {
 
     useEffect(() => {
         const handleNewMessage = (message: Message) => {
-            addMessage(message.conversationId, message);
+            addMessage(message);
             updateConversationLastMessage(message.conversationId, message);
         };
 
-        socket.on('message:new', handleNewMessage);
+        socketService.on(SOCKET_EVENTS.NEW_MESSAGE, handleNewMessage);
 
         return () => {
-            socket.off('message:new', handleNewMessage);
+            socketService.off(SOCKET_EVENTS.NEW_MESSAGE, handleNewMessage);
         };
     }, [addMessage, updateConversationLastMessage]);
 };

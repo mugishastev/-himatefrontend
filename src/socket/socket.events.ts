@@ -5,20 +5,23 @@ export const SOCKET_EVENTS = {
     CONNECT_ERROR: 'connect_error',
 
     // Messages
-    NEW_MESSAGE: 'message:new',
-    MESSAGE_RECEIVED: 'message:received',
-    MESSAGE_READ: 'message:read',
-    MESSAGE_DELETED: 'message:deleted',
+    NEW_MESSAGE: 'newMessage',
+    MESSAGE_RECEIVED: 'messageStatusUpdate',
+    MESSAGE_READ: 'messageStatusUpdate',
+    MESSAGE_DELETED: 'messageDeleted',
 
     // Conversations
-    CONVERSATION_CREATED: 'conversation:created',
-    CONVERSATION_UPDATED: 'conversation:updated',
-    JOIN_ROOM: 'room:join',
-    LEAVE_ROOM: 'room:leave',
+    CONVERSATION_CREATED: 'conversationCreated',
+    CONVERSATION_UPDATED: 'conversationUpdated',
+    JOIN_ROOM: 'joinConversation',
+    LEAVE_ROOM: 'leaveConversation',
 
     // Presence & Typing
-    USER_ONLINE: 'user:online',
-    USER_OFFLINE: 'user:offline',
-    TYPING_START: 'typing:start',
-    TYPING_STOP: 'typing:stop',
+    PRESENCE: 'presence',
+    TYPING: 'typing',
+    USER_TYPING: 'userTyping',
+
+    // Calls
+    CALL_INITIATE: 'initiateCall',
+    CALL_INCOMING: 'incomingCall',
 };

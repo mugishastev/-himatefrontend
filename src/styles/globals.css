@@ -45,3 +45,34 @@ a {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--text-secondary);
 }
+
+html.dark-mode {
+    color-scheme: dark;
+}
+
+html.dark-mode body {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+html.dark-mode .bg-white {
+    background-color: #111827 !important;
+}
+
+html.dark-mode .bg-bg-secondary,
+html.dark-mode .bg-gray-50 {
+    background-color: #0f172a !important;
+}
+
+html.dark-mode .text-text-primary {
+    color: var(--text-primary) !important;
+}
+
+html.dark-mode .text-text-secondary {
+    color: var(--text-secondary) !important;
+}
+
+html.dark-mode .border-gray-100,
+html.dark-mode .border-gray-200 {
+    border-color: #374151 !important;
+}

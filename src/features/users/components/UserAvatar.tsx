@@ -15,11 +15,13 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({ user, size = 'md', showS
         xl: 'w-24 h-24 text-3xl',
     };
 
+    const imageUrl = user.avatarUrl || user.profileImage;
+
     return (
         <div className="relative inline-block">
             <div className={`${sizeClasses[size]} rounded-full bg-brand/10 border-2 border-white flex items-center justify-center font-bold text-brand overflow-hidden shadow-sm`}>
-                {user.avatarUrl ? (
-                    <img src={user.avatarUrl} alt={user.username} className="w-full h-full object-cover" />
+                {imageUrl ? (
+                    <img src={imageUrl} alt={user.username} className="w-full h-full object-cover" />
                 ) : (
                     user.username.charAt(0).toUpperCase()
                 )}

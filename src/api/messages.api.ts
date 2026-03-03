@@ -2,11 +2,7 @@ import api from './axios';
 
 export const messagesApi = {
     sendMessage: async (data: any) => {
-        // Check if it's FormData or a plain object
-        const isFormData = data instanceof FormData;
-        const response = await api.post('/messages', data, {
-            headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : undefined,
-        });
+        const response = await api.post('/messages', data);
         return response.data;
     },
     getMessages: async (conversationId: string | number, params?: any) => {

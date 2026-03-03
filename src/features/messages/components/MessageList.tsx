@@ -1,9 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { MessageItem } from './MessageItem';
 import { TypingIndicator } from './TypingIndicator';
 import { useMessages } from '../../../hooks/useMessages';
 import { useConversationStore } from '../../../store/conversation.store';
 import { useTypingIndicator } from '../../../hooks/useTypingIndicator';
+import { socketEmitters } from '../../../socket';
+import { formatChatDayDivider } from '../../../utils/chat';
 
 export const MessageList: React.FC = () => {
     const { activeConversationId, typingUsers } = useConversationStore();
@@ -13,17 +15,31 @@ export const MessageList: React.FC = () => {
     // Subscribe to typing events
     useTypingIndicator(activeConversationId);
 
-    const isAnyoneTyping = activeConversationId && typingUsers[activeConversationId]?.length > 0;
+    const typingKey = activeConversationId ? String(activeConversationId) : null;
+    const isAnyoneTyping = typingKey ? (typingUsers[typingKey]?.length || 0) > 0 : false;
+    const orderedMessages = useMemo(() => {
+        return [...messages].sort((a, b) => {
+            const aTime = new Date(a.createdAt || a.timestamp || 0).getTime();
+            const bTime = new Date(b.createdAt || b.timestamp || 0).getTime();
+            return aTime - bTime;
+        });
+    }, [messages]);
 
     useEffect(() => {
         if (activeConversationId) {
-            fetchMessages(activeConversationId);
+            fetchMessages(String(activeConversationId));
+            socketEmitters.joinConversation(activeConversationId);
         }
+        return () => {
+            if (activeConversationId) {
+                socketEmitters.leaveConversation(activeConversationId);
+            }
+        };
     }, [activeConversationId, fetchMessages]);
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
+    }, [orderedMessages.length]);
 
     if (!activeConversationId) {
         return (
@@ -45,9 +61,25 @@ export const MessageList: React.FC = () => {
 
     return (
         <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-white/50 backdrop-blur-sm">
-            {messages.map((message) => (
-                <MessageItem key={message.id} message={message} />
-            ))}
+            {orderedMessages.map((message, index) => {
+                const prev = index > 0 ? orderedMessages[index - 1] : null;
+                const currentDay = formatChatDayDivider(message);
+                const prevDay = prev ? formatChatDayDivider(prev) : null;
+                const showDivider = !prev || currentDay !== prevDay;
+
+                return (
+                    <React.Fragment key={String(message.id)}>
+                        {showDivider && (
+                            <div className="flex justify-center py-1">
+                                <span className="px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-text-secondary bg-white border border-gray-100 rounded-full">
+                                    {currentDay}
+                                </span>
+                            </div>
+                        )}
+                        <MessageItem message={message} />
+                    </React.Fragment>
+                );
+            })}
 
             {isAnyoneTyping && (
                 <div className="sticky bottom-0 pb-2">

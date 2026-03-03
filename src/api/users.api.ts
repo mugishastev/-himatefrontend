@@ -17,9 +17,7 @@ export const usersApi = {
         const formData = new FormData();
         formData.append('image', file);
         const response = await api.patch(`/users/${id}/profile-image`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
+            timeout: 30000,
         });
         return response.data;
     },

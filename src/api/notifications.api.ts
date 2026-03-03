@@ -1,8 +1,7 @@
 import api from './axios';
-import type { ApiResponse } from '../types/common.types';
 
 export interface Notification {
-    id: string;
+    id: string | number;
     type: 'MESSAGE' | 'FRIEND_REQUEST' | 'SYSTEM';
     content: string;
     isRead: boolean;
@@ -10,15 +9,15 @@ export interface Notification {
 }
 
 export const notificationsApi = {
-    getNotifications: async (userId: number | string): Promise<ApiResponse<Notification[]>> => {
+    getNotifications: async (userId: number | string): Promise<Notification[]> => {
         const response = await api.get(`/notifications/user/${userId}`);
         return response.data;
     },
-    markAsRead: async (id: string): Promise<ApiResponse<void>> => {
+    markAsRead: async (id: string | number): Promise<void> => {
         const response = await api.patch(`/notifications/${id}`, { isRead: true });
         return response.data;
     },
-    markAllAsRead: async (userId: number | string): Promise<ApiResponse<void>> => {
+    markAllAsRead: async (userId: number | string): Promise<void> => {
         const response = await api.patch(`/notifications/user/${userId}/read-all`);
         return response.data;
     },

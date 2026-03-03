@@ -2,9 +2,11 @@ import { useCallback, useState } from 'react';
 import { messagesApi } from '../api/messages.api';
 import { useMessageStore } from '../store/message.store';
 import { useConversationStore } from '../store/conversation.store';
+import { useAuthStore } from '../store/auth.store';
 
 export const useMessages = () => {
-    const { activeConversationId } = useConversationStore();
+    const { activeConversationId, updateConversationLastMessage } = useConversationStore();
+    const { user } = useAuthStore();
     const { messages, setMessages, addMessage, setLoading } = useMessageStore();
     const [error, setError] = useState<string | null>(null);
 
@@ -13,7 +15,13 @@ export const useMessages = () => {
         setError(null);
         try {
             const response = await messagesApi.getMessages(conversationId);
-            setMessages(conversationId, response.data);
+            const items = (response.data || response) as any[];
+            const normalized = [...items].sort((a, b) => {
+                const aTime = new Date(a.createdAt || a.timestamp || 0).getTime();
+                const bTime = new Date(b.createdAt || b.timestamp || 0).getTime();
+                return aTime - bTime;
+            });
+            setMessages(conversationId, normalized);
         } catch (err: any) {
             setError(err.message || 'Failed to fetch messages');
         } finally {
@@ -22,34 +30,37 @@ export const useMessages = () => {
     }, [setMessages, setLoading]);
 
     const sendMessage = async (content: string, file?: File | null) => {
-        if (!activeConversationId) return;
+        if (!activeConversationId || !user?.id) return;
         try {
             let data: any;
+            const senderId = Number(user.id);
+            const conversationId = Number(activeConversationId);
 
             if (file) {
                 const formData = new FormData();
                 formData.append('content', content);
-                formData.append('conversationId', activeConversationId);
-                formData.append('type', file.type.startsWith('image/') ? 'IMAGE' : 'FILE');
-                formData.append('file', file);
+                formData.append('conversationId', String(conversationId));
+                formData.append('senderId', String(senderId));
+                formData.append('media', file);
                 data = formData;
             } else {
                 data = {
                     content,
-                    conversationId: activeConversationId,
-                    type: 'TEXT',
+                    conversationId,
+                    senderId,
                 };
             }
 
             const response = await messagesApi.sendMessage(data);
-            addMessage(response.data);
+            addMessage(response);
+            updateConversationLastMessage(conversationId, response);
         } catch (err: any) {
             setError(err.message || 'Failed to send message');
         }
     };
 
     return {
-        messages: activeConversationId ? messages[activeConversationId] || [] : [],
+        messages: activeConversationId ? messages[String(activeConversationId)] || [] : [],
         fetchMessages,
         sendMessage,
         error,

@@ -4,15 +4,15 @@ import type { Message } from '../types/message.types';
 
 interface ConversationState {
     conversations: Conversation[];
-    activeConversationId: string | null;
-    typingUsers: Record<string, string[]>; // conversationId -> userIds
+    activeConversationId: string | number | null;
+    typingUsers: Record<string, (string | number)[]>; // conversationId -> userIds
     setConversations: (conversations: Conversation[]) => void;
-    setActiveConversation: (id: string | null) => void;
+    setActiveConversation: (id: string | number | null) => void;
     addConversation: (conversation: Conversation) => void;
-    updateConversationLastMessage: (conversationId: string, message: Message) => void;
-    setTyping: (conversationId: string, userId: string, isTyping: boolean) => void;
-    addTypingUser: (conversationId: string, userId: string) => void;
-    removeTypingUser: (conversationId: string, userId: string) => void;
+    updateConversationLastMessage: (conversationId: string | number, message: Message) => void;
+    setTyping: (conversationId: string | number, userId: string | number, isTyping: boolean) => void;
+    addTypingUser: (conversationId: string | number, userId: string | number) => void;
+    removeTypingUser: (conversationId: string | number, userId: string | number) => void;
 }
 
 export const useConversationStore = create<ConversationState>((set) => ({
@@ -31,33 +31,36 @@ export const useConversationStore = create<ConversationState>((set) => ({
         })),
     setTyping: (conversationId, userId, isTyping) =>
         set((state) => {
-            const currentTyping = state.typingUsers[conversationId] || [];
+            const key = String(conversationId);
+            const currentTyping = state.typingUsers[key] || [];
             const newTyping = isTyping
                 ? [...new Set([...currentTyping, userId])]
                 : currentTyping.filter((id) => id !== userId);
 
             return {
-                typingUsers: { ...state.typingUsers, [conversationId]: newTyping },
+                typingUsers: { ...state.typingUsers, [key]: newTyping },
             };
         }),
     addTypingUser: (conversationId, userId) =>
         set((state) => {
-            const current = state.typingUsers[conversationId] || [];
+            const key = String(conversationId);
+            const current = state.typingUsers[key] || [];
             if (current.includes(userId)) return state;
             return {
                 typingUsers: {
                     ...state.typingUsers,
-                    [conversationId]: [...current, userId],
+                    [key]: [...current, userId],
                 },
             };
         }),
     removeTypingUser: (conversationId, userId) =>
-        set((state) => ({
-            typingUsers: {
-                ...state.typingUsers,
-                [conversationId]: (state.typingUsers[conversationId] || []).filter(
-                    (id) => id !== userId
-                ),
-            },
-        })),
+        set((state) => {
+            const key = String(conversationId);
+            return {
+                typingUsers: {
+                    ...state.typingUsers,
+                    [key]: (state.typingUsers[key] || []).filter((id) => id !== userId),
+                },
+            };
+        }),
 }));

@@ -1,6 +1,8 @@
 import React from 'react';
 import type { Conversation } from '../../../types/conversation.types';
 import { useConversationStore } from '../../../store/conversation.store';
+import { useAuthStore } from '../../../store/auth.store';
+import { formatChatPreviewTime } from '../../../utils/chat';
 
 interface ConversationItemProps {
     conversation: Conversation;
@@ -8,10 +10,19 @@ interface ConversationItemProps {
 
 export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation }) => {
     const { activeConversationId, setActiveConversation } = useConversationStore();
+    const { user } = useAuthStore();
     const isActive = activeConversationId === conversation.id;
 
-    const otherParticipant = conversation.participants.find(p => p.isAdmin === false); // Simplified logic
-    const displayName = conversation.isGroup ? conversation.title : otherParticipant?.user.username || 'Chat';
+    const otherParticipant = conversation.participants.find(
+        (p) => Number(p.userId) !== Number(user?.id)
+    );
+    const displayName = conversation.isGroup
+        ? conversation.title || 'Group Chat'
+        : otherParticipant?.user?.username || 'Chat';
+    const lastMessage = conversation.lastMessage || conversation.messages?.[0];
+    const previewTime = lastMessage ? formatChatPreviewTime(lastMessage) : '';
+    const previewContent = lastMessage?.content || 'No messages yet';
+    const showUnread = (conversation.unreadCount || 0) > 0;
 
     return (
         <div
@@ -34,12 +45,19 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
                         {displayName}
                     </h3>
                     <span className="text-xs text-text-secondary">
-                        {conversation.lastMessage ? new Date(conversation.lastMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                        {previewTime}
                     </span>
                 </div>
-                <p className="text-xs text-text-secondary truncate mt-1">
-                    {conversation.lastMessage?.content || 'No messages yet'}
-                </p>
+                <div className="mt-1 flex items-center gap-2">
+                    <p className="text-xs text-text-secondary truncate flex-1">
+                        {previewContent}
+                    </p>
+                    {showUnread && (
+                        <span className="min-w-[20px] h-5 px-1 rounded-full bg-brand text-white text-[10px] font-black flex items-center justify-center">
+                            {conversation.unreadCount! > 99 ? '99+' : conversation.unreadCount}
+                        </span>
+                    )}
+                </div>
             </div>
         </div>
     );

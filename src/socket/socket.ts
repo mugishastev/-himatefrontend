@@ -4,9 +4,16 @@ import { io, Socket } from 'socket.io-client';
 class SocketService {
     private socket: Socket | null = null;
 
-    connect() {
+    connect(accessToken: string) {
+        const auth = { token: `Bearer ${accessToken}` };
+
         if (!this.socket) {
-            this.socket = io(socketConfig.url, socketConfig.options);
+            this.socket = io(socketConfig.url, {
+                ...socketConfig.options,
+                auth,
+            });
+        } else {
+            this.socket.auth = auth;
         }
 
         if (!this.socket.connected) {
@@ -35,8 +42,8 @@ class SocketService {
         this.socket?.on(event, callback);
     }
 
-    off(event: string) {
-        this.socket?.off(event);
+    off(event: string, callback?: (data: any) => void) {
+        this.socket?.off(event, callback);
     }
 }
 

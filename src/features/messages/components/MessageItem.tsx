@@ -2,6 +2,7 @@ import React from 'react';
 import type { Message } from '../../../types/message.types';
 import { useAuthStore } from '../../../store/auth.store';
 import { MessageStatus } from './MessageStatus';
+import { formatChatTime } from '../../../utils/chat';
 
 interface MessageItemProps {
     message: Message;
@@ -9,7 +10,8 @@ interface MessageItemProps {
 
 export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
     const { user } = useAuthStore();
-    const isOwn = message.senderId === user?.id;
+    const isOwn = Number(message.senderId) === Number(user?.id);
+    const senderName = isOwn ? 'You' : (message.sender?.username || 'Unknown');
 
     return (
         <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} group animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out`}>
@@ -25,6 +27,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
                 )}
 
                 <div className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'}`}>
+                    <span className="text-[11px] font-bold text-text-secondary mb-1 px-1">{senderName}</span>
                     <div
                         className={`px-5 py-3 rounded-3xl text-sm font-medium leading-relaxed transition-all duration-300 ${isOwn
                             ? 'bg-brand text-white rounded-br-none shadow-lg shadow-brand/10 hover:shadow-brand/20'
@@ -32,12 +35,22 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
                             }`}
                     >
                         {message.content}
+                        {message.mediaUrl && (
+                            <a
+                                href={message.mediaUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className={`block mt-2 text-xs underline ${isOwn ? 'text-white/90' : 'text-brand'}`}
+                            >
+                                Open attachment
+                            </a>
+                        )}
                     </div>
                     <div className="flex items-center space-x-2 mt-1.5 px-1">
                         <span className="text-[10px] font-black uppercase tracking-widest text-text-secondary opacity-60">
-                            {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            {formatChatTime(message)}
                         </span>
-                        {isOwn && <MessageStatus status={message.status} />}
+                        {isOwn && <MessageStatus status={message.status || 'SENT'} />}
                     </div>
                 </div>
             </div>

@@ -14,17 +14,18 @@ export const useMessageStore = create<MessageState>((set) => ({
     isLoading: false,
     setMessages: (conversationId, messages) =>
         set((state) => ({
-            messages: { ...state.messages, [conversationId]: messages },
+            messages: { ...state.messages, [String(conversationId)]: messages },
         })),
     addMessage: (message) =>
         set((state) => {
-            const currentMessages = state.messages[message.conversationId] || [];
+            const key = String(message.conversationId);
+            const currentMessages = state.messages[key] || [];
             if (currentMessages.some((m) => m.id === message.id)) return state;
 
             return {
                 messages: {
                     ...state.messages,
-                    [message.conversationId]: [...currentMessages, message],
+                    [key]: [...currentMessages, message],
                 },
             };
         }),

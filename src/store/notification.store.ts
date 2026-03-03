@@ -6,7 +6,7 @@ interface NotificationState {
     unreadCount: number;
     setNotifications: (notifications: Notification[]) => void;
     addNotification: (notification: Notification) => void;
-    markAsRead: (id: string) => void;
+    markAsRead: (id: string | number) => void;
     markAllAsRead: () => void;
 }
 

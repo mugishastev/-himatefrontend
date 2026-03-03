@@ -17,13 +17,13 @@ export const useNotifications = () => {
         if (!user?.id) return;
         try {
             const response = await notificationsApi.getNotifications(user.id);
-            setNotifications(response.data || response);
+            setNotifications(response);
         } catch (error) {
             console.error('Failed to fetch notifications', error);
         }
     }, [setNotifications, user?.id]);
 
-    const markAsRead = async (id: string) => {
+    const markAsRead = async (id: string | number) => {
         try {
             await notificationsApi.markAsRead(id);
             markStoredAsRead(id);

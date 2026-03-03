@@ -3,11 +3,11 @@ import { create } from 'zustand';
 interface UIState {
     isSidebarOpen: boolean;
     activeModal: string | null;
-    currentView: 'CHATS' | 'CONTACTS' | 'PROFILE';
+    currentView: 'CHATS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE';
     toggleSidebar: () => void;
     openModal: (modalName: string) => void;
     closeModal: () => void;
-    setView: (view: 'CHATS' | 'CONTACTS' | 'PROFILE') => void;
+    setView: (view: 'CHATS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE') => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({

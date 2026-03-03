@@ -7,7 +7,7 @@ export const useSocket = () => {
 
     useEffect(() => {
         if (isAuthenticated && accessToken) {
-            socketService.connect();
+            socketService.connect(accessToken);
             setupSocketListeners();
         } else {
             socketService.disconnect();
