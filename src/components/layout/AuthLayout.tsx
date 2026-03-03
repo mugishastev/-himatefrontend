@@ -6,9 +6,7 @@ export const AuthLayout: React.FC = () => {
         <div className="min-h-screen bg-bg-secondary flex flex-col items-center justify-center p-4">
             <div className="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="text-center">
-                    <div className="w-20 h-20 bg-brand rounded-3xl flex items-center justify-center shadow-xl mx-auto mb-8 transform rotate-6 hover:rotate-0 transition-all duration-300">
-                        <span className="text-white text-4xl font-black italic">H!</span>
-                    </div>
+                    <img src="/logo.png" alt="Himate" className="w-24 h-auto mx-auto mb-8 object-contain animate-in fade-in zoom-in duration-700" />
                 </div>
                 <Outlet />
             </div>

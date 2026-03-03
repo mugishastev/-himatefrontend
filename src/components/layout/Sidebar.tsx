@@ -16,10 +16,10 @@ export const Sidebar: React.FC = () => {
     return (
         <div className="w-24 lg:w-64 h-full bg-white border-r border-gray-100 flex flex-col py-8 shadow-sm">
             <div className="px-6 mb-12 flex items-center">
-                <div className="w-12 h-12 bg-brand rounded-2xl flex items-center justify-center shadow-lg transform rotate-6 hover:rotate-0 transition-all">
-                    <span className="text-white text-2xl font-bold italic">H!</span>
+                <div className="w-12 h-12 flex items-center justify-center">
+                    <img src="/logo.png" alt="Himate" className="w-full h-auto object-contain" />
                 </div>
-                <h1 className="hidden lg:block ml-4 text-2xl font-black text-text-primary tracking-tighter">
+                <h1 className="hidden lg:block ml-4 text-2xl font-black text-brand tracking-tighter">
                     Himate
                 </h1>
             </div>

@@ -23,42 +23,56 @@ export const RegisterForm: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="grid grid-cols-1 gap-4">
                 <Input
-                    label="Username"
-                    placeholder="johndoe"
+                    placeholder="Username"
+                    className="py-3 bg-white border-gray-200 focus:border-brand focus:ring-1 focus:ring-brand"
                     error={errors.username?.message}
                     {...register('username')}
                 />
+
                 <Input
-                    label="Email Address"
                     type="email"
-                    placeholder="name@company.com"
+                    placeholder="Email address"
+                    className="py-3 bg-white border-gray-200 focus:border-brand focus:ring-1 focus:ring-brand"
                     error={errors.email?.message}
                     {...register('email')}
                 />
-                <Input
-                    label="Password"
-                    type="password"
-                    placeholder="••••••••"
-                    error={errors.password?.message}
-                    {...register('password')}
-                />
-                <Input
-                    label="Confirm Password"
-                    type="password"
-                    placeholder="••••••••"
-                    error={errors.confirmPassword?.message}
-                    {...register('confirmPassword')}
-                />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Input
+                        type="password"
+                        placeholder="New password"
+                        className="py-3 bg-white border-gray-200 focus:border-brand focus:ring-1 focus:ring-brand"
+                        error={errors.password?.message}
+                        {...register('password')}
+                    />
+                    <Input
+                        type="password"
+                        placeholder="Confirm password"
+                        className="py-3 bg-white border-gray-200 focus:border-brand focus:ring-1 focus:ring-brand"
+                        error={errors.confirmPassword?.message}
+                        {...register('confirmPassword')}
+                    />
+                </div>
             </div>
 
-            {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+            {error && (
+                <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-2 rounded-lg text-sm font-medium">
+                    {error}
+                </div>
+            )}
 
-            <Button type="submit" className="w-full" isLoading={isLoading}>
-                Create Account
-            </Button>
+            <div className="pt-4 flex justify-center">
+                <Button
+                    type="submit"
+                    className="w-full md:w-2/3 py-3 text-xl font-black bg-[#42b72a] hover:bg-[#36a420] text-white rounded-lg shadow-lg transform transition-all hover:-translate-y-0.5"
+                    isLoading={isLoading}
+                >
+                    Sign Up
+                </Button>
+            </div>
         </form>
     );
 };

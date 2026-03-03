@@ -4,7 +4,11 @@ import { useAuthStore } from '../store/auth.store';
 import { ROUTES } from './routes.config';
 import { useSocket } from '../hooks/useSocket';
 
-export const ProtectedRoute: React.FC = () => {
+interface ProtectedRouteProps {
+    children?: React.ReactNode;
+}
+
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     const { isAuthenticated } = useAuthStore();
     const [isHydrated, setIsHydrated] = useState(false);
 
@@ -29,8 +33,8 @@ export const ProtectedRoute: React.FC = () => {
 
     if (!isHydrated) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-bg-secondary">
-                <div className="animate-spin rounded-full h-12 w-12 border-4 border-brand border-t-transparent"></div>
+            <div className="min-h-screen flex items-center justify-center bg-bg-secondary text-brand font-black text-2xl animate-pulse">
+                Himate...
             </div>
         );
     }
@@ -39,7 +43,7 @@ export const ProtectedRoute: React.FC = () => {
         return <Navigate to={ROUTES.AUTH.LOGIN} replace />;
     }
 
-    return <Outlet />;
+    return children ? <>{children}</> : <Outlet />;
 };
 
 export default ProtectedRoute;
