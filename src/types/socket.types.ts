@@ -1,5 +1,5 @@
-import { Message } from './message.types';
-import { Conversation } from './conversation.types';
+import type { Message } from './message.types';
+import type { Conversation } from './conversation.types';
 
 export interface ServerToClientEvents {
     'message:new': (message: Message) => void;

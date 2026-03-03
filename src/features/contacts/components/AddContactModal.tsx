@@ -3,6 +3,8 @@ import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { contactsApi } from '../../../api/contacts.api';
+import { usersApi } from '../../../api/users.api';
+import { useAuthStore } from '../../../store/auth.store';
 
 interface AddContactModalProps {
     onClose: () => void;
@@ -13,20 +15,34 @@ export const AddContactModal: React.FC<AddContactModalProps> = ({ onClose, onSuc
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { user } = useAuthStore();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!email.trim()) return;
+        if (!email.trim() || !user) return;
 
         setIsLoading(true);
         setError(null);
         try {
-            // Assuming we search by email first or add directly by email
-            await contactsApi.addContact(email);
+            // 1. Search for user by email
+            const searchResponse = await usersApi.findAll({ search: email.trim() });
+            const foundUser = searchResponse.data.find((u: any) => u.email.toLowerCase() === email.trim().toLowerCase());
+
+            if (!foundUser) {
+                throw new Error('User not found with this email');
+            }
+
+            if (Number(foundUser.id) === Number(user.id)) {
+                throw new Error('You cannot add yourself as a contact');
+            }
+
+            // 2. Add contact using both IDs
+            await contactsApi.addContact(Number(user.id), Number(foundUser.id));
+
             onSuccess?.();
             onClose();
         } catch (err: any) {
-            setError(err.message || 'Failed to add contact');
+            setError(err.response?.data?.message || err.message || 'Failed to add contact');
         } finally {
             setIsLoading(false);
         }

@@ -6,6 +6,7 @@ interface ConversationState {
     conversations: Conversation[];
     activeConversationId: string | number | null;
     typingUsers: Record<string, (string | number)[]>; // conversationId -> userIds
+    isLoading: boolean;
     setConversations: (conversations: Conversation[]) => void;
     setActiveConversation: (id: string | number | null) => void;
     addConversation: (conversation: Conversation) => void;
@@ -13,12 +14,14 @@ interface ConversationState {
     setTyping: (conversationId: string | number, userId: string | number, isTyping: boolean) => void;
     addTypingUser: (conversationId: string | number, userId: string | number) => void;
     removeTypingUser: (conversationId: string | number, userId: string | number) => void;
+    setLoading: (isLoading: boolean) => void;
 }
 
 export const useConversationStore = create<ConversationState>((set) => ({
     conversations: [],
     activeConversationId: null,
     typingUsers: {},
+    isLoading: false,
     setConversations: (conversations) => set({ conversations }),
     setActiveConversation: (id) => set({ activeConversationId: id }),
     addConversation: (conversation) =>
@@ -63,4 +66,5 @@ export const useConversationStore = create<ConversationState>((set) => ({
                 },
             };
         }),
+    setLoading: (isLoading) => set({ isLoading }),
 }));

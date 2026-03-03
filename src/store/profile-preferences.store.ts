@@ -33,7 +33,7 @@ interface ProfilePreferencesState {
 
 export const useProfilePreferencesStore = create<ProfilePreferencesState>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             darkMode: false,
             themeColor: 'orange',
             showEmail: true,

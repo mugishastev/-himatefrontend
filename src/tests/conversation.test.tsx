@@ -15,6 +15,7 @@ const mockConversation: Conversation = {
         conversationId: '1',
         type: 'TEXT',
         isRead: true,
+        status: 'SENT',
         sender: { id: 'u1', username: 'sender', email: 's@e.com', createdAt: '', updatedAt: '' }
     },
     participants: [],

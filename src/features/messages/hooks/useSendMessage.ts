@@ -15,7 +15,7 @@ export const useSendMessage = () => {
         setIsLoading(true);
         try {
             const response = await messagesApi.sendMessage({ conversationId, content });
-            addMessage(conversationId, response.data);
+            addMessage(response.data);
             updateConversationLastMessage(conversationId, response.data);
             return response.data;
         } catch (error) {

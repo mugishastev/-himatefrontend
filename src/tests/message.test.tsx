@@ -11,6 +11,7 @@ const mockMessage: Message = {
     conversationId: 'c1',
     type: 'TEXT',
     isRead: false,
+    status: 'SENT',
     sender: {
         id: 'u1',
         username: 'John Doe',

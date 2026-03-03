@@ -1,4 +1,4 @@
-import { BaseEntity } from './common.types';
+import type { BaseEntity } from './common.types';
 
 export type NotificationType = 'MESSAGE' | 'FRIEND_REQUEST' | 'SYSTEM';
 
