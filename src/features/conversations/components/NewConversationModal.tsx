@@ -43,7 +43,8 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
     };
 
     const handleStartChat = async (userId: string | number) => {
-        await createConversation([String(userId)]);
+        console.log('Button Clicked: Starting chat with userId:', userId);
+        await createConversation([userId]);
         onClose();
     };
 

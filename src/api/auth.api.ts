@@ -6,6 +6,10 @@ export const authApi = {
         const response = await api.post('/auth/login', data);
         return response.data;
     },
+    refreshToken: async (refreshTokenValue: string): Promise<AuthResponse> => {
+        const response = await api.post('/auth/refresh', { refreshToken: refreshTokenValue });
+        return response.data;
+    },
     register: async (data: any): Promise<AuthResponse> => {
         const response = await api.post('/auth/register', data);
         return response.data;

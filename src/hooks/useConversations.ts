@@ -23,13 +23,40 @@ export const useConversations = () => {
         }
     }, [setConversations, user?.id]);
 
-    const createConversation = async (participantIds: string[]) => {
+    const createConversation = async (participantIds: (string | number)[]) => {
+        if (!user?.id) {
+            console.error('CreateConversation failed: Current user has no ID', user);
+            return;
+        }
+
+        // Convert to numbers as required by backend CreateConversationDto
+        const numericIds = [
+            ...participantIds.map(id => Number(id)),
+            Number(user.id)
+        ].filter(id => {
+            const isValid = !isNaN(id);
+            if (!isValid) console.warn('Filtering out invalid userId:', id);
+            return isValid;
+        });
+
+        const uniqueUserIds = Array.from(new Set(numericIds));
+        console.log('Final participant IDs for creation:', uniqueUserIds);
+
+        setIsLoading(true);
         try {
-            const response = await conversationsApi.createConversation(participantIds);
-            fetchConversations();
-            return response.data;
-        } catch (error) {
-            console.error('Failed to create conversation', error);
+            const response = await conversationsApi.createConversation(uniqueUserIds);
+            console.log('Conversation created successfully:', response);
+            await fetchConversations();
+            return response.data || response;
+        } catch (error: any) {
+            console.error('CRITICAL: createConversation failed!', error);
+            if (error.response) {
+                console.error('Response Status:', error.response.status);
+                console.error('Response Data:', error.response.data);
+            }
+            throw error;
+        } finally {
+            setIsLoading(false);
         }
     };
 

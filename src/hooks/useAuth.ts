@@ -3,7 +3,6 @@ import { authApi } from '../api/auth.api';
 import { useAuthStore } from '../store/auth.store';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../app/routes.config';
-import { tokenStorage } from '../utils/token';
 
 export const useAuth = () => {
     const { setAuth, logout: clearAuth, user, isAuthenticated } = useAuthStore();
@@ -16,11 +15,11 @@ export const useAuth = () => {
         setError(null);
         try {
             const response = await authApi.login(data);
-            setAuth(response.user, response.accessToken);
-            tokenStorage.setToken(response.accessToken);
+            setAuth(response.user, response.accessToken, response.refreshToken);
             navigate(ROUTES.DASHBOARD);
         } catch (err: any) {
             setError(err.message || 'Login failed');
+            // Re-throw if needed, but the original code didn't
         } finally {
             setIsLoading(false);
         }
@@ -45,8 +44,7 @@ export const useAuth = () => {
         setError(null);
         try {
             const response = await authApi.verifyEmail(email, otp);
-            setAuth(response.user, response.accessToken);
-            tokenStorage.setToken(response.accessToken);
+            setAuth(response.user, response.accessToken, response.refreshToken);
             navigate(ROUTES.DASHBOARD);
         } catch (err: any) {
             setError(err.message || 'Verification failed');

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.store';
+import { tokenStorage } from '../utils/token';
 import { ROUTES } from './routes.config';
 import { useSocket } from '../hooks/useSocket';
 
@@ -16,10 +17,18 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
         // Zustand persist hydration check
         const checkHydration = () => {
             if (useAuthStore.persist.hasHydrated()) {
+                const token = useAuthStore.getState().accessToken;
+                if (token) {
+                    tokenStorage.setToken(token);
+                }
                 setIsHydrated(true);
             } else {
                 // If not hydrated yet, check again soon
                 const unsub = useAuthStore.persist.onHydrate(() => {
+                    const token = useAuthStore.getState().accessToken;
+                    if (token) {
+                        tokenStorage.setToken(token);
+                    }
                     setIsHydrated(true);
                     unsub();
                 });
