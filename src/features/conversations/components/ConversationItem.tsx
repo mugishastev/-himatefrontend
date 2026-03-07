@@ -30,11 +30,11 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
     return (
         <div
             onClick={() => setActiveConversation(conversation.id)}
-            className={`flex items-center px-3 py-2.5 cursor-pointer border-b border-[#f0f2f5] transition-colors duration-150 ${isActive ? 'bg-[#f0f2f5]' : 'bg-white hover:bg-[#f5f6f6]'
+            className={`flex items-center px-3 py-2.5 cursor-pointer border-b border-[#1F2937]/50 transition-colors duration-150 ${isActive ? 'bg-[#1F2937]' : 'bg-[#111827] hover:bg-[#1F2937]/50'
                 }`}
         >
             <div
-                className={`w-[49px] h-[49px] rounded-full bg-[#dfe5e7] flex-shrink-0 flex items-center justify-center font-medium text-[#667781] text-xl overflow-hidden ${otherParticipant?.user?.avatarUrl ? 'cursor-pointer hover:opacity-90' : ''}`}
+                className={`w-[49px] h-[49px] rounded-full bg-[#374248] flex-shrink-0 flex items-center justify-center font-medium text-[#d1d7db] text-xl overflow-hidden ${otherParticipant?.user?.avatarUrl ? 'cursor-pointer hover:opacity-90' : ''}`}
                 onClick={(e) => {
                     if (otherParticipant?.user?.avatarUrl) {
                         e.stopPropagation();
@@ -50,21 +50,21 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
             </div>
 
             {/* Content */}
-            <div className="ml-3 flex-1 min-w-0 py-1">
+            <div className="ml-3 flex-1 min-w-0 py-1 border-b border-[#1F2937] pb-3">
                 <div className="flex justify-between items-baseline gap-2">
-                    <h3 className="text-[17px] font-normal text-[#111b21] truncate leading-snug">
+                    <h3 className="text-[17px] font-normal text-white truncate leading-snug">
                         {displayName}
                     </h3>
-                    <span className={`text-[11px] shrink-0 ${showUnread ? 'text-[#25d366]' : 'text-[#667781]'}`}>
+                    <span className={`text-[12px] shrink-0 ${showUnread ? 'text-[#00a884] font-medium' : 'text-[#aebac1]'}`}>
                         {previewTime}
                     </span>
                 </div>
-                <div className="mt-px flex items-center gap-2">
-                    <p className="text-[14px] text-[#667781] truncate flex-1">
+                <div className="mt-[2px] flex items-center gap-2">
+                    <p className={`text-[14px] truncate flex-1 ${showUnread ? 'text-[#d1d7db] font-medium' : 'text-[#aebac1]'}`}>
                         {previewContent}
                     </p>
                     {showUnread && (
-                        <span className="shrink-0 min-w-[20px] h-5 px-1 rounded-full bg-[#25d366] text-white text-[11px] flex items-center justify-center">
+                        <span className="shrink-0 min-w-[20px] h-5 px-1.5 rounded-full bg-[#F97316] text-white text-[11px] font-bold flex items-center justify-center">
                             {conversation.unreadCount! > 99 ? '99+' : conversation.unreadCount}
                         </span>
                     )}

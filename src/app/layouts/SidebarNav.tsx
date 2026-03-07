@@ -108,10 +108,10 @@ export const SidebarNav: React.FC = () => {
     ];
 
     return (
-        <div className="w-[60px] lg:w-[64px] bg-[#202c33] flex flex-col items-center py-4 h-full border-r border-[#313d45] shrink-0 z-20">
+        <div className="w-[60px] lg:w-[64px] bg-[#111827] flex flex-col items-center py-4 h-full border-r border-[#1F2937] shrink-0 z-20">
             {/* Logo */}
             <div className="w-10 h-10 flex items-center justify-center mb-4 shrink-0 cursor-pointer hover:opacity-80 transition-opacity" title="Himate">
-                <img src="/logo.png" alt="Himate" className="w-8 h-8 object-contain brightness-0 invert opacity-90" />
+                <img src="/logo.png" alt="Himate" className="w-15 h-105 object-contain" />
             </div>
 
             {/* Top Container */}
@@ -123,11 +123,11 @@ export const SidebarNav: React.FC = () => {
                         className="group flex flex-col items-center justify-center relative w-12 h-12"
                         title={item.label}
                     >
-                        <span className={`flex items-center justify-center rounded-full w-10 h-10 transition-colors ${currentView === item.id ? 'bg-[#374248]' : 'bg-transparent'}`}>
+                        <span className={`flex items-center justify-center rounded-full w-10 h-10 transition-colors ${currentView === item.id ? 'bg-[#1F2937]' : 'bg-transparent'}`}>
                             {currentView === item.id ? item.activeIcon : item.inactiveIcon}
                         </span>
                         {!!item.badge && (
-                            <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-[#00a884] text-[#111b21] text-[10px] font-bold flex items-center justify-center shadow-[0_0_0_2px_#202c33]">
+                            <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-[#F97316] text-[#FFFFFF] text-[10px] font-bold flex items-center justify-center shadow-[0_0_0_2px_#111827]">
                                 {item.badge > 9 ? '9+' : item.badge}
                             </span>
                         )}
@@ -144,29 +144,39 @@ export const SidebarNav: React.FC = () => {
                         className="group flex flex-col items-center justify-center relative w-12 h-12"
                         title={item.label}
                     >
-                        <span className={`flex items-center justify-center rounded-full w-10 h-10 transition-colors ${currentView === item.id ? 'bg-[#374248]' : 'bg-transparent'}`}>
+                        <span className={`flex items-center justify-center rounded-full w-10 h-10 transition-colors ${currentView === item.id ? 'bg-[#1F2937]' : 'bg-transparent'}`}>
                             {currentView === item.id ? item.activeIcon : item.inactiveIcon}
                         </span>
                         {!!item.badge && (
-                            <span className="absolute top-1 right-1 w-[10px] h-[10px] rounded-full bg-[#00a884] shadow-[0_0_0_2px_#202c33]"></span>
+                            <span className="absolute top-1 right-1 w-[10px] h-[10px] rounded-full bg-[#F97316] shadow-[0_0_0_2px_#111827]"></span>
                         )}
                     </button>
                 ))}
 
-                <div className="w-8 h-[1px] bg-[#313d45] my-1" />
+                <div className="w-8 h-[1px] bg-[#1F2937] my-1" />
 
                 <button
                     onClick={() => setView('PROFILE')}
                     className="group flex items-center justify-center w-12 h-12 relative"
                     title="Profile"
                 >
-                    <div className={`w-8 h-8 rounded-full overflow-hidden transition-all duration-200 ${currentView === 'PROFILE' ? 'ring-[2px] ring-[#00a884] ring-offset-[#202c33] ring-offset-[2px]' : 'group-hover:opacity-80'}`}>
+                    <div className={`w-8 h-8 rounded-full overflow-hidden transition-all duration-200 ${currentView === 'PROFILE' ? 'ring-[2px] ring-[#F97316] ring-offset-[#111827] ring-offset-[2px]' : 'group-hover:opacity-80'}`}>
                         {user ? (
                             <UserAvatar user={user} size="sm" className="w-full h-full object-cover" />
                         ) : (
-                            <div className="w-full h-full bg-[#374248]" />
+                            <div className="w-full h-full bg-[#1F2937]" />
                         )}
                     </div>
+                </button>
+
+                <button
+                    onClick={logout}
+                    className="group flex items-center justify-center relative text-[#9CA3AF] hover:text-red-400 hover:bg-[#1F2937] rounded-full transition-colors w-10 h-10 mt-1"
+                    title="Logout"
+                >
+                    <svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
                 </button>
             </div>
         </div>

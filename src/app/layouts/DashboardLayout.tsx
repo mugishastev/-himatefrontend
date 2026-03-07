@@ -47,9 +47,63 @@ export const DashboardLayout: React.FC = () => {
                 );
             case 'CALLS':
                 return (
-                    <div className="flex-1 bg-white overflow-y-auto w-full">
-                        <CallsView />
-                    </div>
+                    <>
+                        <aside className="w-[380px] flex-shrink-0 flex flex-col bg-[#111827] border-r border-[#1F2937] z-10 transition-all duration-300">
+                            <CallsView />
+                        </aside>
+                        <main className="flex-1 flex flex-col min-w-0 bg-[#111827] relative z-0 items-center justify-center">
+                            <div className="grid grid-cols-2 gap-8 max-w-lg mb-8">
+                                <button className="flex flex-col items-center gap-3 group">
+                                    <div className="w-20 h-20 rounded-2xl bg-[#1F2937] group-hover:bg-[#374248] flex items-center justify-center transition-colors shadow-lg border border-white/5">
+                                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-white text-[15px] font-medium">Start call</span>
+                                </button>
+                                <button className="flex flex-col items-center gap-3 group">
+                                    <div className="w-20 h-20 rounded-2xl bg-[#1F2937] group-hover:bg-[#374248] flex items-center justify-center transition-colors shadow-lg border border-white/5">
+                                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-white text-[15px] font-medium">New call link</span>
+                                </button>
+                                <button className="flex flex-col items-center gap-3 group">
+                                    <div className="w-20 h-20 rounded-2xl bg-[#1F2937] group-hover:bg-[#374248] flex items-center justify-center transition-colors shadow-lg border border-white/5">
+                                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6b2 2 0 00-2 2v2a2 2 0 01-2 2H2a2 2 0 01-2-2V8c0-1.1.9-2 2-2zm14 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2b2 2 0 00-2 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V8c0-1.1.9-2 2-2zM4 14a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6m14-4a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2" />
+                                            <circle cx="12" cy="12" r="1.5" />
+                                            <circle cx="12" cy="6" r="1.5" />
+                                            <circle cx="12" cy="18" r="1.5" />
+                                            <circle cx="6" cy="12" r="1.5" />
+                                            <circle cx="18" cy="12" r="1.5" />
+                                            <circle cx="6" cy="18" r="1.5" />
+                                            <circle cx="18" cy="18" r="1.5" />
+                                            <circle cx="6" cy="6" r="1.5" />
+                                            <circle cx="18" cy="6" r="1.5" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-white text-[15px] font-medium">Call a number</span>
+                                </button>
+                                <button className="flex flex-col items-center gap-3 group">
+                                    <div className="w-20 h-20 rounded-2xl bg-[#1F2937] group-hover:bg-[#374248] flex items-center justify-center transition-colors shadow-lg border border-white/5">
+                                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-white text-[15px] font-medium">Schedule call</span>
+                                </button>
+                            </div>
+
+                            <div className="absolute bottom-10 left-0 right-0 flex items-center justify-center gap-2 text-[#aebac1] text-[13px]">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                                <span>Your personal calls are end-to-end encrypted</span>
+                            </div>
+                        </main>
+                    </>
                 );
             case 'CONTACTS':
                 return (

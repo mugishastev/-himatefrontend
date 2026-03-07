@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Card } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button';
-import { Input } from '../../../components/ui/Input';
 import { useConversations } from '../../../hooks/useConversations';
 import { useUIStore } from '../../../store/ui.store';
 import { usersApi } from '../../../api/users.api';
@@ -51,105 +48,117 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <Card className="w-full max-w-lg p-0 overflow-hidden shadow-2xl">
-                <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white">
-                    <div>
-                        <h2 className="text-2xl font-black text-text-primary tracking-tight">New Chat</h2>
-                        <p className="text-sm text-text-secondary">Search for people to start a conversation</p>
-                    </div>
-                    <button onClick={onClose} className="p-2 hover:bg-bg-secondary rounded-full text-text-secondary transition-colors">
+        <div className="fixed inset-y-0 left-[60px] lg:left-[64px] z-50 w-full sm:w-[380px] bg-[#111827] flex flex-col shadow-2xl border-r border-[#1F2937] animate-in slide-in-from-left duration-200">
+            {/* Header */}
+            <div className="h-[108px] bg-[#111827] flex items-end px-5 pb-4 shrink-0 text-white">
+                <div className="flex items-center gap-6 w-full translate-y-2">
+                    <button onClick={onClose} className="p-1 hover:bg-[#1F2937] rounded-full transition-colors shrink-0 -ml-1">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
                     </button>
+                    <h2 className="text-[19px] font-medium leading-normal">New chat</h2>
                 </div>
+            </div>
 
-                <div className="p-6 space-y-4">
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-secondary">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </div>
-                        <Input
-                            placeholder="Type a username..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-10 py-3 bg-bg-secondary border-none focus:ring-2 focus:ring-brand/20 transition-all text-lg"
-                        />
+            {/* Search */}
+            <div className="px-3 py-2 border-b border-[#1F2937]/50 shadow-sm shrink-0 bg-[#111827]">
+                <div className="relative bg-[#1F2937] rounded-lg h-9 flex items-center">
+                    <div className="absolute left-4 text-[#aebac1]">
+                        <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
                     </div>
+                    <input
+                        placeholder="Search name or number"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-transparent pl-12 pr-4 text-[14px] text-white outline-none placeholder:text-[#aebac1]"
+                    />
+                </div>
+            </div>
 
-                    {!searchQuery && (
-                        <div className="py-2">
-                            <button
-                                onClick={() => {
-                                    onClose();
-                                    openModal('CREATE_GROUP');
-                                }}
-                                className="w-full flex items-center space-x-4 p-3 rounded-2xl hover:bg-brand/5 border border-transparent hover:border-brand/10 transition-all group group-hover:bg-brand/5"
+            <div className="flex-1 overflow-y-auto no-scrollbar pb-4 block text-[#d1d7db]">
+                {!searchQuery && (
+                    <div className="py-2">
+                        <button
+                            onClick={() => {
+                                onClose();
+                                openModal('CREATE_GROUP');
+                            }}
+                            className="w-full flex items-center px-4 py-3 hover:bg-[#1F2937]/50 transition-colors group cursor-pointer"
+                        >
+                            <div className="w-12 h-12 rounded-full bg-[#00a884] text-white flex items-center justify-center shrink-0">
+                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M13 13h-2v2h2v-2zm-1-8a4 4 0 00-4 4h2a2 2 0 014 0v2h2a4 4 0 00-4-6zm-4 6H7v-2h1v2zm9-3v3h3v2h-3v3h-2v-3h-3v-2h3V8h2zm-3-1l-1 1-1-1v1l1 1 1-1V7zm-6-2C6.48 5 2 9.48 2 15h2c0-4.42 3.58-8 8-8v-2z" />
+                                    {/* Roughly drawing people icon */}
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zM4 21c0-2.21 1.79-4 4-4h8c2.21 0 4 1.79 4 4v1H4v-1zm2-2c.6-.9 2-1.5 3.5-1.5h5c1.5 0 2.9.6 3.5 1.5H6z" />
+                                </svg>
+                            </div>
+                            <div className="ml-4 flex-1 text-left border-b border-[#1F2937]/0 group-hover:border-transparent py-3">
+                                <p className="text-[17px] text-white">New group</p>
+                            </div>
+                        </button>
+
+                        <button className="w-full flex items-center px-4 py-3 hover:bg-[#1F2937]/50 transition-colors group cursor-pointer">
+                            <div className="w-12 h-12 rounded-full bg-[#00a884] text-white flex items-center justify-center shrink-0">
+                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                </svg>
+                            </div>
+                            <div className="ml-4 flex-1 text-left border-b border-[#1F2937]/0 group-hover:border-transparent py-3">
+                                <p className="text-[17px] text-white">New contact</p>
+                            </div>
+                        </button>
+
+                        <button className="w-full flex items-center px-4 py-3 hover:bg-[#1F2937]/50 transition-colors group cursor-pointer">
+                            <div className="w-12 h-12 rounded-full bg-[#00a884] text-white flex items-center justify-center shrink-0">
+                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                                </svg>
+                            </div>
+                            <div className="ml-4 flex-1 text-left border-b border-[#1F2937]/0 group-hover:border-transparent py-3">
+                                <p className="text-[17px] text-white">New community</p>
+                            </div>
+                        </button>
+                    </div>
+                )}
+
+                <div className="pt-2">
+                    <h3 className="text-[#00a884] text-[15px] px-8 py-4 uppercase font-medium tracking-wide">
+                        {searchQuery ? 'Search Results' : 'Contacts on Himate'}
+                    </h3>
+
+                    {isSearching ? (
+                        <div className="py-8 text-center text-[#aebac1]">
+                            <div className="animate-spin w-6 h-6 border-2 border-[#00a884] border-t-transparent rounded-full mx-auto mb-4"></div>
+                        </div>
+                    ) : searchResults.length === 0 ? (
+                        <div className="py-8 text-center text-[#aebac1] px-4">
+                            <p className="text-[14px]">{searchQuery ? 'No results found for ' + searchQuery : 'Search to find users'}</p>
+                        </div>
+                    ) : (
+                        searchResults.map((user) => (
+                            <div
+                                key={user.id}
+                                onClick={() => handleStartChat(user.id)}
+                                className="flex items-center px-4 py-2 hover:bg-[#1F2937]/50 transition-colors group cursor-pointer"
                             >
-                                <div className="w-12 h-12 rounded-full bg-brand/10 text-brand flex items-center justify-center shrink-0">
-                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 12.75c3.31 0 6-2.69 6-6s-2.69-6-6-6-6 2.69-6 6 2.69 6 6 6zm-8.25 8c0-3.17 4.14-4.75 8.25-4.75s8.25 1.58 8.25 4.75H3.75z" />
-                                    </svg>
+                                <div className="shrink-0">
+                                    <UserAvatar user={user} size="lg" />
                                 </div>
-                                <div className="flex-1 text-left">
-                                    <p className="font-bold text-text-primary group-hover:text-brand transition-colors">New Group</p>
-                                </div>
-                            </button>
-                        </div>
-                    )}
-
-                    <div className="max-h-[400px] overflow-y-auto space-y-2 py-2">
-                        {isSearching ? (
-                            <div className="py-12 text-center text-text-secondary">
-                                <div className="animate-spin w-8 h-8 border-4 border-brand border-t-transparent rounded-full mx-auto mb-4"></div>
-                                <p className="font-medium">Searching for users...</p>
-                            </div>
-                        ) : searchResults.length === 0 ? (
-                            <div className="py-12 text-center text-text-secondary">
-                                <div className="w-16 h-16 bg-bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                </div>
-                                <p className="font-medium">{searchQuery ? 'No users found' : 'Type to search users'}</p>
-                            </div>
-                        ) : (
-                            searchResults.map((user) => (
-                                <div
-                                    key={user.id}
-                                    className="flex items-center justify-between p-3 rounded-2xl hover:bg-brand/5 border border-transparent hover:border-brand/10 transition-all group"
-                                >
-                                    <div className="flex items-center space-x-4">
-                                        <UserAvatar user={user} size="md" />
-                                        <div>
-                                            <p className="font-bold text-text-primary">{user.username}</p>
-                                            <p className="text-sm text-text-secondary">{user.status || 'Active'}</p>
-                                        </div>
+                                <div className="ml-4 border-b border-[#1F2937]/50 group-hover:border-transparent flex-1 py-3 flex justify-between items-center">
+                                    <div>
+                                        <p className="text-[17px] text-white font-normal">{user.username}</p>
+                                        <p className="text-[14px] text-[#aebac1] truncate mt-1">Hey there! I am using Himate.</p>
                                     </div>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="opacity-0 group-hover:opacity-100 transition-all py-1.5 px-4 rounded-xl font-bold text-brand hover:bg-brand hover:text-white border-brand/50"
-                                        onClick={() => handleStartChat(user.id)}
-                                        isLoading={isCreating}
-                                    >
-                                        Chat
-                                    </Button>
+                                    {isCreating && <div className="animate-spin w-4 h-4 border-2 border-[#00a884] border-t-transparent rounded-full"></div>}
                                 </div>
-                            ))
-                        )}
-                    </div>
+                            </div>
+                        ))
+                    )}
                 </div>
-
-                <div className="p-4 bg-bg-secondary/50 border-t border-gray-100 flex justify-end">
-                    <Button variant="outline" onClick={onClose} className="border-none hover:bg-bg-secondary font-bold text-text-secondary">
-                        Close
-                    </Button>
-                </div>
-            </Card>
+            </div>
         </div>
     );
 };
