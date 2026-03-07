@@ -6,10 +6,11 @@ import { ROUTES } from '../../../app/routes.config';
 import { useAuthStore } from '../../../store/auth.store';
 
 export const LoginPage: React.FC = () => {
-    const { isAuthenticated } = useAuthStore();
+    const { isAuthenticated, user } = useAuthStore();
 
     if (isAuthenticated) {
-        return <Navigate to={ROUTES.DASHBOARD} replace />;
+        // Admins get routed to admin dashboard, users to chat
+        return <Navigate to={user?.isAdmin ? ROUTES.ADMIN : ROUTES.DASHBOARD} replace />;
     }
 
     return (

@@ -11,6 +11,7 @@ export interface User extends BaseEntity {
     phoneNumber?: string;
     isVerified?: boolean;
     isAdmin?: boolean;
+    role?: { id: number; name: string } | null;
 }
 
 export interface UpdateUserDto {

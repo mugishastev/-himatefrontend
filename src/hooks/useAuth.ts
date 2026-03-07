@@ -16,7 +16,12 @@ export const useAuth = () => {
         try {
             const response = await authApi.login(data);
             setAuth(response.user, response.accessToken, response.refreshToken);
-            navigate(ROUTES.DASHBOARD);
+
+            if (response.user.isAdmin || response.user.role?.name === 'ADMIN') {
+                navigate('/admin');
+            } else {
+                navigate(ROUTES.DASHBOARD);
+            }
         } catch (err: any) {
             setError(err.message || 'Login failed');
             // Re-throw if needed, but the original code didn't
@@ -45,7 +50,12 @@ export const useAuth = () => {
         try {
             const response = await authApi.verifyEmail(email, otp);
             setAuth(response.user, response.accessToken, response.refreshToken);
-            navigate(ROUTES.DASHBOARD);
+
+            if (response.user.isAdmin || response.user.role?.name === 'ADMIN') {
+                navigate('/admin');
+            } else {
+                navigate(ROUTES.DASHBOARD);
+            }
         } catch (err: any) {
             setError(err.message || 'Verification failed');
             throw err;

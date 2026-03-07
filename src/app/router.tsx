@@ -8,7 +8,15 @@ import { LandingPage } from '../pages/LandingPage';
 import VerifyEmailPage from '../features/auth/pages/VerifyEmailPage';
 import DashboardLayout from './layouts/DashboardLayout';
 import ProtectedRoute from './protected-route';
+import AdminProtectedRoute from './AdminProtectedRoute';
 import RootErrorPage from './pages/RootErrorPage';
+import { AdminLayout } from '../features/dashboard/layouts/AdminLayout';
+import { AdminOverviewPage } from '../features/dashboard/pages/AdminOverviewPage';
+import { AdminUsersPage } from '../features/dashboard/pages/AdminUsersPage';
+import { AdminConversationsPage } from '../features/dashboard/pages/AdminConversationsPage';
+import { AdminMessagesPage } from '../features/dashboard/pages/AdminMessagesPage';
+import { AdminReportsPage } from '../features/dashboard/pages/AdminReportsPage';
+import { AdminSettingsPage } from '../features/dashboard/pages/AdminSettingsPage';
 
 export const router = createBrowserRouter([
     {
@@ -24,6 +32,23 @@ export const router = createBrowserRouter([
             </ProtectedRoute>
         ),
         errorElement: <RootErrorPage />,
+    },
+    {
+        path: ROUTES.ADMIN,
+        element: (
+            <AdminProtectedRoute>
+                <AdminLayout />
+            </AdminProtectedRoute>
+        ),
+        errorElement: <RootErrorPage />,
+        children: [
+            { index: true, element: <AdminOverviewPage /> },
+            { path: 'users', element: <AdminUsersPage /> },
+            { path: 'conversations', element: <AdminConversationsPage /> },
+            { path: 'messages', element: <AdminMessagesPage /> },
+            { path: 'reports', element: <AdminReportsPage /> },
+            { path: 'settings', element: <AdminSettingsPage /> },
+        ],
     },
     {
         path: ROUTES.AUTH.LOGIN,
