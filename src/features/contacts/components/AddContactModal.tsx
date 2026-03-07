@@ -12,20 +12,20 @@ interface AddContactModalProps {
 }
 
 export const AddContactModal: React.FC<AddContactModalProps> = ({ onClose, onSuccess }) => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { user } = useAuthStore();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!email.trim() || !user) return;
+        if (!username.trim() || !user) return;
 
         setIsLoading(true);
         setError(null);
         try {
-            // 1. Search for user by email — handle both { data: [...] } and direct array responses
-            const searchResponse = await usersApi.findAll({ search: email.trim() });
+            // 1. Search for user by username — handle both { data: [...] } and direct array responses
+            const searchResponse = await usersApi.findAll({ search: username.trim() });
             const userList: any[] = Array.isArray(searchResponse)
                 ? searchResponse
                 : Array.isArray(searchResponse?.data)
@@ -33,11 +33,11 @@ export const AddContactModal: React.FC<AddContactModalProps> = ({ onClose, onSuc
                     : [];
 
             const foundUser = userList.find(
-                (u: any) => u.email?.toLowerCase() === email.trim().toLowerCase()
+                (u: any) => u.username?.toLowerCase() === username.trim().toLowerCase()
             );
 
             if (!foundUser) {
-                throw new Error('No user found with this email address');
+                throw new Error('No user found with this username');
             }
 
             if (Number(foundUser.id) === Number(user.id)) {
@@ -70,11 +70,11 @@ export const AddContactModal: React.FC<AddContactModalProps> = ({ onClose, onSuc
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <Input
-                        label="Email Address"
-                        placeholder="friend@example.com"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        label="Username"
+                        placeholder="himateuser123"
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                     {error && <p className="text-sm text-red-500">{error}</p>}
                     <div className="flex space-x-3 pt-2">

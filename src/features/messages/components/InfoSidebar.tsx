@@ -52,7 +52,7 @@ export const InfoSidebar: React.FC = () => {
                     <h2 className="text-2xl font-normal text-[#111b21] mb-1">{displayName}</h2>
                     {!activeConversation.isGroup && (
                         <p className="text-[#667781] text-lg font-normal">
-                            {otherParticipant?.user.email}
+                            {otherParticipant?.user.status || 'Active'}
                         </p>
                     )}
                 </div>

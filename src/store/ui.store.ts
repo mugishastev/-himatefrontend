@@ -5,7 +5,7 @@ interface UIState {
     activeModal: string | null;
     viewingUserId: string | number | null;
     viewingImageUrl: string | null;
-    currentView: 'CHATS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS';
+    currentView: 'CHATS' | 'CALLS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS';
     isInfoPaneOpen: boolean;
     infoPaneType: 'CONTACT' | 'GROUP' | null;
     toggleSidebar: () => void;
@@ -14,7 +14,7 @@ interface UIState {
     openImage: (url: string) => void;
     setInfoPane: (isOpen: boolean, type?: 'CONTACT' | 'GROUP' | null) => void;
     closeModal: () => void;
-    setView: (view: 'CHATS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS') => void;
+    setView: (view: 'CHATS' | 'CALLS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS') => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({

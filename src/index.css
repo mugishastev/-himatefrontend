@@ -1,18 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-    --color-brand: #FF6B22;
-    --color-brand-light: #FF8A50;
-    --color-brand-dark: #E65100;
+    /* ── Official Himate Color Palette ── */
 
-    --color-bg-primary: #FFFFFF;
-    --color-bg-secondary: #F8F9FA;
-    --color-text-primary: #1A1A1B;
-    --color-text-secondary: #6B7280;
+    /* Primary brand: Vibrant Orange */
+    --color-brand: #F97316;
+    --color-brand-light: #FB923C;
+    --color-brand-dark: #EA6C0A;
+
+    /* App backgrounds: Deep Navy */
+    --color-bg-primary: #111827;
+    --color-bg-secondary: #111827;
+
+    /* Surfaces: Charcoal Grey */
+    --color-surface: #1F2937;
+    --color-surface-raised: #374151;
+
+    /* Typography */
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: #9CA3AF;
+    --color-text-muted: #6B7280;
 }
 
 @layer base {
     body {
-        @apply bg-bg-primary text-text-primary;
+        background-color: #111827;
+        color: #FFFFFF;
     }
 }

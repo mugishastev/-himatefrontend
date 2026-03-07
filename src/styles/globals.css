@@ -8,8 +8,10 @@ body {
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
+    /* #111827 Deep Navy */
     color: var(--text-primary);
+    /* #FFFFFF White */
 }
 
 * {
@@ -27,52 +29,100 @@ a {
     color: inherit;
 }
 
-/* Custom scrollbar */
+/* ── Himate Chat Bubble Styles ── */
+/* Sent message: Orange background (#F97316) + white text */
+.bubble-sent {
+    background-color: var(--brand-primary);
+    /* #F97316 */
+    color: #FFFFFF;
+    border-radius: var(--radius-chat) var(--radius-chat) 4px var(--radius-chat);
+}
+
+/* Received message: Charcoal Grey (#1F2937) + white text */
+.bubble-received {
+    background-color: var(--surface);
+    /* #1F2937 */
+    color: #FFFFFF;
+    border-radius: var(--radius-chat) var(--radius-chat) var(--radius-chat) 4px;
+}
+
+/* ── Navigation Bar ── */
+.nav-bar {
+    background-color: var(--bg-primary);
+    /* #111827 Deep Navy */
+}
+
+.nav-bar .nav-icon-active {
+    color: var(--brand-primary);
+    /* #F97316 Orange */
+}
+
+/* ── Input Field ── */
+.input-field {
+    background-color: var(--surface);
+    /* #1F2937 */
+    border: 1px solid var(--surface-raised);
+    /* #374151 */
+    color: var(--text-primary);
+    border-radius: var(--radius-2xl);
+}
+
+.input-field:focus {
+    border-color: var(--brand-primary);
+    outline: none;
+}
+
+/* ── Primary Action Button ── */
+.btn-primary {
+    background-color: var(--brand-primary);
+    /* #F97316 */
+    color: #FFFFFF;
+    border-radius: 12px;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--brand-dark);
+    /* #EA6C0A */
+}
+
+/* ── Notification Badge ── */
+.notification-badge {
+    background-color: var(--brand-primary);
+    /* #F97316 */
+    color: #FFFFFF;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+
+/* ── Scrollbar — matches dark theme ── */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--text-muted);
+    background: var(--surface-raised);
     border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
+    background: var(--text-muted);
 }
 
-html.dark-mode {
-    color-scheme: dark;
-}
-
-html.dark-mode body {
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
-}
-
-html.dark-mode .bg-white {
-    background-color: #111827 !important;
-}
-
-html.dark-mode .bg-bg-secondary,
-html.dark-mode .bg-gray-50 {
-    background-color: #0f172a !important;
-}
-
-html.dark-mode .text-text-primary {
-    color: var(--text-primary) !important;
-}
-
-html.dark-mode .text-text-secondary {
-    color: var(--text-secondary) !important;
-}
-
-html.dark-mode .border-gray-100,
-html.dark-mode .border-gray-200 {
-    border-color: #374151 !important;
+/* ── Selection highlight ── */
+::selection {
+    background-color: #F9731633;
+    color: #FFFFFF;
 }

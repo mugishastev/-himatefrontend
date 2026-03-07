@@ -9,6 +9,7 @@ interface UserState {
     setSearchResults: (results: User[]) => void;
     setOnlineUsers: (userIds: string[]) => void;
     addContact: (user: User) => void;
+    removeContact: (contactId: number) => void;
     setIsLoading: (isLoading: boolean) => void;
     isLoading: boolean;
 }
@@ -25,6 +26,10 @@ export const useUserStore = create<UserState>((set) => ({
             contacts: state.contacts.some((c) => c.id === user.id)
                 ? state.contacts
                 : [...state.contacts, user],
+        })),
+    removeContact: (contactId) =>
+        set((state) => ({
+            contacts: state.contacts.filter((c) => c.id !== contactId),
         })),
     setIsLoading: (isLoading) => set({ isLoading }),
     isLoading: false,

@@ -3,6 +3,7 @@ import { ConversationList } from '../../features/conversations/components/Conver
 import { ContactList } from '../../features/contacts/components/ContactList';
 import { ProfileView } from '../../features/users/components/ProfileView';
 import { SettingsView } from '../../features/settings/components/SettingsView';
+import { CallsView } from '../../features/calls/components/CallsView';
 import { ChatWindow } from '../../features/messages/components/ChatWindow';
 import { SidebarNav } from './SidebarNav';
 import { NewConversationModal } from '../../features/conversations/components/NewConversationModal';
@@ -43,6 +44,12 @@ export const DashboardLayout: React.FC = () => {
                             </div>
                         </main>
                     </>
+                );
+            case 'CALLS':
+                return (
+                    <div className="flex-1 bg-white overflow-y-auto w-full">
+                        <CallsView />
+                    </div>
                 );
             case 'CONTACTS':
                 return (

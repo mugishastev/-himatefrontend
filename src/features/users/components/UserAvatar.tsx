@@ -25,7 +25,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({ user, size = 'md', showS
                 {imageUrl ? (
                     <img src={imageUrl} alt={user.username} className="w-full h-full object-cover" />
                 ) : (
-                    user.username.charAt(0).toUpperCase()
+                    (user.username ?? user.email ?? '?').charAt(0).toUpperCase()
                 )}
             </div>
             {showStatus && (

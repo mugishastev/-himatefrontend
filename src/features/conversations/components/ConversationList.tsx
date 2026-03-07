@@ -100,6 +100,15 @@ export const ConversationList: React.FC = () => {
                                 <button
                                     className="w-full text-left px-4 py-2 text-[#3b4a54] hover:bg-[#f5f6f6] transition-colors"
                                     onClick={() => {
+                                        openModal("CREATE_GROUP");
+                                        setIsMenuOpen(false);
+                                    }}
+                                >
+                                    New group
+                                </button>
+                                <button
+                                    className="w-full text-left px-4 py-2 text-[#3b4a54] hover:bg-[#f5f6f6] transition-colors"
+                                    onClick={() => {
                                         setView("PROFILE");
                                         setIsMenuOpen(false);
                                     }}

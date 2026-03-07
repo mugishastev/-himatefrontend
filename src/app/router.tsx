@@ -17,6 +17,11 @@ import { AdminConversationsPage } from '../features/dashboard/pages/AdminConvers
 import { AdminMessagesPage } from '../features/dashboard/pages/AdminMessagesPage';
 import { AdminReportsPage } from '../features/dashboard/pages/AdminReportsPage';
 import { AdminSettingsPage } from '../features/dashboard/pages/AdminSettingsPage';
+import { AdminBannedUsersPage } from '../features/dashboard/pages/AdminBannedUsersPage';
+import { AdminSupportTicketsPage } from '../features/dashboard/pages/AdminSupportTicketsPage';
+import { AdminAnnouncementsPage } from '../features/dashboard/pages/AdminAnnouncementsPage';
+import { AdminMediaGalleryPage } from '../features/dashboard/pages/AdminMediaGalleryPage';
+import { AdminRolesPage } from '../features/dashboard/pages/AdminRolesPage';
 
 export const router = createBrowserRouter([
     {
@@ -47,7 +52,12 @@ export const router = createBrowserRouter([
             { path: 'conversations', element: <AdminConversationsPage /> },
             { path: 'messages', element: <AdminMessagesPage /> },
             { path: 'reports', element: <AdminReportsPage /> },
+            { path: 'banned', element: <AdminBannedUsersPage /> },
+            { path: 'tickets', element: <AdminSupportTicketsPage /> },
+            { path: 'announcements', element: <AdminAnnouncementsPage /> },
+            { path: 'media', element: <AdminMediaGalleryPage /> },
             { path: 'settings', element: <AdminSettingsPage /> },
+            { path: 'roles', element: <AdminRolesPage /> },
         ],
     },
     {

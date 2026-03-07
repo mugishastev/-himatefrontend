@@ -137,7 +137,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose }) =
                                 <UserAvatar user={user} size="sm" />
                                 <div>
                                     <p className="font-bold text-sm text-text-primary">{user.username}</p>
-                                    <p className="text-xs text-text-muted">{user.email}</p>
+                                    <p className="text-xs text-text-muted">{user.status || 'Active'}</p>
                                 </div>
                             </button>
                         ))}

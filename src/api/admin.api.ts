@@ -25,4 +25,17 @@ export const adminApi = {
         const response = await api.post(`/admin/users/${userId}/unban`);
         return response.data;
     },
+    getAuditLogs: async (page = 1, limit = 30, action?: string) => {
+        const response = await api.get('/admin/audit-logs', { params: { page, limit, action } });
+        return response.data;
+    },
+    sendBroadcast: async (title: string, message: string) => {
+        const response = await api.post('/admin/broadcast', { title, message });
+        return response.data;
+    },
+    getBroadcastHistory: async () => {
+        const response = await api.get('/admin/broadcast/history');
+        return response.data;
+    },
 };
+

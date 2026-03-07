@@ -1,42 +1,119 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { adminApi } from '../../../api/admin.api';
+
+const ACTION_COLORS: Record<string, string> = {
+    LOGIN: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+    LOGOUT: 'text-slate-400 bg-slate-800 border-slate-700',
+    USER_BANNED: 'text-red-400 bg-red-500/10 border-red-500/20',
+    USER_UNBANNED: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+    BROADCAST_SENT: 'text-brand bg-brand/10 border-brand/20',
+    RESET_PASSWORD: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+    REGISTER: 'text-violet-400 bg-violet-500/10 border-violet-500/20',
+};
+
+const ACTION_TYPES = ['ALL', 'LOGIN', 'USER_BANNED', 'USER_UNBANNED', 'BROADCAST_SENT', 'RESET_PASSWORD', 'REGISTER'];
 
 export const AdminReportsPage: React.FC = () => {
+    const [logs, setLogs] = useState<any[]>([]);
+    const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [actionFilter, setActionFilter] = useState('ALL');
+
+    const fetchLogs = (p = 1, action = actionFilter) => {
+        setLoading(true);
+        adminApi.getAuditLogs(p, 30, action === 'ALL' ? undefined : action)
+            .then((res) => {
+                setLogs(res.data ?? []);
+                setTotal(res.total ?? 0);
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
+    };
+
+    useEffect(() => { fetchLogs(1, actionFilter); }, [actionFilter]);
+    useEffect(() => { fetchLogs(page, actionFilter); }, [page]);
+
+    const totalPages = Math.ceil(total / 30) || 1;
+
     return (
-        <div className="p-8">
-            <h1 className="text-2xl font-bold text-white mb-2">System Reports</h1>
-            <p className="text-slate-400 text-sm mb-8">Generate and export system-wide activity and moderation reports</p>
+        <div className="p-8 space-y-6">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-white">Audit Logs</h1>
+                    <p className="text-slate-400 text-sm mt-1">{total.toLocaleString()} total admin & platform actions recorded</p>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[
-                    { title: 'User Growth Report', desc: 'Export detailed CSV of new signups over time.', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' },
-                    { title: 'Message Activity', desc: 'Daily breakdown of messages sent across platform.', icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z' },
-                    { title: 'Moderation Logs', desc: 'Deleted content and banned user audits.', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
-                ].map(report => (
-                    <div key={report.title} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-colors group flex flex-col items-start relative overflow-hidden">
-                        <div className="w-12 h-12 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-5">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={report.icon} />
-                            </svg>
-                        </div>
-                        <h2 className="text-lg font-semibold text-white mb-2">{report.title}</h2>
-                        <p className="text-sm text-slate-400 mb-8 flex-1">{report.desc}</p>
-
-                        <button className="text-brand font-medium text-sm flex items-center gap-1.5 group-hover:underline">
-                            Generate Report
-                            <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                {/* Action filter */}
+                <div className="flex flex-wrap gap-2">
+                    {ACTION_TYPES.map((a) => (
+                        <button
+                            key={a}
+                            onClick={() => { setPage(1); setActionFilter(a); }}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${actionFilter === a ? 'bg-brand/15 text-brand border-brand/30' : 'bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700'}`}
+                        >
+                            {a.replace(/_/g, ' ')}
                         </button>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
 
-            <div className="mt-12 bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <h2 className="text-lg font-semibold text-white mb-6">Recent Exports</h2>
-                <div className="text-center py-10">
-                    <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-500">
-                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                    </div>
-                    <p className="text-slate-400 font-medium">No recent reports generated</p>
-                    <p className="text-sm text-slate-500 mt-1">Generated reports will appear here for 7 days</p>
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                <table className="w-full text-sm">
+                    <thead className="border-b border-slate-800">
+                        <tr>
+                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Action</th>
+                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">User</th>
+                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Details</th>
+                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800">
+                        {loading ? (
+                            Array.from({ length: 10 }).map((_, i) => (
+                                <tr key={i}><td colSpan={4} className="px-6 py-4"><div className="h-4 bg-slate-800 rounded animate-pulse" /></td></tr>
+                            ))
+                        ) : logs.length === 0 ? (
+                            <tr>
+                                <td colSpan={4} className="px-6 py-16 text-center text-slate-500">
+                                    <svg className="w-10 h-10 mx-auto mb-3 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                    <p className="text-sm">No audit logs found</p>
+                                </td>
+                            </tr>
+                        ) : (
+                            logs.map((log: any) => (
+                                <tr key={log.id} className="hover:bg-slate-800/50 transition-colors">
+                                    <td className="px-6 py-4">
+                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${ACTION_COLORS[log.action] ?? 'text-slate-400 bg-slate-800 border-slate-700'}`}>
+                                            {log.action.replace(/_/g, ' ')}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {log.user ? (
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-6 h-6 rounded-full bg-brand/10 flex items-center justify-center text-brand text-[10px] font-bold overflow-hidden flex-shrink-0">
+                                                    {log.user.profileImage ? <img src={log.user.profileImage} alt="" className="w-full h-full object-cover" /> : log.user.username?.charAt(0).toUpperCase()}
+                                                </div>
+                                                <span className="text-slate-300 text-sm">{log.user.username}</span>
+                                            </div>
+                                        ) : (
+                                            <span className="text-slate-600 text-sm">System</span>
+                                        )}
+                                    </td>
+                                    <td className="px-6 py-4 text-slate-400 text-sm max-w-xs truncate">{log.details || '—'}</td>
+                                    <td className="px-6 py-4 text-slate-500 text-xs whitespace-nowrap">{new Date(log.createdAt).toLocaleString()}</td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            <div className="flex items-center justify-between">
+                <p className="text-sm text-slate-500">Page {page} of {totalPages} · {total.toLocaleString()} records</p>
+                <div className="flex gap-2">
+                    <button disabled={page <= 1} onClick={() => setPage(p => p - 1)} className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 text-sm disabled:opacity-40 hover:bg-slate-700 transition-colors">← Prev</button>
+                    <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)} className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 text-sm disabled:opacity-40 hover:bg-slate-700 transition-colors">Next →</button>
                 </div>
             </div>
         </div>

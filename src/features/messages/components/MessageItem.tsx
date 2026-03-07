@@ -51,11 +51,11 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
         const urlRegex = /(https?:\/\/[^\s]+)/g;
         const parts = text.split(urlRegex);
         return (
-            <span className="whitespace-pre-wrap break-words leading-relaxed text-[#111b21]">
+            <span className="whitespace-pre-wrap break-words leading-relaxed text-white">
                 {parts.map((part, i) => {
                     if (part.match(urlRegex)) {
                         return (
-                            <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-[#027eb5] hover:underline">
+                            <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-white/80 underline hover:text-white">
                                 {part}
                             </a>
                         );
@@ -91,19 +91,19 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
                     className={`flex flex-col ${isOwn ? "items-end" : "items-start"} relative group/msg max-w-[85%] sm:max-w-[70%]`}
                 >
                     <div
-                        className={`relative px-3 py-1.5 rounded-lg text-[14.2px] leading-relaxed shadow-sm transition-all duration-300 ${isOwn
-                            ? "bg-[#dcf8c6] text-[#111b21] rounded-tr-none"
-                            : "bg-white text-[#111b21] rounded-tl-none border border-[#d1d7db]/30"
+                        className={`relative px-3 py-2 rounded-2xl text-[14.2px] leading-relaxed shadow-md transition-all duration-300 ${isOwn
+                                ? 'bg-[#F97316] text-white rounded-tr-sm'          /* Sent: Vibrant Orange */
+                                : 'bg-[#1F2937] text-white rounded-tl-sm border border-white/5'  /* Received: Charcoal Grey */
                             }`}
                     >
                         {/* Tail Component */}
-                        <div
-                            className={`absolute top-0 w-3 h-3 overflow-hidden ${isOwn ? "-right-2" : "-left-2"}`}
-                        >
+                        <div className={`absolute top-0 w-3 h-3 overflow-hidden ${isOwn ? '-right-2' : '-left-2'}`}>
                             <div
-                                className={`w-3 h-3 origin-center rotate-45 transform ${isOwn ? "bg-[#dcf8c6]" : "bg-white border-l border-t border-[#d1d7db]/30"} ${isOwn ? "-translate-x-1.5 shadow-[-1px_1px_1px_rgba(0,0,0,0.05)]" : "translate-x-1.5 shadow-[-1px_1px_1px_rgba(0,0,0,0.03)]"}`}
-                            ></div>
-                        </div>
+                                className={`w-3 h-3 origin-center rotate-45 transform ${isOwn
+                                        ? 'bg-[#F97316] -translate-x-1.5'   /* Orange tail for sent */
+                                        : 'bg-[#1F2937] translate-x-1.5'    /* Charcoal tail for received */
+                                    }`}
+                            /></div>
 
                         {/* Smart Content Renderer */}
                         {renderContent(message.content)}

@@ -3,6 +3,7 @@ import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { useConversations } from '../../../hooks/useConversations';
+import { useUIStore } from '../../../store/ui.store';
 import { usersApi } from '../../../api/users.api';
 import { UserAvatar } from '../../users/components/UserAvatar';
 import type { User } from '../../../types/user.types';
@@ -16,6 +17,7 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
     const [searchResults, setSearchResults] = useState<User[]>([]);
     const [isSearching, setIsSearching] = useState(false);
     const { createConversation, isLoading: isCreating } = useConversations();
+    const { openModal } = useUIStore();
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -71,12 +73,33 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
                             </svg>
                         </div>
                         <Input
-                            placeholder="Type a username or email..."
+                            placeholder="Type a username..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="pl-10 py-3 bg-bg-secondary border-none focus:ring-2 focus:ring-brand/20 transition-all text-lg"
                         />
                     </div>
+
+                    {!searchQuery && (
+                        <div className="py-2">
+                            <button
+                                onClick={() => {
+                                    onClose();
+                                    openModal('CREATE_GROUP');
+                                }}
+                                className="w-full flex items-center space-x-4 p-3 rounded-2xl hover:bg-brand/5 border border-transparent hover:border-brand/10 transition-all group group-hover:bg-brand/5"
+                            >
+                                <div className="w-12 h-12 rounded-full bg-brand/10 text-brand flex items-center justify-center shrink-0">
+                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 12.75c3.31 0 6-2.69 6-6s-2.69-6-6-6-6 2.69-6 6 2.69 6 6 6zm-8.25 8c0-3.17 4.14-4.75 8.25-4.75s8.25 1.58 8.25 4.75H3.75z" />
+                                    </svg>
+                                </div>
+                                <div className="flex-1 text-left">
+                                    <p className="font-bold text-text-primary group-hover:text-brand transition-colors">New Group</p>
+                                </div>
+                            </button>
+                        </div>
+                    )}
 
                     <div className="max-h-[400px] overflow-y-auto space-y-2 py-2">
                         {isSearching ? (
@@ -103,7 +126,7 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
                                         <UserAvatar user={user} size="md" />
                                         <div>
                                             <p className="font-bold text-text-primary">{user.username}</p>
-                                            <p className="text-sm text-text-secondary">{user.email}</p>
+                                            <p className="text-sm text-text-secondary">{user.status || 'Active'}</p>
                                         </div>
                                     </div>
                                     <Button

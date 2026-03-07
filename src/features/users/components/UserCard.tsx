@@ -15,7 +15,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, onMessage }) => {
             <UserAvatar user={user} size="lg" />
             <div>
                 <h3 className="text-lg font-bold text-text-primary">{user.username}</h3>
-                <p className="text-sm text-text-secondary">{user.email}</p>
+                <p className="text-sm text-text-secondary">{user.status || 'Active'}</p>
             </div>
             <div className="flex w-full gap-2">
                 <Button variant="primary" size="sm" className="flex-1" onClick={onMessage}>

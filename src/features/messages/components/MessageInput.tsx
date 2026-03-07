@@ -310,7 +310,7 @@ export const MessageInput: React.FC = () => {
                                 }}
                                 placeholder="Type a message"
                                 rows={1}
-                                className="w-full px-4 py-2.5 bg-white border border-[#e9edef] rounded-lg outline-none focus:border-[#c4c9cd] resize-none transition-all duration-200 text-[#111b21] text-[15px] overflow-y-auto max-h-40"
+                                className="w-full px-4 py-2.5 bg-[#1F2937] border border-white/10 rounded-xl outline-none focus:border-[#F97316]/60 resize-none transition-all duration-200 text-white placeholder:text-[#9CA3AF] text-[15px] overflow-y-auto max-h-40"
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' && !e.shiftKey) {
                                         e.preventDefault();
@@ -327,7 +327,7 @@ export const MessageInput: React.FC = () => {
                     <button
                         type="button"
                         onClick={startRecording}
-                        className="w-11 h-11 rounded-full flex items-center justify-center transition-all shrink-0 bg-[#00a884] text-white hover:bg-[#017561] hover:scale-105"
+                        className="w-11 h-11 rounded-full flex items-center justify-center transition-all shrink-0 bg-[#F97316] text-white hover:bg-[#EA6C0A] hover:scale-105"
                         title="Record Voice Note"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -338,7 +338,7 @@ export const MessageInput: React.FC = () => {
                     <button
                         type="button"
                         onClick={stopAndSendRecording}
-                        className="w-11 h-11 rounded-full bg-[#00a884] hover:bg-[#017561] hover:scale-105 text-white flex items-center justify-center transition-all shrink-0 shadow-sm z-10"
+                        className="w-11 h-11 rounded-full bg-[#F97316] hover:bg-[#EA6C0A] hover:scale-105 text-white flex items-center justify-center transition-all shrink-0 shadow-sm z-10"
                         title="Send Voice Note"
                     >
                         <svg className="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
@@ -348,7 +348,7 @@ export const MessageInput: React.FC = () => {
                 ) : (
                     <button
                         type="submit"
-                        className="w-11 h-11 rounded-full bg-[#00a884] hover:bg-[#017561] text-white flex items-center justify-center transition-all shrink-0 shadow-sm"
+                        className="w-11 h-11 rounded-full bg-[#F97316] hover:bg-[#EA6C0A] text-white flex items-center justify-center transition-all shrink-0 shadow-sm disabled:opacity-50"
                         disabled={!content.trim() && !file}
                     >
                         {editingMessage ? (

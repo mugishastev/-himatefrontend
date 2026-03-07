@@ -23,10 +23,6 @@ export const ContactItem: React.FC<ContactItemProps> = ({ contact, onOpenProfile
                 {contact.username}
             </h4>
 
-            <p className="text-sm font-medium text-brand mt-1 truncate w-full px-2">
-                {contact.email}
-            </p>
-
             <div className="flex items-center gap-1.5 mt-3 px-3 py-1 bg-[#f0f2f5] rounded-full">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 block"></span>
                 <p className="text-[11px] font-semibold text-[#667781] uppercase tracking-wider">

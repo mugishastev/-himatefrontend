@@ -3,6 +3,8 @@ import { useUserStore } from '../../../store/user.store';
 import { useUIStore } from '../../../store/ui.store';
 import { useAuthStore } from '../../../store/auth.store';
 import { contactsApi } from '../../../api/contacts.api';
+import { conversationsApi } from '../../../api/conversations.api';
+import { useConversationStore } from '../../../store/conversation.store';
 import { ContactItem } from './ContactItem';
 import { Modal } from '../../../components/ui/Modal';
 import type { User } from '../../../types/user.types';
@@ -10,10 +12,12 @@ import { UserAvatar } from '../../users/components/UserAvatar';
 
 export const ContactList: React.FC = () => {
     const { user } = useAuthStore();
-    const { contacts, setContacts, setIsLoading, isLoading } = useUserStore();
-    const { openModal } = useUIStore();
+    const { contacts, setContacts, setIsLoading, isLoading, removeContact } = useUserStore();
+    const { openModal, setView } = useUIStore();
+    const { setActiveConversation, addConversation } = useConversationStore();
     const [query, setQuery] = useState('');
     const [selectedContact, setSelectedContact] = useState<User | null>(null);
+    const [messaging, setMessaging] = useState(false);
 
     useEffect(() => {
         const fetchContacts = async () => {
@@ -35,10 +39,41 @@ export const ContactList: React.FC = () => {
         const q = query.trim().toLowerCase();
         if (!q) return contacts;
         return contacts.filter((c) =>
-            (c.username || '').toLowerCase().includes(q) ||
-            (c.email || '').toLowerCase().includes(q)
+            (c.username || '').toLowerCase().includes(q)
         );
     }, [contacts, query]);
+
+    const handleMessage = async () => {
+        if (!selectedContact || !user?.id || messaging) return;
+        setMessaging(true);
+        try {
+            const conv = await conversationsApi.createConversation({
+                userIds: [Number(selectedContact.id)],
+                isGroup: false,
+            });
+            addConversation(conv);
+            setActiveConversation(conv.id);
+            setSelectedContact(null);
+            setView('CHATS');
+        } catch (err) {
+            console.error('Failed to open DM:', err);
+            alert('Could not open a conversation. Please try again.');
+        } finally {
+            setMessaging(false);
+        }
+    };
+
+    const handleRemoveContact = async () => {
+        if (!selectedContact) return;
+        if (!confirm(`Remove ${selectedContact.username} from contacts?`)) return;
+        try {
+            await contactsApi.deleteContact(Number(selectedContact.id));
+            removeContact(Number(selectedContact.id));
+            setSelectedContact(null);
+        } catch (err) {
+            console.error('Failed to remove contact:', err);
+        }
+    };
 
     return (
         <div className="flex flex-col h-full bg-[#f0f2f5] animate-in fade-in duration-300">
@@ -72,7 +107,7 @@ export const ContactList: React.FC = () => {
                                 type="text"
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
-                                placeholder="Search contacts by name or email..."
+                                placeholder="Search contacts by username..."
                                 className="w-full bg-[#f0f2f5] border-transparent rounded-xl pl-12 pr-4 py-3 text-[15px] outline-none focus:ring-2 focus:ring-brand/30 transition-shadow"
                             />
                             <svg className="w-5 h-5 text-[#667781] absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,7 +153,6 @@ export const ContactList: React.FC = () => {
                             </div>
                             <div className="text-center">
                                 <p className="text-xl font-bold text-[#111b21]">{selectedContact.username}</p>
-                                <p className="text-sm text-brand font-medium mt-1">{selectedContact.email}</p>
                             </div>
                         </div>
                         <div className="space-y-4">
@@ -135,10 +169,27 @@ export const ContactList: React.FC = () => {
                             </div>
                         </div>
                         <div className="pt-4 flex gap-3">
-                            <button className="flex-1 bg-brand text-white py-2.5 rounded-xl font-medium hover:bg-brand/90 transition-colors shadow-sm">
-                                Message
+                            <button
+                                onClick={handleMessage}
+                                disabled={messaging}
+                                className="flex-1 bg-[#F97316] hover:bg-[#EA6C0A] text-white py-2.5 rounded-xl font-medium transition-colors shadow-sm disabled:opacity-60 flex items-center justify-center gap-2"
+                            >
+                                {messaging ? (
+                                    <>
+                                        <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                        Opening...
+                                    </>
+                                ) : (
+                                    <>
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                                        Message
+                                    </>
+                                )}
                             </button>
-                            <button className="flex-1 bg-gray-100 text-[#111b21] py-2.5 rounded-xl font-medium hover:bg-gray-200 transition-colors">
+                            <button
+                                onClick={handleRemoveContact}
+                                className="flex-1 bg-[#1F2937] text-slate-300 py-2.5 rounded-xl font-medium hover:bg-red-500/10 hover:text-red-400 transition-colors"
+                            >
                                 Remove
                             </button>
                         </div>

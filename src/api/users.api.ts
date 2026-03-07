@@ -25,4 +25,12 @@ export const usersApi = {
         const response = await api.patch(`/users/${id}/fcm-token`, { fcmToken });
         return response.data;
     },
+    changePassword: async (id: number, currentPassword: string, newPassword: string) => {
+        const response = await api.patch(`/users/${id}/change-password`, { currentPassword, newPassword });
+        return response.data;
+    },
+    deleteAccount: async (id: number) => {
+        const response = await api.delete(`/users/${id}`);
+        return response.data;
+    },
 };

@@ -93,7 +93,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ userId, onCl
                                 {isOnline && <span className="w-3 h-3 bg-emerald-500 rounded-full border-2 border-white"></span>}
                             </div>
                             <p className="text-sm font-medium text-text-secondary bg-bg-secondary inline-block px-3 py-1 rounded-full mt-2">
-                                {user.email}
+                                {user.status || 'Active'}
                             </p>
                         </div>
 

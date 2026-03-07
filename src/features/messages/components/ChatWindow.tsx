@@ -20,7 +20,7 @@ export const ChatWindow: React.FC = () => {
         : otherParticipant?.user.username || 'Chat';
     const subtitle = activeConversation?.isGroup
         ? `${activeConversation.participants.length} members`
-        : (otherParticipant?.user?.email || 'Direct conversation');
+        : (otherParticipant?.user?.status || 'Active');
 
     return (
         <div className="flex-1 flex flex-col bg-[#efeae2] h-full min-w-0 relative">
@@ -69,22 +69,40 @@ export const ChatWindow: React.FC = () => {
                     <MessageInput />
                 </>
             ) : (
-                <div className="flex-1 flex flex-col items-center justify-center p-8 text-center border-b-[6px] border-[#25D366] bg-[#f0f2f5] relative overflow-hidden z-20">
-                    <img
-                        src="https://static.whatsapp.net/rsrc.php/v3/y6/r/wa66ilXUu0v.png"
-                        alt="WhatsApp Web"
-                        className="w-[320px] max-w-full opacity-80 mb-8"
-                    />
-                    <h2 className="text-[32px] font-light text-[#41525d] mb-4">Himate Web</h2>
-                    <p className="text-[14px] text-[#667781] max-w-lg leading-relaxed mb-8">
-                        Send and receive messages without keeping your phone online.<br />
-                        Use Himate on up to 4 linked devices and 1 phone at the same time.
+                <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-[#111827] relative overflow-hidden z-20">
+                    {/* Subtle background glow */}
+                    <div className="absolute w-96 h-96 rounded-full bg-[#F97316]/5 blur-3xl pointer-events-none" />
+
+                    {/* Logo */}
+                    <div className="relative mb-8">
+                        <div className="w-28 h-28 rounded-3xl bg-[#1F2937] border border-white/10 flex items-center justify-center shadow-xl overflow-hidden">
+                            <img src="/logo.png" alt="Himate" className="w-20 h-20 object-contain" />
+                        </div>
+                        <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-[#F97316] flex items-center justify-center shadow-lg">
+                            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    {/* Title */}
+                    <h2 className="text-3xl font-bold text-white mb-3">Himate Web</h2>
+                    <p className="text-[#9CA3AF] text-sm max-w-sm leading-relaxed mb-8">
+                        Select a conversation from the list to start chatting.<br />
+                        Your messages are private and secure.
                     </p>
-                    <div className="flex items-center gap-1 text-[13px] text-[#8696a0]">
-                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path>
-                        </svg>
-                        End-to-end encrypted
+
+                    {/* Feature pills */}
+                    <div className="flex flex-wrap gap-3 justify-center">
+                        {[
+                            { icon: '🔒', label: 'End-to-end encrypted' },
+                            { icon: '⚡', label: 'Real-time messaging' },
+                            { icon: '📎', label: 'Share files & media' },
+                        ].map(f => (
+                            <span key={f.label} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1F2937] border border-white/10 text-[#9CA3AF] text-xs font-medium">
+                                <span>{f.icon}</span>{f.label}
+                            </span>
+                        ))}
                     </div>
                 </div>
             )}

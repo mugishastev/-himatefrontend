@@ -77,7 +77,7 @@ export const AdminMessagesPage: React.FC = () => {
                                         {msg.conversation?.title || (msg.conversation?.isGroup ? 'Group' : 'DM')} #{msg.conversationId}
                                     </td>
                                     <td className="px-6 py-4 text-slate-500 text-xs">
-                                        {new Date(msg.createdAt).toLocaleString()}
+                                        {new Date(msg.timestamp ?? msg.createdAt).toLocaleString()}
                                     </td>
                                 </tr>
                             ))
