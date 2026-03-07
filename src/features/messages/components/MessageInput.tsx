@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { useMessages } from '../../../hooks/useMessages';
-import { Button } from '../../../components/ui/Button';
 import { AttachmentPreview } from './AttachmentPreview';
 import { useConversationStore } from '../../../store/conversation.store';
 import { socketEmitters } from '../../../socket';
@@ -13,8 +12,8 @@ export const MessageInput: React.FC = () => {
     const [isRecording, setIsRecording] = useState(false);
     const [recordSeconds, setRecordSeconds] = useState(0);
 
-    const { sendMessage } = useMessages();
-    const { activeConversationId } = useConversationStore();
+    const { sendMessage, updateMessage } = useMessages();
+    const { activeConversationId, editingMessage, setEditingMessage } = useConversationStore();
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const mediaInputRef = useRef<HTMLInputElement>(null);
@@ -38,6 +37,15 @@ export const MessageInput: React.FC = () => {
     React.useEffect(() => {
         autoGrow();
     }, [content]);
+
+    React.useEffect(() => {
+        if (editingMessage) {
+            setContent(editingMessage.content);
+            textAreaRef.current?.focus();
+        } else {
+            setContent('');
+        }
+    }, [editingMessage]);
 
     React.useEffect(() => {
         const closeOnOutside = (event: MouseEvent) => {
@@ -69,7 +77,13 @@ export const MessageInput: React.FC = () => {
         e.preventDefault();
         if (!content.trim() && !file) return;
 
-        await sendMessage(content, file);
+        if (editingMessage) {
+            await updateMessage(Number(editingMessage.id), content);
+            setEditingMessage(null);
+        } else {
+            await sendMessage(content, file);
+        }
+
         if (activeConversationId) socketEmitters.sendTyping(activeConversationId, false);
         setContent('');
         setFile(null);
@@ -100,27 +114,75 @@ export const MessageInput: React.FC = () => {
         );
     };
 
-    const startRecording = () => {
-        setIsRecording(true);
-        setRecordSeconds(0);
-        recordTimerRef.current = setInterval(() => {
-            setRecordSeconds((s) => s + 1);
-        }, 1000);
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    const audioChunksRef = useRef<Blob[]>([]);
+    const secondsRef = useRef(0);
+
+    const startRecording = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const recorder = new MediaRecorder(stream);
+            mediaRecorderRef.current = recorder;
+            audioChunksRef.current = [];
+            secondsRef.current = 0;
+
+            recorder.ondataavailable = (e) => {
+                if (e.data.size > 0) {
+                    audioChunksRef.current.push(e.data);
+                }
+            };
+
+            recorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+                const audioFile = new File([audioBlob], `voice-note-${Date.now()}.webm`, { type: 'audio/webm' });
+
+                if (secondsRef.current > 0) {
+                    await sendMessage('', audioFile);
+                }
+
+                stream.getTracks().forEach(track => track.stop());
+                setRecordSeconds(0);
+                secondsRef.current = 0;
+            };
+
+            recorder.start();
+            setIsRecording(true);
+            setRecordSeconds(0);
+            recordTimerRef.current = setInterval(() => {
+                setRecordSeconds((s) => s + 1);
+                secondsRef.current += 1;
+            }, 1000);
+        } catch (err) {
+            console.error('Failed to start recording', err);
+            alert('Could not access microphone');
+        }
     };
 
-    const stopRecording = async () => {
-        setIsRecording(false);
-        if (recordTimerRef.current) {
-            clearInterval(recordTimerRef.current);
-            recordTimerRef.current = null;
+    const stopRecording = () => {
+        if (mediaRecorderRef.current && isRecording) {
+            mediaRecorderRef.current.stop();
+            setIsRecording(false);
+            if (recordTimerRef.current) {
+                clearInterval(recordTimerRef.current);
+                recordTimerRef.current = null;
+            }
         }
-        if (recordSeconds === 0) return;
-        await sendMessage(`🎤 Voice note (${recordSeconds}s)`);
-        setRecordSeconds(0);
     };
 
     return (
-        <div className="p-4 bg-white border-t border-gray-100 space-y-3">
+        <div className="shrink-0 bg-[#f0f2f5] border-t border-[#e9edef] px-3 py-2 space-y-2">
+            {editingMessage && (
+                <div className="flex items-center justify-between bg-brand/5 border border-brand/10 p-2 rounded-xl animate-in fade-in slide-in-from-top-1 duration-200">
+                    <div className="flex items-center gap-2 text-brand">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                        <span className="text-xs font-bold uppercase">Editing Message</span>
+                    </div>
+                    <button onClick={() => setEditingMessage(null)} className="p-1 hover:bg-white/50 rounded-full text-text-muted transition-colors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+            )}
+
             {file && (
                 <div className="flex animate-in slide-in-from-bottom-2 duration-300">
                     <AttachmentPreview file={file} onRemove={() => setFile(null)} />
@@ -141,15 +203,16 @@ export const MessageInput: React.FC = () => {
                 </div>
             )}
 
-            <form onSubmit={handleSend} className="flex space-x-3 items-end">
+            <form onSubmit={handleSend} className="flex items-end gap-2">
+                {/* Emoji picker */}
                 <div className="relative" ref={emojiRef}>
                     <button
                         type="button"
                         onClick={() => setIsEmojiOpen((v) => !v)}
-                        className="p-3 hover:bg-bg-secondary rounded-2xl text-text-secondary transition-all hover:text-brand border border-dashed border-gray-200 hover:border-brand"
+                        className="p-2.5 text-[#54656f] hover:text-[#111b21] transition-colors rounded-full hover:bg-black/5"
                         title="Emoji"
                     >
-                        <span className="text-xl">😊</span>
+                        <span className="text-2xl leading-none">😊</span>
                     </button>
                     {isEmojiOpen && (
                         <div className="absolute bottom-14 left-0 z-30 bg-white rounded-2xl border border-gray-100 shadow-xl p-3 w-56">
@@ -173,11 +236,11 @@ export const MessageInput: React.FC = () => {
                     <button
                         type="button"
                         onClick={() => setIsAttachMenuOpen((v) => !v)}
-                        className="p-3 hover:bg-bg-secondary rounded-2xl text-text-secondary transition-all hover:text-brand border border-dashed border-gray-200 hover:border-brand"
+                        className="p-2.5 text-[#54656f] hover:text-[#111b21] transition-colors rounded-full hover:bg-black/5"
                         title="Attachments"
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                         </svg>
                     </button>
 
@@ -211,6 +274,7 @@ export const MessageInput: React.FC = () => {
                     />
                 </div>
 
+                {/* Text input */}
                 <div className="flex-1 relative">
                     <textarea
                         ref={textAreaRef}
@@ -219,9 +283,9 @@ export const MessageInput: React.FC = () => {
                             setContent(e.target.value);
                             emitTyping();
                         }}
-                        placeholder="Type a message..."
+                        placeholder="Type a message"
                         rows={1}
-                        className="w-full px-5 py-3.5 bg-bg-secondary border-none rounded-2xl outline-none focus:ring-2 focus:ring-brand/20 resize-none transition-all duration-200 text-text-primary overflow-y-auto max-h-40"
+                        className="w-full px-4 py-2.5 bg-white border border-[#e9edef] rounded-lg outline-none focus:border-[#c4c9cd] resize-none transition-all duration-200 text-[#111b21] text-[15px] overflow-y-auto max-h-40"
                         onKeyDown={(e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                                 e.preventDefault();
@@ -231,33 +295,40 @@ export const MessageInput: React.FC = () => {
                     />
                 </div>
 
-                <button
-                    type="button"
-                    onMouseDown={startRecording}
-                    onMouseUp={stopRecording}
-                    onMouseLeave={() => {
-                        if (isRecording) stopRecording();
-                    }}
-                    onTouchStart={startRecording}
-                    onTouchEnd={stopRecording}
-                    className={`rounded-2xl w-14 h-14 p-0 flex items-center justify-center border transition-all ${isRecording ? 'bg-red-50 border-red-200 text-red-600' : 'bg-white border-gray-200 text-text-secondary hover:text-brand hover:border-brand/40'}`}
-                    title="Hold to record voice note"
-                >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14a3 3 0 003-3V7a3 3 0 10-6 0v4a3 3 0 003 3zm0 0v4m-4 0h8" />
-                    </svg>
-                </button>
-
-                <Button
-                    type="submit"
-                    variant="primary"
-                    className="rounded-2xl w-14 h-14 p-0 flex items-center justify-center shadow-lg shadow-brand/20 active:scale-95 transition-transform"
-                    disabled={!content.trim() && !file}
-                >
-                    <svg className="w-7 h-7 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                    </svg>
-                </Button>
+                {/* Mic / Send button */}
+                {!content.trim() && !file ? (
+                    <button
+                        type="button"
+                        onMouseDown={startRecording}
+                        onMouseUp={stopRecording}
+                        onMouseLeave={() => { if (isRecording) stopRecording(); }}
+                        onTouchStart={startRecording}
+                        onTouchEnd={stopRecording}
+                        className={`w-11 h-11 rounded-full flex items-center justify-center transition-all shrink-0 ${isRecording ? 'bg-red-500 text-white' : 'bg-[#00a884] text-white hover:bg-[#017561]'
+                            }`}
+                        title="Hold to record"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14a3 3 0 003-3V7a3 3 0 10-6 0v4a3 3 0 003 3zm0 0v4m-4 0h8" />
+                        </svg>
+                    </button>
+                ) : (
+                    <button
+                        type="submit"
+                        className="w-11 h-11 rounded-full bg-[#00a884] hover:bg-[#017561] text-white flex items-center justify-center transition-all shrink-0 shadow-sm"
+                        disabled={!content.trim() && !file}
+                    >
+                        {editingMessage ? (
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                            </svg>
+                        ) : (
+                            <svg className="w-5 h-5 rotate-90" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                            </svg>
+                        )}
+                    </button>
+                )}
             </form>
         </div>
     );

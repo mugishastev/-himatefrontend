@@ -24,19 +24,27 @@ export const AddContactModal: React.FC<AddContactModalProps> = ({ onClose, onSuc
         setIsLoading(true);
         setError(null);
         try {
-            // 1. Search for user by email
+            // 1. Search for user by email — handle both { data: [...] } and direct array responses
             const searchResponse = await usersApi.findAll({ search: email.trim() });
-            const foundUser = searchResponse.data.find((u: any) => u.email.toLowerCase() === email.trim().toLowerCase());
+            const userList: any[] = Array.isArray(searchResponse)
+                ? searchResponse
+                : Array.isArray(searchResponse?.data)
+                    ? searchResponse.data
+                    : [];
+
+            const foundUser = userList.find(
+                (u: any) => u.email?.toLowerCase() === email.trim().toLowerCase()
+            );
 
             if (!foundUser) {
-                throw new Error('User not found with this email');
+                throw new Error('No user found with this email address');
             }
 
             if (Number(foundUser.id) === Number(user.id)) {
                 throw new Error('You cannot add yourself as a contact');
             }
 
-            // 2. Add contact using both IDs
+            // 2. Add contact
             await contactsApi.addContact(Number(user.id), Number(foundUser.id));
 
             onSuccess?.();

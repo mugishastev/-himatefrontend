@@ -1,11 +1,7 @@
 import api from './axios';
 
 export const conversationsApi = {
-    createConversation: async (participantIds: string[] | number[]) => {
-        const data = {
-            userIds: participantIds,
-            isGroup: participantIds.length > 2
-        };
+    createConversation: async (data: { userIds: number[]; title?: string; isGroup?: boolean }) => {
         const response = await api.post('/conversations', data);
         return response.data;
     },

@@ -1,10 +1,10 @@
 import api from './axios';
-import type { StatusListResponse, StatusPost } from '../types/status.types';
+import type { StatusPost } from '../types/status.types';
 
 export const statusesApi = {
-    getStatuses: async (): Promise<StatusListResponse> => {
+    getStatuses: async (): Promise<StatusPost[]> => {
         const response = await api.get('/statuses');
-        return response.data;
+        return Array.isArray(response.data) ? response.data : response.data?.data || [];
     },
     createStatus: async (payload: {
         userId: number;

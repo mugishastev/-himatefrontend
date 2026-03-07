@@ -5,9 +5,10 @@ interface UserAvatarProps {
     user: User;
     size?: 'sm' | 'md' | 'lg' | 'xl';
     showStatus?: boolean;
+    className?: string;
 }
 
-export const UserAvatar: React.FC<UserAvatarProps> = ({ user, size = 'md', showStatus = true }) => {
+export const UserAvatar: React.FC<UserAvatarProps> = ({ user, size = 'md', showStatus = true, className = '' }) => {
     const sizeClasses = {
         sm: 'w-8 h-8 text-xs',
         md: 'w-12 h-12 text-sm',
@@ -18,7 +19,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({ user, size = 'md', showS
     const imageUrl = user.avatarUrl || user.profileImage;
 
     return (
-        <div className="relative inline-block">
+        <div className={`relative inline-block ${className}`}>
             <div className={`${sizeClasses[size]} rounded-full bg-brand/10 border-2 border-white flex items-center justify-center font-bold text-brand overflow-hidden shadow-sm`}>
                 {imageUrl ? (
                     <img src={imageUrl} alt={user.username} className="w-full h-full object-cover" />

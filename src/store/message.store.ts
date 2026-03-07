@@ -6,6 +6,8 @@ interface MessageState {
     isLoading: boolean;
     setMessages: (conversationId: string, messages: Message[]) => void;
     addMessage: (message: Message) => void;
+    removeMessage: (conversationId: string, messageId: number) => void;
+    updateMessage: (conversationId: string, message: Message) => void;
     setLoading: (isLoading: boolean) => void;
 }
 
@@ -26,6 +28,28 @@ export const useMessageStore = create<MessageState>((set) => ({
                 messages: {
                     ...state.messages,
                     [key]: [...currentMessages, message],
+                },
+            };
+        }),
+    removeMessage: (conversationId, messageId) =>
+        set((state) => {
+            const key = String(conversationId);
+            const currentMessages = state.messages[key] || [];
+            return {
+                messages: {
+                    ...state.messages,
+                    [key]: currentMessages.filter((m) => m.id !== messageId),
+                },
+            };
+        }),
+    updateMessage: (conversationId, message) =>
+        set((state) => {
+            const key = String(conversationId);
+            const currentMessages = state.messages[key] || [];
+            return {
+                messages: {
+                    ...state.messages,
+                    [key]: currentMessages.map((m) => (m.id === message.id ? message : m)),
                 },
             };
         }),

@@ -17,4 +17,8 @@ export const messagesApi = {
         const response = await api.delete(`/messages/${messageId}`);
         return response.data;
     },
+    updateMessage: async (messageId: number, content: string) => {
+        const response = await api.patch(`/messages/${messageId}`, { content });
+        return response.data;
+    },
 };

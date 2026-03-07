@@ -7,7 +7,7 @@ import { useAuthStore } from '../store/auth.store';
 export const useMessages = () => {
     const { activeConversationId, updateConversationLastMessage } = useConversationStore();
     const { user } = useAuthStore();
-    const { messages, setMessages, addMessage, setLoading } = useMessageStore();
+    const { messages, setMessages, addMessage, removeMessage, updateMessage: updateMessageInStore, setLoading } = useMessageStore();
     const [error, setError] = useState<string | null>(null);
 
     const fetchMessages = useCallback(async (conversationId: string) => {
@@ -59,10 +59,32 @@ export const useMessages = () => {
         }
     };
 
+    const deleteMessage = async (id: number) => {
+        if (!activeConversationId) return;
+        try {
+            await messagesApi.deleteMessage(id);
+            removeMessage(String(activeConversationId), id);
+        } catch (err: any) {
+            setError(err.message || 'Failed to delete message');
+        }
+    };
+
+    const updateMessage = async (id: number, content: string) => {
+        if (!activeConversationId) return;
+        try {
+            const updated = await messagesApi.updateMessage(id, content);
+            updateMessageInStore(String(activeConversationId), updated);
+        } catch (err: any) {
+            setError(err.message || 'Failed to update message');
+        }
+    };
+
     return {
         messages: activeConversationId ? messages[String(activeConversationId)] || [] : [],
         fetchMessages,
         sendMessage,
+        deleteMessage,
+        updateMessage,
         error,
     };
 };

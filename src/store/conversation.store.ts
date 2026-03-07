@@ -6,9 +6,11 @@ interface ConversationState {
     conversations: Conversation[];
     activeConversationId: string | number | null;
     typingUsers: Record<string, (string | number)[]>; // conversationId -> userIds
+    editingMessage: Message | null;
     isLoading: boolean;
     setConversations: (conversations: Conversation[]) => void;
     setActiveConversation: (id: string | number | null) => void;
+    setEditingMessage: (message: Message | null) => void;
     addConversation: (conversation: Conversation) => void;
     updateConversationLastMessage: (conversationId: string | number, message: Message) => void;
     setTyping: (conversationId: string | number, userId: string | number, isTyping: boolean) => void;
@@ -21,9 +23,11 @@ export const useConversationStore = create<ConversationState>((set) => ({
     conversations: [],
     activeConversationId: null,
     typingUsers: {},
+    editingMessage: null,
     isLoading: false,
     setConversations: (conversations) => set({ conversations }),
     setActiveConversation: (id) => set({ activeConversationId: id }),
+    setEditingMessage: (message) => set({ editingMessage: message }),
     addConversation: (conversation) =>
         set((state) => ({ conversations: [conversation, ...state.conversations] })),
     updateConversationLastMessage: (conversationId, message) =>

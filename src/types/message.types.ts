@@ -1,7 +1,7 @@
 import type { User } from './auth.types';
 import type { BaseEntity } from './common.types';
 
-export type MessageType = 'TEXT' | 'IMAGE' | 'FILE' | 'SYSTEM';
+export type MessageType = 'TEXT' | 'IMAGE' | 'VIDEO' | 'AUDIO' | 'FILE' | 'SYSTEM';
 
 export type MessageStatus = 'SENDING' | 'SENT' | 'RECEIVED' | 'READ' | 'FAILED';
 
@@ -12,6 +12,7 @@ export interface Message extends BaseEntity {
     sender: User;
     conversationId: string | number;
     isRead: boolean;
+    isDelivered: boolean;
     status: MessageStatus;
     fileUrl?: string;
     mediaUrl?: string;
