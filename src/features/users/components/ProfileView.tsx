@@ -91,176 +91,129 @@ export const ProfileView: React.FC = () => {
   if (!user) return null;
 
   return (
-    <div className="flex flex-col h-full bg-[#f0f2f5] animate-in slide-in-from-left duration-300">
-      {/* WhatsApp Header */}
-      <header className="h-[108px] bg-[#008069] flex items-end px-6 pb-4 shrink-0 text-white">
+    <div className="flex flex-col h-full bg-[#f0f2f5] animate-in fade-in duration-300">
+      {/* Header */}
+      <header className="h-[108px] bg-brand flex items-end px-8 pb-4 shrink-0 text-white shadow-md z-10">
         <button
           onClick={() => setView("CHATS")}
-          className="mr-6 hover:bg-white/10 p-1 rounded-full transition-colors"
+          className="mr-6 hover:bg-white/20 p-2 rounded-full transition-colors flex items-center gap-2"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2.5"
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            />
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
+          <span className="font-medium text-[16px]">Back</span>
         </button>
-        <h1 className="text-[19px] font-medium tracking-wide">Profile</h1>
+        <h1 className="text-[22px] font-semibold tracking-wide ml-4">Profile Overview</h1>
       </header>
 
-      <div className="flex-1 overflow-y-auto no-scrollbar pb-10">
-        {/* Avatar Section */}
-        <div className="bg-[#f0f2f5] py-7 flex justify-center">
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="relative group w-[200px] h-[200px] rounded-full overflow-hidden shadow-sm"
-            title="Change Profile Photo"
-          >
-            <UserAvatar
-              user={user}
-              size="xl"
-              className="w-full h-full text-5xl object-cover"
-            />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white cursor-pointer">
-              <svg
-                className="w-8 h-8 mb-2"
-                fill="currentColor"
-                viewBox="0 0 24 24"
+      <div className="flex-1 overflow-y-auto no-scrollbar py-10 px-4 md:px-8">
+        <div className="max-w-4xl mx-auto space-y-6">
+
+          {/* Top Section: Avatar & Quick Stats */}
+          <div className="bg-white rounded-2xl shadow-sm p-8 flex flex-col md:flex-row items-center md:items-start gap-8">
+            <div className="shrink-0 flex flex-col items-center">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="relative group w-[180px] h-[180px] rounded-full overflow-hidden shadow-md ring-4 ring-[#f0f2f5]"
+                title="Change Profile Photo"
               >
-                <path d="M21.016 4.969c.516 0 .984.469.984.984v12.094c0 .516-.469 1.031-.984 1.031h-18.047c-.516 0-.984-.515-.984-1.031v-12.094c0-.515.468-.984.984-.984h18.047zm-18.047 12.094l5.016-6.047 3.984 4.969 5.016-6.516 4.031 7.594h-18.047z" />
-              </svg>
-              <span className="text-xs uppercase tracking-wide font-medium text-center px-4">
-                Change
-                <br />
-                Profile Photo
-              </span>
+                <UserAvatar user={user} size="full" className="w-full h-full text-5xl object-cover" />
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white cursor-pointer backdrop-blur-sm">
+                  <svg className="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M21.016 4.969c.516 0 .984.469.984.984v12.094c0 .516-.469 1.031-.984 1.031h-18.047c-.516 0-.984-.515-.984-1.031v-12.094c0-.515.468-.984.984-.984h18.047zm-18.047 12.094l5.016-6.047 3.984 4.969 5.016-6.516 4.031 7.594h-18.047z" />
+                  </svg>
+                  <span className="text-xs uppercase tracking-wider font-semibold text-center px-4">Change Photo</span>
+                </div>
+              </button>
+              <input ref={fileInputRef} type="file" className="hidden" accept="image/*" onChange={handleAvatarUpload} />
             </div>
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            className="hidden"
-            accept="image/*"
-            onChange={handleAvatarUpload}
-          />
-        </div>
 
-        {/* Name Section */}
-        <div className="bg-white px-7 py-3 shadow-sm mb-3">
-          <h2 className="text-[14px] text-[#008069] mb-4">Your name</h2>
-          <div className="flex items-center group relative pb-2">
-            {isEditingName ? (
-              <div className="flex-1 flex flex-col">
-                <input
-                  autoFocus
-                  className="w-full text-[#111b21] text-[17px] outline-none border-b-2 border-[#008069] pb-1 bg-transparent"
-                  value={identityForm.username}
-                  onChange={(e) =>
-                    setIdentityForm((prev) => ({
-                      ...prev,
-                      username: e.target.value,
-                    }))
-                  }
-                  onKeyDown={(e) => e.key === "Enter" && handleSaveName()}
-                />
-                <div className="absolute right-0 top-0 flex gap-2">
-                  <button onClick={handleSaveName} className="text-[#008069]">
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M8.03 18.03l-4.54-4.54-1.41 1.41 5.95 5.95 12.02-12.02-1.41-1.41z" />
-                    </svg>
-                  </button>
+            <div className="flex-1 w-full pt-4">
+              <h2 className="text-3xl font-bold text-[#111b21] mb-2">{identityForm.username}</h2>
+              <p className="text-[#667781] text-lg mb-6">{identityForm.bio || "Available"}</p>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#f0f2f5] rounded-xl p-4 flex items-center gap-4">
+                  <div className="bg-brand/10 p-3 rounded-full text-brand">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#667781] uppercase font-semibold tracking-wider">Email Address</p>
+                    <p className="text-[#111b21] font-medium">{user.email || "Not provided"}</p>
+                  </div>
+                </div>
+                <div className="bg-[#f0f2f5] rounded-xl p-4 flex items-center gap-4">
+                  <div className="bg-brand/10 p-3 rounded-full text-brand">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#667781] uppercase font-semibold tracking-wider">Member Since</p>
+                    <p className="text-[#111b21] font-medium">Recently Joined</p>
+                  </div>
                 </div>
               </div>
-            ) : (
-              <>
-                <p className="text-[#111b21] text-[17px] flex-1 pb-1">
-                  {identityForm.username}
-                </p>
-                <button
-                  onClick={() => setIsEditingName(true)}
-                  className="text-[#8696a0] hover:text-[#54656f]"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                  </svg>
-                </button>
-              </>
-            )}
+            </div>
           </div>
-        </div>
 
-        <div className="px-7 py-3">
-          <p className="text-[13.5px] text-[#667781] leading-relaxed">
-            This is not your username or pin. This name will be visible to your
-            WhatsApp contacts.
-          </p>
-        </div>
+          {/* Bottom Section: Edit Identity */}
+          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div className="px-8 py-5 border-b border-[#f0f2f5] bg-gray-50/50">
+              <h3 className="text-lg font-semibold text-[#111b21]">Identity Information</h3>
+              <p className="text-sm text-[#667781]">Update your visible name and what you are up to.</p>
+            </div>
 
-        {/* About Section */}
-        <div className="bg-white px-7 py-3 shadow-sm mt-3">
-          <h2 className="text-[14px] text-[#008069] mb-4">About</h2>
-          <div className="flex items-center group relative pb-2">
-            {isEditingBio ? (
-              <div className="flex-1 flex flex-col">
-                <input
-                  autoFocus
-                  className="w-full text-[#111b21] text-[17px] outline-none border-b-2 border-[#008069] pb-1 bg-transparent"
-                  value={identityForm.bio}
-                  onChange={(e) =>
-                    setIdentityForm((prev) => ({
-                      ...prev,
-                      bio: e.target.value,
-                    }))
-                  }
-                  onKeyDown={(e) => e.key === "Enter" && handleSaveBio()}
-                />
-                <div className="absolute right-0 top-0 flex gap-2">
-                  <button onClick={handleSaveBio} className="text-[#008069]">
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M8.03 18.03l-4.54-4.54-1.41 1.41 5.95 5.95 12.02-12.02-1.41-1.41z" />
-                    </svg>
-                  </button>
+            <div className="p-8 space-y-8">
+              {/* Name Edit */}
+              <div>
+                <label className="text-sm font-semibold text-brand tracking-wide uppercase mb-2 flex">Your Name</label>
+                <div className="flex items-center group relative mt-2 bg-gray-50 rounded-lg p-4 border border-gray-100 hover:border-brand/30 transition-colors">
+                  {isEditingName ? (
+                    <div className="flex-1 flex flex-col">
+                      <input autoFocus className="w-full text-[#111b21] text-lg outline-none bg-transparent font-medium" value={identityForm.username} onChange={(e) => setIdentityForm((prev) => ({ ...prev, username: e.target.value }))} onKeyDown={(e) => e.key === "Enter" && handleSaveName()} />
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3">
+                        <button onClick={handleSaveName} className="bg-brand text-white p-1.5 rounded-md hover:bg-brand/90 transition-colors shadow-sm">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-[#111b21] text-lg font-medium flex-1">{identityForm.username}</p>
+                      <button onClick={() => setIsEditingName(true)} className="text-[#8696a0] hover:text-brand transition-colors p-2 rounded-md hover:bg-brand/10">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg>
+                      </button>
+                    </>
+                  )}
+                </div>
+                <p className="text-sm text-[#667781] mt-2 ml-1">This name will be visible to your Himate contacts.</p>
+              </div>
+
+              {/* Bio Edit */}
+              <div>
+                <label className="text-sm font-semibold text-brand tracking-wide uppercase mb-2 flex">About</label>
+                <div className="flex items-center group relative mt-2 bg-gray-50 rounded-lg p-4 border border-gray-100 hover:border-brand/30 transition-colors">
+                  {isEditingBio ? (
+                    <div className="flex-1 flex flex-col">
+                      <input autoFocus className="w-full text-[#111b21] text-lg outline-none bg-transparent font-medium" value={identityForm.bio} onChange={(e) => setIdentityForm((prev) => ({ ...prev, bio: e.target.value }))} onKeyDown={(e) => e.key === "Enter" && handleSaveBio()} />
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3">
+                        <button onClick={handleSaveBio} className="bg-brand text-white p-1.5 rounded-md hover:bg-brand/90 transition-colors shadow-sm">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-[#111b21] text-lg font-medium flex-1 truncate">{identityForm.bio || "Available"}</p>
+                      <button onClick={() => setIsEditingBio(true)} className="text-[#8696a0] hover:text-brand transition-colors p-2 rounded-md hover:bg-brand/10">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg>
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
-            ) : (
-              <>
-                <p className="text-[#111b21] text-[17px] flex-1 pb-1 truncate">
-                  {identityForm.bio || "Available"}
-                </p>
-                <button
-                  onClick={() => setIsEditingBio(true)}
-                  className="text-[#8696a0] hover:text-[#54656f]"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                  </svg>
-                </button>
-              </>
-            )}
+            </div>
           </div>
+
         </div>
       </div>
     </div>

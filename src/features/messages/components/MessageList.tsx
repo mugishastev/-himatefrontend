@@ -6,9 +6,11 @@ import { useConversationStore } from '../../../store/conversation.store';
 import { useTypingIndicator } from '../../../hooks/useTypingIndicator';
 import { socketEmitters } from '../../../socket';
 import { formatChatDayDivider } from '../../../utils/chat';
+import { messagesApi } from '../../../api/messages.api';
 
 export const MessageList: React.FC = () => {
     const { activeConversationId, typingUsers } = useConversationStore();
+    const clearUnreadCount = useConversationStore((state) => state.clearUnreadCount);
     const { messages, fetchMessages } = useMessages();
     const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -29,13 +31,18 @@ export const MessageList: React.FC = () => {
         if (activeConversationId) {
             fetchMessages(String(activeConversationId));
             socketEmitters.joinConversation(activeConversationId);
+
+            // Instantly clear unread count in frontend state
+            clearUnreadCount(activeConversationId);
+            // Tell backend messages are read
+            messagesApi.markConversationAsRead(activeConversationId).catch(console.error);
         }
         return () => {
             if (activeConversationId) {
                 socketEmitters.leaveConversation(activeConversationId);
             }
         };
-    }, [activeConversationId, fetchMessages]);
+    }, [activeConversationId, fetchMessages, clearUnreadCount]);
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });

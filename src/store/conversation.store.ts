@@ -17,6 +17,7 @@ interface ConversationState {
     addTypingUser: (conversationId: string | number, userId: string | number) => void;
     removeTypingUser: (conversationId: string | number, userId: string | number) => void;
     setLoading: (isLoading: boolean) => void;
+    clearUnreadCount: (conversationId: string | number) => void;
 }
 
 export const useConversationStore = create<ConversationState>((set) => ({
@@ -71,4 +72,10 @@ export const useConversationStore = create<ConversationState>((set) => ({
             };
         }),
     setLoading: (isLoading) => set({ isLoading }),
+    clearUnreadCount: (conversationId) =>
+        set((state) => ({
+            conversations: state.conversations.map((c) =>
+                String(c.id) === String(conversationId) ? { ...c, unreadCount: 0 } : c
+            ),
+        })),
 }));

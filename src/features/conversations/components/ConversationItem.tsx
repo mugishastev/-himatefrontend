@@ -2,6 +2,7 @@ import React from 'react';
 import type { Conversation } from '../../../types/conversation.types';
 import { useConversationStore } from '../../../store/conversation.store';
 import { useAuthStore } from '../../../store/auth.store';
+import { useUIStore } from '../../../store/ui.store';
 import { formatChatPreviewTime } from '../../../utils/chat';
 
 interface ConversationItemProps {
@@ -10,6 +11,7 @@ interface ConversationItemProps {
 
 export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation }) => {
     const { activeConversationId, setActiveConversation } = useConversationStore();
+    const { openImage } = useUIStore();
     const { user } = useAuthStore();
     const isActive = String(activeConversationId) === String(conversation.id);
 
@@ -31,8 +33,15 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
             className={`flex items-center px-3 py-2.5 cursor-pointer border-b border-[#f0f2f5] transition-colors duration-150 ${isActive ? 'bg-[#f0f2f5]' : 'bg-white hover:bg-[#f5f6f6]'
                 }`}
         >
-            {/* Avatar */}
-            <div className="w-[49px] h-[49px] rounded-full bg-[#dfe5e7] flex-shrink-0 flex items-center justify-center font-medium text-[#667781] text-xl overflow-hidden">
+            <div
+                className={`w-[49px] h-[49px] rounded-full bg-[#dfe5e7] flex-shrink-0 flex items-center justify-center font-medium text-[#667781] text-xl overflow-hidden ${otherParticipant?.user?.avatarUrl ? 'cursor-pointer hover:opacity-90' : ''}`}
+                onClick={(e) => {
+                    if (otherParticipant?.user?.avatarUrl) {
+                        e.stopPropagation();
+                        openImage(otherParticipant.user.avatarUrl);
+                    }
+                }}
+            >
                 {otherParticipant?.user?.avatarUrl ? (
                     <img src={otherParticipant.user.avatarUrl} alt={displayName} className="w-full h-full object-cover" />
                 ) : (

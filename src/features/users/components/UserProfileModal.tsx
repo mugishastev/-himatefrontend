@@ -73,8 +73,8 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ userId, onCl
                 <div className="px-6 pb-6 relative">
                     {/* Avatar overlap */}
                     <div className="absolute -top-12 left-6">
-                        <div className="p-1 bg-white rounded-full shadow-lg">
-                            <UserAvatar user={user} size="xl" className="w-24 h-24" />
+                        <div className="p-1 bg-white rounded-full shadow-lg w-24 h-24">
+                            <UserAvatar user={user} size="full" />
                         </div>
                     </div>
 

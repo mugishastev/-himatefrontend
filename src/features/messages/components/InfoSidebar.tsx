@@ -46,7 +46,7 @@ export const InfoSidebar: React.FC = () => {
                                 {displayName.charAt(0).toUpperCase()}
                             </div>
                         ) : (
-                            otherParticipant?.user && <UserAvatar user={otherParticipant.user} size="lg" />
+                            otherParticipant?.user && <UserAvatar user={otherParticipant.user} size="full" showStatus={false} />
                         )}
                     </div>
                     <h2 className="text-2xl font-normal text-[#111b21] mb-1">{displayName}</h2>

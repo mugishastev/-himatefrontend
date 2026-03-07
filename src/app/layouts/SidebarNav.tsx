@@ -54,7 +54,7 @@ export const SidebarNav: React.FC = () => {
     return (
         <div className="w-20 bg-brand flex flex-col items-center py-6 space-y-5 text-white/70">
             <div className="w-12 h-12 flex items-center justify-center mb-6">
-                <img src="/logo.png" alt="Himate" className="w-full h-auto object-contain" />
+                <img src="/logo.png" alt="Himate" className="w-full h-auto object-contain brightness-0 invert opacity-90" />
             </div>
 
             <div className="flex-1 w-full space-y-4 px-2">

@@ -13,6 +13,10 @@ export const messagesApi = {
         const response = await api.patch(`/messages/${messageId}/read`);
         return response.data;
     },
+    markConversationAsRead: async (conversationId: string | number) => {
+        const response = await api.patch(`/messages/conversation/${conversationId}/read`);
+        return response.data;
+    },
     deleteMessage: async (messageId: number) => {
         const response = await api.delete(`/messages/${messageId}`);
         return response.data;

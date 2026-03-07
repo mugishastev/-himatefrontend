@@ -2,6 +2,7 @@ import React from 'react';
 import { ConversationList } from '../../features/conversations/components/ConversationList';
 import { ContactList } from '../../features/contacts/components/ContactList';
 import { ProfileView } from '../../features/users/components/ProfileView';
+import { SettingsView } from '../../features/settings/components/SettingsView';
 import { ChatWindow } from '../../features/messages/components/ChatWindow';
 import { SidebarNav } from './SidebarNav';
 import { NewConversationModal } from '../../features/conversations/components/NewConversationModal';
@@ -12,64 +13,73 @@ import { useUIStore } from '../../store/ui.store';
 import { NotificationList } from '../../features/notifications/components/NotificationList';
 import { StatusFeed } from '../../features/status/components/StatusFeed';
 import { InfoSidebar } from '../../features/messages/components/InfoSidebar';
+import { ImageViewerModal } from '../../features/messages/components/ImageViewerModal';
 import { useNotifications } from '../../hooks/useNotifications';
 import { useConversations } from '../../hooks/useConversations';
 
 
 export const DashboardLayout: React.FC = () => {
-    const { isSidebarOpen, currentView, activeModal, viewingUserId, closeModal } = useUIStore();
+    const { currentView, activeModal, viewingUserId, closeModal } = useUIStore();
 
     // Kick off global notification and conversation fetching on mount
     useNotifications();
     useConversations();
 
-    const renderSideView = () => {
+    const renderMainView = () => {
         switch (currentView) {
             case 'CHATS':
-                return <ConversationList />;
+                return (
+                    <>
+                        <aside className="w-[380px] flex-shrink-0 flex flex-col bg-white border-r border-[#d1d7db] z-10 transition-all duration-300">
+                            <ConversationList />
+                        </aside>
+                        <main className="flex-1 flex flex-col min-w-0 bg-[#efeae2] relative z-0">
+                            <div
+                                className="absolute inset-0 pointer-events-none opacity-[0.06]"
+                                style={{ backgroundImage: 'url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png")' }}
+                            />
+                            <div className="relative flex-1 flex flex-col min-w-0 overflow-hidden">
+                                <ChatWindow />
+                            </div>
+                        </main>
+                    </>
+                );
             case 'CONTACTS':
-                return <ContactList />;
+                return (
+                    <div className="flex-1 bg-white overflow-y-auto w-full">
+                        <ContactList />
+                    </div>
+                );
             case 'STATUS':
-                return <StatusFeed refreshKey={0} />;
-            case 'NOTIFICATIONS':
-                return null;
+                return (
+                    <div className="flex-1 bg-[#111b21]">
+                        <StatusFeed refreshKey={0} />
+                    </div>
+                );
             case 'PROFILE':
-                return <ProfileView />;
+                return (
+                    <div className="flex-1 bg-white overflow-y-auto w-full">
+                        <ProfileView />
+                    </div>
+                );
+            case 'SETTINGS':
+                return (
+                    <div className="flex-1 bg-white overflow-y-auto w-full">
+                        <SettingsView />
+                    </div>
+                );
             case 'NOTIFICATIONS':
-                return null;
+                return (
+                    <div className="flex-1 p-6 bg-bg-secondary overflow-y-auto">
+                        <div className="max-w-3xl mx-auto space-y-4">
+                            <h2 className="text-2xl font-black text-text-primary tracking-tight">Notifications</h2>
+                            <NotificationList />
+                        </div>
+                    </div>
+                );
             default:
-                return <ConversationList />;
+                return null;
         }
-    };
-
-    const renderMainView = () => {
-        if (currentView === 'STATUS') {
-            // Status list is in the side panel, main area shows a welcome placeholder
-            return (
-                <div className="flex-1 h-full bg-[#f0f2f5] flex flex-col items-center justify-center gap-4 text-center px-8">
-                    <div className="w-24 h-24 rounded-full bg-brand/10 flex items-center justify-center">
-                        <svg className="w-12 h-12 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 className="text-xl font-medium text-[#111b21] mb-2">Click a status to view</h3>
-                        <p className="text-[#667781] text-sm max-w-xs">Select a status update from the left to see it in full screen.</p>
-                    </div>
-                </div>
-            );
-        }
-        if (currentView === 'NOTIFICATIONS') {
-            return (
-                <div className="flex-1 p-6 bg-bg-secondary overflow-y-auto">
-                    <div className="max-w-3xl mx-auto space-y-4">
-                        <h2 className="text-2xl font-black text-text-primary tracking-tight">Notifications</h2>
-                        <NotificationList />
-                    </div>
-                </div>
-            );
-        }
-        return <ChatWindow />;
     };
 
     return (
@@ -80,26 +90,11 @@ export const DashboardLayout: React.FC = () => {
                     {/* Narrow left nav */}
                     <SidebarNav />
 
-                    {/* Conversation / contact list / status / profile pane */}
-                    {currentView !== 'NOTIFICATIONS' && (
-                        <aside className={`${isSidebarOpen ? (currentView === 'STATUS' ? 'w-[380px]' : 'w-[420px]') : 'w-0'} shrink-0 transition-all duration-300 overflow-hidden border-r border-[#d1d7db] bg-white flex flex-col`}>
-                            {renderSideView()}
-                        </aside>
-                    )}
+                    {/* Dynamic Main App Area */}
+                    {renderMainView()}
 
-                    {/* Main content */}
-                    <main className="flex-1 flex flex-col min-w-0 bg-[#efeae2] relative overflow-hidden">
-                        <div
-                            className="absolute inset-0 pointer-events-none opacity-[0.06]"
-                            style={{ backgroundImage: 'url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png")' }}
-                        />
-                        <div className="relative flex-1 flex flex-col min-w-0 overflow-hidden">
-                            {renderMainView()}
-                        </div>
-                    </main>
-
-                    {/* Right info pane */}
-                    <InfoSidebar />
+                    {/* Right info pane (only visible when in CHATS and InfoSidebar is toggled) */}
+                    {currentView === 'CHATS' && <InfoSidebar />}
                 </div>
             </div>
 
@@ -121,6 +116,9 @@ export const DashboardLayout: React.FC = () => {
             )}
             {activeModal === 'USER_PROFILE' && viewingUserId && (
                 <UserProfileModal userId={viewingUserId} onClose={closeModal} />
+            )}
+            {activeModal === 'IMAGE_VIEWER' && (
+                <ImageViewerModal />
             )}
         </div>
     );
