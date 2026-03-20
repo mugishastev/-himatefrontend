@@ -22,6 +22,9 @@ import { StartCallModal } from '../../features/calls/components/StartCallModal';
 import { DialpadModal } from '../../features/calls/components/DialpadModal';
 import { ScheduleCallModal } from '../../features/calls/components/ScheduleCallModal';
 import { PagesDiscoverView } from '../../features/pages/components/PagesDiscoverView';
+import { CreatorStudioView } from '../../features/pages/components/CreatorStudioView';
+import { CreatePageModal } from '../../features/pages/components/CreatePageModal';
+import { PageInboxView } from '../../features/pages/components/PageInboxView';
 
 export const DashboardLayout: React.FC = () => {
     const { currentView, activeModal, viewingUserId, closeModal, openModal } = useUIStore();
@@ -159,6 +162,18 @@ export const DashboardLayout: React.FC = () => {
                         <PagesDiscoverView />
                     </div>
                 );
+            case 'CREATOR_STUDIO':
+                return (
+                    <div className="flex-1 bg-bg-secondary overflow-hidden w-full flex">
+                        <CreatorStudioView />
+                    </div>
+                );
+            case 'PAGE_INBOX':
+                return (
+                    <div className="flex-1 bg-bg-secondary overflow-hidden w-full flex">
+                        <PageInboxView />
+                    </div>
+                );
             default:
                 return null;
         }
@@ -211,6 +226,9 @@ export const DashboardLayout: React.FC = () => {
             )}
             {activeModal === 'IMAGE_VIEWER' && (
                 <ImageViewerModal />
+            )}
+            {activeModal === 'CREATE_PAGE' && (
+                <CreatePageModal />
             )}
         </div>
     );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { Page, PagePost } from '../../../api/pages.api';
 import { pagesApi } from '../../../api/pages.api';
 import { useAuthStore } from '../../../store/auth.store';
+import { useUIStore } from '../../../store/ui.store';
 
 interface Props {
     handle: string;
@@ -12,6 +13,7 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
     const [page, setPage] = useState<(Page & { posts: PagePost[] }) | null>(null);
     const [loading, setLoading] = useState(true);
     const { user } = useAuthStore();
+    const { setView } = useUIStore();
 
     useEffect(() => {
         const fetchFeed = async () => {
@@ -91,7 +93,7 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                                 </>
                             )}
                             {isOwner && (
-                                <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-bold transition-colors shadow-md">
+                                <button onClick={() => setView('CREATOR_STUDIO')} className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-bold transition-colors shadow-md">
                                     Creator Studio
                                 </button>
                             )}

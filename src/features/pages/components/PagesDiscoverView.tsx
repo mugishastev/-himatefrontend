@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import type { Page } from '../../../api/pages.api';
 import { pagesApi } from '../../../api/pages.api';
+import { useUIStore } from '../../../store/ui.store';
 
 export const PagesDiscoverView: React.FC = () => {
     const [pages, setPages] = useState<Page[]>([]);
     const [loading, setLoading] = useState(true);
+    const { openModal } = useUIStore();
 
     useEffect(() => {
         const fetchPages = async () => {
@@ -34,7 +36,7 @@ export const PagesDiscoverView: React.FC = () => {
                     </div>
                     <button 
                         className="bg-brand text-white px-5 py-2.5 rounded-xl font-medium hover:bg-brand-dark transition-colors"
-                        onClick={() => alert('Creator Studio incoming!')}
+                        onClick={() => openModal('CREATE_PAGE')}
                     >
                         Get Started
                     </button>

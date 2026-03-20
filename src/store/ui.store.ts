@@ -9,6 +9,7 @@ export type ModalType =
     | 'START_CALL'
     | 'DIALPAD'
     | 'SCHEDULE_CALL'
+    | 'CREATE_PAGE'
     | null;
 
 interface UIState {
@@ -16,7 +17,7 @@ interface UIState {
     activeModal: ModalType;
     viewingUserId: string | number | null;
     viewingImageUrl: string | null;
-    currentView: 'CHATS' | 'CALLS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES';
+    currentView: 'CHATS' | 'CALLS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES' | 'CREATOR_STUDIO' | 'PAGE_INBOX';
     isInfoPaneOpen: boolean;
     infoPaneType: 'CONTACT' | 'GROUP' | null;
     toggleSidebar: () => void;
@@ -25,7 +26,7 @@ interface UIState {
     openImage: (url: string) => void;
     setInfoPane: (isOpen: boolean, type?: 'CONTACT' | 'GROUP' | null) => void;
     closeModal: () => void;
-    setView: (view: 'CHATS' | 'CALLS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES') => void;
+    setView: (view: 'CHATS' | 'CALLS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES' | 'CREATOR_STUDIO' | 'PAGE_INBOX') => void;
 }
 
 
