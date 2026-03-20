@@ -24,4 +24,8 @@ export const SOCKET_EVENTS = {
     // Calls
     CALL_INITIATE: 'initiateCall',
     CALL_INCOMING: 'incomingCall',
+    CALL_ACCEPTED: 'callAccepted',
+    CALL_ENDED: 'callEnded',
+    CALL_ACCEPT_EMIT: 'acceptCall',
+    CALL_END_EMIT: 'endCall',
 };

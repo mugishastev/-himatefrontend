@@ -1,15 +1,26 @@
 import { create } from 'zustand';
 
+export type ModalType =
+    | 'NEW_CONVERSATION'
+    | 'CREATE_GROUP'
+    | 'ADD_CONTACT'
+    | 'USER_PROFILE'
+    | 'IMAGE_VIEWER'
+    | 'START_CALL'
+    | 'DIALPAD'
+    | 'SCHEDULE_CALL'
+    | null;
+
 interface UIState {
     isSidebarOpen: boolean;
-    activeModal: string | null;
+    activeModal: ModalType;
     viewingUserId: string | number | null;
     viewingImageUrl: string | null;
     currentView: 'CHATS' | 'CALLS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS';
     isInfoPaneOpen: boolean;
     infoPaneType: 'CONTACT' | 'GROUP' | null;
     toggleSidebar: () => void;
-    openModal: (modalName: string) => void;
+    openModal: (modalName: ModalType) => void;
     openProfile: (userId: string | number) => void;
     openImage: (url: string) => void;
     setInfoPane: (isOpen: boolean, type?: 'CONTACT' | 'GROUP' | null) => void;

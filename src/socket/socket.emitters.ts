@@ -18,4 +18,10 @@ export const socketEmitters = {
             conversationId: Number(conversationId),
         });
     },
+    acceptCall: (callerId: string | number) => {
+        socketService.emit(SOCKET_EVENTS.CALL_ACCEPT_EMIT, { callerId: Number(callerId) });
+    },
+    endCall: (targetId: string | number) => {
+        socketService.emit(SOCKET_EVENTS.CALL_END_EMIT, { targetId: Number(targetId) });
+    },
 };
