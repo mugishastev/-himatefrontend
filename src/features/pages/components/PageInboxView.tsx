@@ -221,15 +221,17 @@ export const PageInboxView: React.FC = () => {
                         </div>
                         
                         <div>
-                            <h4 className="font-bold text-xs text-text-secondary uppercase mb-3 tracking-wider">Purchase History</h4>
+                            <h4 className="font-bold text-xs text-text-secondary uppercase mb-3 tracking-wider">Conversation Activity</h4>
                             <div className="text-sm space-y-2">
                                 <div className="flex justify-between border-b border-gray-50 pb-2">
-                                    <span className="text-text-primary">Winter Jacket Pro</span>
-                                    <span className="font-bold text-green-600">$120</span>
+                                    <span className="text-text-primary">First Contact</span>
+                                    <span className="font-bold text-text-secondary">
+                                        {activeTicket.rawConversation?.createdAt ? new Date(activeTicket.rawConversation.createdAt).toLocaleDateString() : 'Today'}
+                                    </span>
                                 </div>
                                 <div className="flex justify-between border-b border-gray-50 pb-2">
-                                    <span className="text-text-primary">Beanie Hat</span>
-                                    <span className="font-bold text-green-600">$25</span>
+                                    <span className="text-text-primary">Response Time</span>
+                                    <span className="font-bold text-brand">~2 mins</span>
                                 </div>
                             </div>
                         </div>

@@ -20,6 +20,9 @@ export interface PagePost {
     mediaUrls: string[];
     views: number;
     createdAt: string;
+    _count?: {
+        reactions: number;
+    };
 }
 
 export const pagesApi = {
@@ -65,6 +68,21 @@ export const pagesApi = {
 
     messagePage: async (pageId: number) => {
         const response = await api.post<any>(`/pages/${pageId}/message`);
+        return response.data;
+    },
+
+    reactToPost: async (postId: number, emoji: string) => {
+        const response = await api.post(`/pages/posts/${postId}/react`, { emoji });
+        return response.data;
+    },
+
+    trackPostView: async (postId: number) => {
+        const response = await api.post(`/pages/posts/${postId}/view`);
+        return response.data;
+    },
+
+    deletePost: async (postId: number) => {
+        const response = await api.post(`/pages/posts/${postId}/delete`);
         return response.data;
     }
 };

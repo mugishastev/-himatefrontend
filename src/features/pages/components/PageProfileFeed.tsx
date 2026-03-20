@@ -34,9 +34,20 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
         try {
             await pagesApi.followPage(page.id);
             alert(`You are now following ${page.name}!`);
-            // In a real app we'd optimistically update follower count
+            setPage(prev => prev ? { ...prev, _count: { ...prev._count, followers: (prev._count?.followers || 0) + 1 } } : null);
         } catch (err) {
             console.error('Error following', err);
+        }
+    };
+
+    const handleReact = async (postId: number) => {
+        try {
+            await pagesApi.reactToPost(postId, '❤️');
+            // Refresh feed or local state
+            const updated = await pagesApi.getPageByHandle(handle);
+            setPage(updated);
+        } catch (err) {
+            console.error('Error reacting:', err);
         }
     };
 
@@ -153,8 +164,11 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                             
                             {/* Post Footer / Reactions */}
                             <div className="p-3 border-t border-gray-100 flex items-center gap-4 text-text-secondary px-4">
-                                <button className="flex items-center gap-1 hover:text-red-500 transition-colors">
-                                    <span className="text-xl">❤️</span> {Math.floor(Math.random() * 100)}
+                                <button 
+                                    onClick={() => handleReact(post.id)}
+                                    className="flex items-center gap-1 hover:text-red-500 transition-colors"
+                                >
+                                    <span className="text-xl">❤️</span> {post._count?.reactions || 0}
                                 </button>
                                 <button className="flex items-center gap-1 hover:text-blue-500 transition-colors font-medium text-sm">
                                     Share to Chat
