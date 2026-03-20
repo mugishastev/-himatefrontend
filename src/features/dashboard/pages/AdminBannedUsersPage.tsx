@@ -10,9 +10,8 @@ export const AdminBannedUsersPage: React.FC = () => {
 
     const fetchBanned = () => {
         setLoading(true);
-        adminApi.getUsers(page, 20, search || undefined).then((res) => {
-            const filtered = { ...res, data: res.data.filter((u: any) => u.isBanned), total: res.data.filter((u: any) => u.isBanned).length };
-            setData(filtered);
+        adminApi.getUsers(page, 20, search || undefined, true).then((res) => {
+            setData(res);
             setLoading(false);
         }).catch(() => setLoading(false));
     };
@@ -100,6 +99,17 @@ export const AdminBannedUsersPage: React.FC = () => {
                             )}
                         </tbody>
                     </table>
+                    
+                    {/* Pagination */}
+                    {data && data.total > 20 && (
+                        <div className="p-4 border-t border-slate-800 flex items-center justify-between">
+                            <p className="text-xs text-slate-500">Showing {data.data.length} of {data.total} banned users</p>
+                            <div className="flex gap-2">
+                                <button disabled={page <= 1} onClick={() => setPage(p => p - 1)} className="px-3 py-1 rounded bg-slate-800 text-slate-400 text-xs disabled:opacity-40 hover:bg-slate-700 transition-colors">← Prev</button>
+                                <button disabled={page * 20 >= data.total} onClick={() => setPage(p => p + 1)} className="px-3 py-1 rounded bg-slate-800 text-slate-400 text-xs disabled:opacity-40 hover:bg-slate-700 transition-colors">Next →</button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

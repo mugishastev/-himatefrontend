@@ -5,8 +5,8 @@ export const adminApi = {
         const response = await api.get('/admin/stats');
         return response.data;
     },
-    getUsers: async (page = 1, limit = 20, search?: string) => {
-        const response = await api.get('/admin/users', { params: { page, limit, search } });
+    getUsers: async (page = 1, limit = 20, search?: string, isBanned?: boolean) => {
+        const response = await api.get('/admin/users', { params: { page, limit, search, isBanned } });
         return response.data;
     },
     getConversations: async (page = 1, limit = 20) => {
