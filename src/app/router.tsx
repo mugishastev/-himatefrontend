@@ -108,3 +108,34 @@ export const router = createBrowserRouter([
         element: <Navigate to="/" replace />,
     },
 ]);
+
+const TITLE_MAP: Record<string, string> = {
+    '/login': 'Login',
+    '/register': 'Create Account',
+    '/forgot-password': 'Forgot Password',
+    '/reset-password': 'Reset Password',
+    '/verify-email': 'Verify Email',
+    '/admin': 'Admin Overview',
+    '/admin/users': 'Manage Users',
+    '/admin/conversations': 'Manage Conversations',
+    '/admin/messages': 'Manage Messages',
+    '/admin/reports': 'User Reports',
+    '/admin/banned': 'Banned Users',
+    '/admin/tickets': 'Support Tickets',
+    '/admin/announcements': 'Announcements',
+    '/admin/media': 'Media Gallery',
+    '/admin/settings': 'Admin Configuration',
+    '/admin/roles': 'Manage Roles',
+};
+
+router.subscribe((state) => {
+    const path = state.location.pathname;
+    
+    // Let the ChatWindow or specific pages handle their own dynamic titles securely
+    // But for auth forms and admin screens we automatically apply them here.
+    if (TITLE_MAP[path]) {
+        document.title = `Himate | ${TITLE_MAP[path]}`;
+    } else if (path.startsWith('/profile/')) {
+        document.title = `Himate | User Profile`;
+    }
+});

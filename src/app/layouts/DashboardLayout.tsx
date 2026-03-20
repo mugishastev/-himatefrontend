@@ -30,6 +30,13 @@ export const DashboardLayout: React.FC = () => {
     useNotifications();
     useConversations();
 
+    React.useEffect(() => {
+        if (currentView !== 'CHATS') {
+            const viewName = currentView.charAt(0) + currentView.slice(1).toLowerCase();
+            document.title = `Himate | ${viewName}`;
+        }
+    }, [currentView]);
+
     const renderMainView = () => {
         switch (currentView) {
             case 'CHATS':
