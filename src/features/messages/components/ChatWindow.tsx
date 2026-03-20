@@ -10,6 +10,7 @@ import { conversationsApi } from '../../../api/conversations.api';
 import { usersApi } from '../../../api/users.api';
 import { callsApi } from '../../../api/calls.api';
 import { socketEmitters } from '../../../socket/socket.emitters';
+import { WallpaperPicker, WALLPAPER_OPTIONS, WALLPAPER_STORAGE_KEY } from './WallpaperPicker';
 
 export const ChatWindow: React.FC = () => {
     const { activeConversationId, conversations, setActiveConversation, setConversations } = useConversationStore();
@@ -19,7 +20,25 @@ export const ChatWindow: React.FC = () => {
     const activeConversation = conversations.find(c => c.id === activeConversationId);
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isWallpaperOpen, setIsWallpaperOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    // ── Wallpaper persistence ──────────────────────────────────
+    const savedWallpaper = (() => {
+        try {
+            const raw = localStorage.getItem(WALLPAPER_STORAGE_KEY);
+            return raw ? JSON.parse(raw) : null;
+        } catch { return null; }
+    })();
+    const defaultWallpaper = WALLPAPER_OPTIONS.find(w => w.id === 'dark-default')!;
+    const [wallpaper, setWallpaper] = useState<{ id: string; style: React.CSSProperties }>(
+        savedWallpaper ?? { id: defaultWallpaper.id, style: defaultWallpaper.style }
+    );
+
+    const handleWallpaperSelect = (next: { id: string; style: React.CSSProperties }) => {
+        setWallpaper(next);
+        localStorage.setItem(WALLPAPER_STORAGE_KEY, JSON.stringify(next));
+    };
 
     // Close menu when clicking outside
     useEffect(() => {
@@ -100,7 +119,8 @@ export const ChatWindow: React.FC = () => {
     };
 
     return (
-        <div className="flex-1 flex flex-col bg-[#efeae2] h-full min-w-0 relative">
+        <>
+        <div className="flex-1 flex flex-col h-full min-w-0 relative" style={wallpaper.style}>
             {activeConversationId ? (
                 <>
                     <header className="h-[60px] bg-[#f0f2f5] border-b border-gray-200 flex items-center justify-between px-4 shrink-0 z-10 relative">
@@ -190,6 +210,18 @@ export const ChatWindow: React.FC = () => {
                                     <button
                                         onClick={() => {
                                             setIsMenuOpen(false);
+                                            setIsWallpaperOpen(true);
+                                        }}
+                                        className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54] flex items-center gap-2"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        Change wallpaper
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setIsMenuOpen(false);
                                             setActiveConversation(null);
                                         }}
                                         className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54]"
@@ -261,5 +293,14 @@ export const ChatWindow: React.FC = () => {
                 </div>
             )}
         </div>
+        {/* Wallpaper picker modal */}
+        {isWallpaperOpen && (
+            <WallpaperPicker
+                currentId={wallpaper.id}
+                onSelect={handleWallpaperSelect}
+                onClose={() => setIsWallpaperOpen(false)}
+            />
+        )}
+        </>
     );
 };

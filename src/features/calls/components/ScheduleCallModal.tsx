@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useUIStore } from '../../../store/ui.store';
 import { useAuthStore } from '../../../store/auth.store';
-import api from '../../../api/axios'; // Or contacts API
+import { usersApi } from '../../../api/users.api';
 import { UserAvatar } from '../../users/components/UserAvatar';
 import { callsApi } from '../../../api/calls.api';
 
@@ -16,22 +16,24 @@ export const ScheduleCallModal: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        const fetchContacts = async () => {
+        const fetchUsers = async () => {
             try {
-                const response = await api.get('/contacts');
-                setContacts(response.data.data || response.data || []);
+                // GET /users already excludes ADMIN role server-side
+                const response = await usersApi.findAll({ limit: 200 });
+                const raw: any[] = response.data ?? response ?? [];
+                setContacts(raw.filter((u: any) => u.id !== user?.id));
             } catch (err) {
-                console.error("Failed to load contacts", err);
+                console.error('Failed to load users', err);
             }
         };
-        fetchContacts();
-        
+        fetchUsers();
+
         // Auto-set tomorrow's date at noon
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         setScheduledDate(tomorrow.toISOString().split('T')[0]);
         setScheduledTime('12:00');
-    }, []);
+    }, [user?.id]);
 
     const handleSchedule = async () => {
         if (!selectedUser || !scheduledDate || !scheduledTime) return;
@@ -76,18 +78,18 @@ export const ScheduleCallModal: React.FC = () => {
                         <label className="block text-[#00a884] text-[13px] font-semibold uppercase tracking-wide mb-3">Participant</label>
                         {!selectedUser ? (
                             <div className="max-h-48 overflow-y-auto no-scrollbar space-y-1 bg-[#1F2937]/50 rounded-xl p-2 border border-[#2a3942]">
-                                {contacts.map(c => {
-                                    const cuser = c.contact || c;
+                                {contacts.map(u => {
+                                    if (!u) return null;
                                     return (
-                                        <div 
-                                            key={cuser.id} 
-                                            onClick={() => setSelectedUser(cuser)}
+                                        <div
+                                            key={u.id}
+                                            onClick={() => setSelectedUser(u)}
                                             className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#2a3942] cursor-pointer transition-colors"
                                         >
-                                            <UserAvatar user={cuser} size="sm" />
-                                            <span className="text-[#d1d7db] font-medium">{cuser.username}</span>
+                                            <UserAvatar user={u} size="sm" />
+                                            <span className="text-[#d1d7db] font-medium">{u.username}</span>
                                         </div>
-                                    )
+                                    );
                                 })}
                             </div>
                         ) : (
