@@ -25,9 +25,10 @@ import { PagesDiscoverView } from '../../features/pages/components/PagesDiscover
 import { CreatorStudioView } from '../../features/pages/components/CreatorStudioView';
 import { CreatePageModal } from '../../features/pages/components/CreatePageModal';
 import { PageInboxView } from '../../features/pages/components/PageInboxView';
+import { PageProfileFeed } from '../../features/pages/components/PageProfileFeed';
 
 export const DashboardLayout: React.FC = () => {
-    const { currentView, activeModal, viewingUserId, closeModal, openModal } = useUIStore();
+    const { currentView, activeModal, viewingUserId, viewingPageHandle, closeModal, openModal, openPage } = useUIStore();
 
     // Kick off global notification and conversation fetching on mount
     useNotifications();
@@ -159,7 +160,14 @@ export const DashboardLayout: React.FC = () => {
             case 'PAGES':
                 return (
                     <div className="flex-1 bg-white overflow-hidden w-full flex">
-                        <PagesDiscoverView />
+                        {viewingPageHandle ? (
+                            <PageProfileFeed 
+                                handle={viewingPageHandle} 
+                                onBack={() => openPage(null)} 
+                            />
+                        ) : (
+                            <PagesDiscoverView />
+                        )}
                     </div>
                 );
             case 'CREATOR_STUDIO':

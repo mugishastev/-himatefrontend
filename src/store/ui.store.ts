@@ -18,6 +18,7 @@ interface UIState {
     viewingUserId: string | number | null;
     viewingImageUrl: string | null;
     currentView: 'CHATS' | 'CALLS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES' | 'CREATOR_STUDIO' | 'PAGE_INBOX';
+    viewingPageHandle: string | null;
     isInfoPaneOpen: boolean;
     infoPaneType: 'CONTACT' | 'GROUP' | null;
     toggleSidebar: () => void;
@@ -27,6 +28,7 @@ interface UIState {
     setInfoPane: (isOpen: boolean, type?: 'CONTACT' | 'GROUP' | null) => void;
     closeModal: () => void;
     setView: (view: 'CHATS' | 'CALLS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES' | 'CREATOR_STUDIO' | 'PAGE_INBOX') => void;
+    openPage: (handle: string | null) => void;
 }
 
 
@@ -38,6 +40,7 @@ export const useUIStore = create<UIState>((set) => ({
     currentView: 'CHATS',
     isInfoPaneOpen: false,
     infoPaneType: null,
+    viewingPageHandle: null,
     toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
     openModal: (modalName) => set({ activeModal: modalName }),
     openProfile: (userId) => set({ activeModal: 'USER_PROFILE', viewingUserId: userId }),
@@ -45,4 +48,5 @@ export const useUIStore = create<UIState>((set) => ({
     setInfoPane: (isOpen, type = null) => set({ isInfoPaneOpen: isOpen, infoPaneType: type }),
     closeModal: () => set({ activeModal: null, viewingUserId: null, viewingImageUrl: null }),
     setView: (view) => set({ currentView: view }),
+    openPage: (handle) => set({ currentView: 'PAGES', viewingPageHandle: handle }),
 }));

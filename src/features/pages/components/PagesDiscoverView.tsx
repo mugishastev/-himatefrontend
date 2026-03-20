@@ -6,7 +6,7 @@ import { useUIStore } from '../../../store/ui.store';
 export const PagesDiscoverView: React.FC = () => {
     const [pages, setPages] = useState<Page[]>([]);
     const [loading, setLoading] = useState(true);
-    const { openModal } = useUIStore();
+    const { openModal, openPage } = useUIStore();
 
     useEffect(() => {
         const fetchPages = async () => {
@@ -76,8 +76,7 @@ export const PagesDiscoverView: React.FC = () => {
                                 <button 
                                     className="w-full bg-[#f0f2f5] hover:bg-gray-200 text-text-primary font-medium py-2 rounded-xl transition-colors"
                                     onClick={() => {
-                                        // Normally this would open the PageFeed
-                                        alert(`Navigating to @${page.handle}'s blog feed!`);
+                                        openPage(page.handle);
                                     }}
                                 >
                                     View Feed
