@@ -71,6 +71,20 @@ export const SidebarNav: React.FC = () => {
                 </svg>
             ),
             label: 'Contacts'
+        },
+        {
+            id: 'PAGES',
+            activeIcon: (
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                </svg>
+            ),
+            inactiveIcon: (
+                <svg className="w-6 h-6 text-[#aebac1] group-hover:text-[#d1d7db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2v16z" />
+                </svg>
+            ),
+            label: 'Pages'
         }
     ];
 
