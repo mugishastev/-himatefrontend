@@ -33,4 +33,12 @@ export const usersApi = {
         const response = await api.delete(`/users/${id}`);
         return response.data;
     },
+    blockUser: async (targetUserId: number) => {
+        const response = await api.post(`/users/${targetUserId}/block`);
+        return response.data;
+    },
+    unblockUser: async (targetUserId: number) => {
+        const response = await api.delete(`/users/${targetUserId}/block`);
+        return response.data;
+    },
 };

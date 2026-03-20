@@ -3,6 +3,8 @@ import { useConversations } from '../../../hooks/useConversations';
 import { useUIStore } from '../../../store/ui.store';
 import { usersApi } from '../../../api/users.api';
 import { UserAvatar } from '../../users/components/UserAvatar';
+import { useAuthStore } from '../../../store/auth.store';
+import { useConversationStore } from '../../../store/conversation.store';
 import type { User } from '../../../types/user.types';
 
 interface NewConversationModalProps {
@@ -13,8 +15,10 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<User[]>([]);
     const [isSearching, setIsSearching] = useState(false);
-    const { createConversation, isLoading: isCreating } = useConversations();
+    const { conversations, createConversation, setActiveConversation, isLoading: isCreating } = useConversations();
     const { openModal } = useUIStore();
+    const { user: currentUser } = useAuthStore();
+    const { setActiveConversation: storeSetActive } = useConversationStore();
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -42,7 +46,24 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
     };
 
     const handleStartChat = async (userId: string | number) => {
-        console.log('Button Clicked: Starting chat with userId:', userId);
+        // Check if there's already a 1:1 conversation with this user
+        const existing = conversations.find(conv => {
+            if (conv.isGroup) return false;
+            const participantIds = conv.participants.map(p => Number(p.userId));
+            return (
+                participantIds.includes(Number(userId)) &&
+                participantIds.includes(Number(currentUser?.id))
+            );
+        });
+
+        if (existing) {
+            // Already have a conversation — just navigate to it
+            storeSetActive(existing.id);
+            onClose();
+            return;
+        }
+
+        // No existing conversation — create a new one
         await createConversation([userId]);
         onClose();
     };

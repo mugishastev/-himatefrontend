@@ -25,4 +25,8 @@ export const conversationsApi = {
         const response = await api.delete(`/conversations/${conversationId}/participants/${userId}`);
         return response.data;
     },
+    deleteConversation: async (conversationId: number) => {
+        const response = await api.delete(`/conversations/${conversationId}`);
+        return response.data;
+    },
 };
