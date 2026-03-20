@@ -28,9 +28,35 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
     const displayName = conversation.isGroup
         ? conversation.title || 'Group Chat'
         : otherParticipant?.user?.username || 'Chat';
+
+    // Backend returns profileImage; avatarUrl is the frontend alias
+    const avatarSrc = (otherParticipant?.user as any)?.profileImage
+        || otherParticipant?.user?.avatarUrl
+        || null;
+
     const lastMessage = conversation.lastMessage || conversation.messages?.[0];
     const previewTime = lastMessage ? formatChatPreviewTime(lastMessage) : '';
-    const previewContent = lastMessage?.content || 'No messages yet';
+
+    // Show "You: ..." if last message was sent by current user
+    const isOwnMessage = lastMessage && String((lastMessage as any).senderId) === String(user?.id);
+    let rawContent = lastMessage?.content || '';
+    
+    // Override rawContent based on message type if available
+    if (lastMessage && (lastMessage as any).type) {
+        switch ((lastMessage as any).type) {
+            case 'AUDIO': rawContent = '🎤 Voice message'; break;
+            case 'IMAGE': rawContent = '📷 Photo'; break;
+            case 'VIDEO': rawContent = '🎥 Video'; break;
+            case 'FILE': rawContent = '📄 File'; break;
+        }
+    }
+    
+    if (!rawContent) rawContent = 'No messages yet';
+
+    const previewContent = lastMessage
+        ? (isOwnMessage ? `You: ${rawContent}` : rawContent)
+        : 'No messages yet';
+
     const showUnread = (conversation.unreadCount || 0) > 0;
     const avatarLetter = (displayName || 'C').charAt(0).toUpperCase();
 
@@ -96,16 +122,16 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
         >
             {/* Avatar */}
             <div
-                className={`w-[49px] h-[49px] rounded-full bg-[#374248] flex-shrink-0 flex items-center justify-center font-medium text-[#d1d7db] text-xl overflow-hidden ${otherParticipant?.user?.avatarUrl ? 'cursor-pointer hover:opacity-90' : ''}`}
+                className={`w-[49px] h-[49px] rounded-full bg-[#374248] flex-shrink-0 flex items-center justify-center font-medium text-[#d1d7db] text-xl overflow-hidden ${avatarSrc ? 'cursor-pointer hover:opacity-90' : ''}`}
                 onClick={(e) => {
-                    if (otherParticipant?.user?.avatarUrl) {
+                    if (avatarSrc) {
                         e.stopPropagation();
-                        openImage(otherParticipant.user.avatarUrl);
+                        openImage(avatarSrc);
                     }
                 }}
             >
-                {otherParticipant?.user?.avatarUrl ? (
-                    <img src={otherParticipant.user.avatarUrl} alt={displayName} className="w-full h-full object-cover" />
+                {avatarSrc ? (
+                    <img src={avatarSrc} alt={displayName} className="w-full h-full object-cover" />
                 ) : (
                     avatarLetter
                 )}

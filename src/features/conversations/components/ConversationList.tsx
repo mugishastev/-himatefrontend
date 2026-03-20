@@ -7,6 +7,7 @@ export const ConversationList: React.FC = () => {
     const { conversations, fetchConversations, isLoading } = useConversations();
     const { isSidebarOpen, openModal } = useUIStore();
     const [query, setQuery] = useState("");
+    const [filter, setFilter] = useState<"ALL" | "UNREAD" | "FAVORITES">("ALL");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -27,15 +28,28 @@ export const ConversationList: React.FC = () => {
     const filteredConversations = useMemo(() => {
         const normalizedQuery = query.trim().toLowerCase();
         return conversations.filter((conversation) => {
+            // Text Search
             const participants = conversation.participants || [];
             const title =
                 conversation.title ||
                 participants.map((p) => p.user?.username).join(", ");
             if (normalizedQuery && !title.toLowerCase().includes(normalizedQuery))
                 return false;
+
+            // Filter Chips
+            if (filter === "UNREAD") {
+                if (!conversation.unreadCount || conversation.unreadCount === 0) return false;
+            } else if (filter === "FAVORITES") {
+                // Not supported in schema yet, fallback to all or empty
+                // For now, let's just make it empty if no favorites are stored locally
+                return false; 
+            }
+
             return true;
         });
-    }, [conversations, query]);
+    }, [conversations, query, filter]);
+
+    const globalUnreadCount = conversations.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
 
     if (!isSidebarOpen) return null;
 
@@ -126,13 +140,22 @@ export const ConversationList: React.FC = () => {
 
             {/* Filter Chips */}
             <div className="flex px-3 pb-3 gap-2 overflow-x-auto no-scrollbar shrink-0 border-b border-[#1F2937]">
-                <button className="px-4 py-1.5 rounded-full bg-[#1F2937] hover:bg-[#374248] text-[#d1d7db] text-[14px] font-medium transition-colors">
+                <button 
+                    onClick={() => setFilter('ALL')}
+                    className={`px-4 py-1.5 rounded-full text-[14px] font-medium transition-colors ${filter === 'ALL' ? 'bg-[#374248] text-white' : 'bg-[#1F2937] hover:bg-[#374248] text-[#d1d7db]'}`}
+                >
                     All
                 </button>
-                <button className="px-4 py-1.5 rounded-full bg-[#1F2937] hover:bg-[#374248] text-[#d1d7db] text-[14px] font-medium transition-colors">
-                    Unread <span className="text-[#00a884] ml-1">1</span>
+                <button 
+                    onClick={() => setFilter('UNREAD')}
+                    className={`px-4 py-1.5 rounded-full text-[14px] font-medium transition-colors ${filter === 'UNREAD' ? 'bg-[#374248] text-white' : 'bg-[#1F2937] hover:bg-[#374248] text-[#d1d7db]'}`}
+                >
+                    Unread {globalUnreadCount > 0 && <span className="text-[#00a884] ml-1">{globalUnreadCount}</span>}
                 </button>
-                <button className="px-4 py-1.5 rounded-full bg-[#1F2937] hover:bg-[#374248] text-[#d1d7db] text-[14px] font-medium transition-colors">
+                <button 
+                    onClick={() => setFilter('FAVORITES')}
+                    className={`px-4 py-1.5 rounded-full text-[14px] font-medium transition-colors ${filter === 'FAVORITES' ? 'bg-[#374248] text-white' : 'bg-[#1F2937] hover:bg-[#374248] text-[#d1d7db]'}`}
+                >
                     Favorites
                 </button>
             </div>
