@@ -40,10 +40,18 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
         }
     };
 
-    const handleMessageSupport = () => {
-        // Here we would call the backend to create a standard 1-on-1 Chat with the Page's OwnerId
-        // or a specific Page Inbox route
-        alert(`Opening 1-on-1 chat with ${page?.name} Customer Support...`);
+    const handleMessageSupport = async () => {
+        if (!page) return;
+        try {
+            await pagesApi.messagePage(page.id);
+            // After creating the support conversation, we switch the user to the Chats view.
+            // The logic in ConversationList will automatically include this new support chat.
+            setView('CHATS');
+            alert(`Opening support ticket with ${page.name}. You can find it in your Chats list!`);
+        } catch (err) {
+            console.error('Error starting support chat', err);
+            alert('Could not start support chat. Please try again.');
+        }
     };
 
     if (loading) return <div className="p-10 flex justify-center"><div className="animate-spin w-8 h-8 rounded-full border-4 border-brand border-t-transparent" /></div>;

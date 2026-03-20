@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { pagesApi } from '../../../api/pages.api';
 import { useUIStore } from '../../../store/ui.store';
 
 interface Ticket {
@@ -8,21 +9,53 @@ interface Ticket {
     time: string;
     status: 'UNASSIGNED' | 'VIP' | 'RESOLVED';
     unread: boolean;
+    rawConversation: any;
 }
-
-const mockTickets: Ticket[] = [
-    { id: '1', userName: 'Alice Johnson', lastMessage: 'Is this product available in large?', time: '10:05 AM', status: 'UNASSIGNED', unread: true },
-    { id: '2', userName: 'John Doe', lastMessage: 'I need help tracking my order #8492', time: '09:30 AM', status: 'VIP', unread: true },
-    { id: '3', userName: 'Michael Smith', lastMessage: 'Thanks, it arrived yesterday!', time: 'Yesterday', status: 'RESOLVED', unread: false },
-    { id: '4', userName: 'Sarah Connor', lastMessage: 'Do you ship to Canada?', time: 'Yesterday', status: 'UNASSIGNED', unread: false },
-];
 
 export const PageInboxView: React.FC = () => {
     const { setView } = useUIStore();
     const [activeTab, setActiveTab] = useState<'UNASSIGNED' | 'VIP' | 'RESOLVED'>('UNASSIGNED');
     const [activeTicket, setActiveTicket] = useState<Ticket | null>(null);
+    const [tickets, setTickets] = useState<Ticket[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const filteredTickets = mockTickets.filter(t => t.status === activeTab);
+    useEffect(() => {
+        const fetchIncomingSupport = async () => {
+            try {
+                const myPages = await pagesApi.getMyPages();
+                if (myPages.length > 0) {
+                    const pageId = myPages[0].id; // Handling first page for demo
+                    const convs = await pagesApi.getPageConversations(pageId);
+                    
+                    const mappedTickets: Ticket[] = convs.map(c => {
+                        const lastMsg = c.messages[0];
+                        const otherParticipant = c.participants.find((p: any) => p.user.id !== myPages[0].ownerId);
+                        
+                        return {
+                            id: c.id.toString(),
+                            userName: otherParticipant?.user?.username || 'Guest',
+                            lastMessage: lastMsg?.content || 'Started a conversation',
+                            time: lastMsg ? new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
+                            status: 'UNASSIGNED', // Real status logic could be added to Conversation schema
+                            unread: lastMsg ? !lastMsg.isRead : false,
+                            rawConversation: c
+                        };
+                    });
+                    setTickets(mappedTickets);
+                }
+            } catch (err) {
+                console.error('Failed to load support tickets:', err);
+            } finally {
+                setLoading(true); // Should be false but keeping it simple
+                setLoading(false);
+            }
+        };
+        fetchIncomingSupport();
+    }, []);
+
+    const filteredTickets = tickets.filter(t => t.status === activeTab);
+
+    if (loading) return <div className="flex-1 flex items-center justify-center bg-bg-secondary text-brand font-bold">Synchronizing CRM Tickets...</div>;
 
     return (
         <div className="flex h-full w-full bg-bg-secondary overflow-hidden">

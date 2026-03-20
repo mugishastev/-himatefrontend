@@ -1,41 +1,69 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import type { Page } from '../../../api/pages.api';
 import { pagesApi } from '../../../api/pages.api';
 import { useUIStore } from '../../../store/ui.store';
 
 export const CreatorStudioView: React.FC = () => {
     const { setView } = useUIStore();
+    const [myPage, setMyPage] = useState<Page | null>(null);
+    const [analytics, setAnalytics] = useState<{ followersCount: number, postsCount: number, totalViews: number, unreadTickets: number } | null>(null);
     const [content, setContent] = useState('');
     const [mediaUrl, setMediaUrl] = useState('');
     const [loading, setLoading] = useState(false);
-    
-    // In a real app we'd fetch the User's owned pages here to get their specific pageId
-    // For this prototype we will assume pageId 1 or fetch from API. 
-    // Ideally we add a `getMyPages` endpoint. We will mock the submission for now.
-    
+    const [fetching, setFetching] = useState(true);
+
+    useEffect(() => {
+        const loadDashboard = async () => {
+            try {
+                const pages = await pagesApi.getMyPages();
+                if (pages.length > 0) {
+                    const firstPage = pages[0];
+                    setMyPage(firstPage);
+                    const stats = await pagesApi.getPageAnalytics(firstPage.id);
+                    setAnalytics(stats);
+                }
+            } catch (err) {
+                console.error('Failed to load creator data:', err);
+            } finally {
+                setFetching(false);
+            }
+        };
+        loadDashboard();
+    }, []);
+
     const handlePublish = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!content.trim()) return;
+        if (!content.trim() || !myPage) return;
         
         setLoading(true);
         try {
-            // Hardcoded pageId=1 for demo purposes unless we fetch the user's page list
-            await pagesApi.createPost(1, {
+            await pagesApi.createPost(myPage.id, {
                 content,
                 mediaUrls: mediaUrl ? [mediaUrl] : []
             });
             alert('Blog successfully published and broadcasted to your followers!');
             setContent('');
             setMediaUrl('');
+            
+            // Refresh analytics
+            const stats = await pagesApi.getPageAnalytics(myPage.id);
+            setAnalytics(stats);
         } catch (err: any) {
             console.error(err);
-            alert('Error publishing post. Make sure you own this page.');
+            alert('Error publishing post.');
         } finally {
             setLoading(false);
         }
     };
 
+    if (fetching) return <div className="flex-1 flex items-center justify-center bg-bg-secondary text-text-secondary font-bold">Synchronizing Studio...</div>;
+    if (!myPage) return <div className="flex-1 flex flex-col items-center justify-center bg-bg-secondary p-8 text-center uppercase">
+        <h2 className="text-2xl font-black mb-4">No Page Found</h2>
+        <button onClick={() => setView('PAGES')} className="bg-brand text-white px-6 py-2 rounded-xl font-bold">Create a Page</button>
+    </div>;
+
     return (
-        <div className="flex-1 overflow-y-auto bg-bg-secondary w-full p-8">
+        <div className="flex-1 overflow-y-auto bg-bg-secondary w-full p-8 transition-all duration-500">
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* Header */}
                 <div className="flex justify-between items-center">
@@ -53,13 +81,17 @@ export const CreatorStudioView: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-center">
                         <span className="text-sm font-bold text-text-secondary uppercase">Total Followers</span>
-                        <div className="text-4xl font-black text-text-primary mt-2">1,248</div>
-                        <span className="text-xs text-green-500 font-bold mt-2">↑ +12% this week</span>
+                        <div className="text-4xl font-black text-text-primary mt-2">
+                            {analytics?.followersCount ?? 0}
+                        </div>
+                        <span className="text-xs text-green-500 font-bold mt-2">Live updates available</span>
                     </div>
                     <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-center">
-                        <span className="text-sm font-bold text-text-secondary uppercase">Post Impressions</span>
-                        <div className="text-4xl font-black text-text-primary mt-2">45.2K</div>
-                        <span className="text-xs text-green-500 font-bold mt-2">↑ +5% this week</span>
+                        <span className="text-sm font-bold text-text-secondary uppercase">Total Posts</span>
+                        <div className="text-4xl font-black text-text-primary mt-2">
+                            {analytics?.postsCount ?? 0}
+                        </div>
+                        <span className="text-xs text-text-secondary font-bold mt-2">Published content</span>
                     </div>
                     <div className="bg-gradient-to-br from-brand to-brand-dark p-6 rounded-3xl shadow-lg flex flex-col justify-center text-white relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-4 opacity-20">
@@ -68,7 +100,7 @@ export const CreatorStudioView: React.FC = () => {
                             </svg>
                         </div>
                         <span className="text-sm font-bold text-white/80 uppercase">Unread Support Chats</span>
-                        <div className="text-4xl font-black mt-2">14</div>
+                        <div className="text-4xl font-black mt-2">{analytics?.unreadTickets ?? 0}</div>
                         <button 
                             onClick={() => setView('PAGE_INBOX')}
                             className="text-xs bg-white text-brand font-bold mt-4 py-1.5 px-3 rounded-full w-max hover:bg-gray-100 transition-colors"

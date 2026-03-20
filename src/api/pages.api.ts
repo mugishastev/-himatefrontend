@@ -46,5 +46,25 @@ export const pagesApi = {
     createPost: async (pageId: number, data: { content: string, mediaUrls?: string[] }) => {
         const response = await api.post<PagePost>(`/pages/${pageId}/posts`, data);
         return response.data;
+    },
+
+    getMyPages: async () => {
+        const response = await api.get<Page[]>('/pages/my-pages');
+        return response.data;
+    },
+
+    getPageAnalytics: async (pageId: number) => {
+        const response = await api.get<{ followersCount: number, postsCount: number, totalViews: number, unreadTickets: number }>(`/pages/${pageId}/analytics`);
+        return response.data;
+    },
+
+    getPageConversations: async (pageId: number) => {
+        const response = await api.get<any[]>(`/pages/${pageId}/conversations`);
+        return response.data;
+    },
+
+    messagePage: async (pageId: number) => {
+        const response = await api.post<any>(`/pages/${pageId}/message`);
+        return response.data;
     }
 };
