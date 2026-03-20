@@ -21,7 +21,7 @@ import { useConversations } from '../../hooks/useConversations';
 import { StartCallModal } from '../../features/calls/components/StartCallModal';
 import { DialpadModal } from '../../features/calls/components/DialpadModal';
 import { ScheduleCallModal } from '../../features/calls/components/ScheduleCallModal';
-
+import { PagesDiscoverView } from '../../features/pages/components/PagesDiscoverView';
 
 export const DashboardLayout: React.FC = () => {
     const { currentView, activeModal, viewingUserId, closeModal, openModal } = useUIStore();
@@ -146,11 +146,17 @@ export const DashboardLayout: React.FC = () => {
                 );
             case 'NOTIFICATIONS':
                 return (
-                    <div className="flex-1 p-6 bg-bg-secondary overflow-y-auto">
+                    <div className="flex-1 p-6 bg-bg-secondary overflow-y-auto w-full">
                         <div className="max-w-3xl mx-auto space-y-4">
                             <h2 className="text-2xl font-black text-text-primary tracking-tight">Notifications</h2>
                             <NotificationList />
                         </div>
+                    </div>
+                );
+            case 'PAGES':
+                return (
+                    <div className="flex-1 bg-white overflow-hidden w-full flex">
+                        <PagesDiscoverView />
                     </div>
                 );
             default:
