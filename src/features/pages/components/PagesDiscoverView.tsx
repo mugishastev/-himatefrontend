@@ -6,12 +6,14 @@ import { useUIStore } from '../../../store/ui.store';
 export const PagesDiscoverView: React.FC = () => {
     const [pages, setPages] = useState<Page[]>([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState('');
     const { openModal, openPage } = useUIStore();
 
     useEffect(() => {
         const fetchPages = async () => {
+            setLoading(true);
             try {
-                const data = await pagesApi.getDiscoverPages();
+                const data = await pagesApi.getDiscoverPages(search);
                 setPages(data);
             } catch (error) {
                 console.error('Failed to load discover pages', error);
@@ -19,13 +21,27 @@ export const PagesDiscoverView: React.FC = () => {
                 setLoading(false);
             }
         };
-        fetchPages();
-    }, []);
+
+        const timeoutId = setTimeout(fetchPages, 300);
+        return () => clearTimeout(timeoutId);
+    }, [search]);
 
     return (
         <div className="flex flex-col h-full bg-bg-secondary w-full">
-            <header className="h-[60px] bg-bg-primary border-b border-border-light flex items-center px-6 shrink-0 z-10">
-                <h1 className="text-xl font-bold text-text-primary">Discover Pages</h1>
+            <header className="h-[60px] bg-bg-primary border-b border-border-light flex items-center px-6 shrink-0 z-10 gap-4">
+                <h1 className="text-xl font-bold text-text-primary shrink-0">Discover Pages</h1>
+                <div className="flex-1 max-w-md relative">
+                    <input 
+                        type="text" 
+                        placeholder="Search for brands, creators..." 
+                        className="w-full bg-bg-secondary border border-border-light rounded-xl px-10 py-2 focus:outline-none focus:ring-2 focus:ring-brand/20 transition-all text-sm"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <svg className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
             </header>
             
             <div className="flex-1 overflow-y-auto p-6 space-y-6">

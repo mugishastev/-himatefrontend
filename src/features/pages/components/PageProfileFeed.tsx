@@ -12,6 +12,8 @@ interface Props {
 export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
     const [page, setPage] = useState<(Page & { posts: PagePost[] }) | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editData, setEditData] = useState({ name: '', bio: '', avatarUrl: '' });
     const { user } = useAuthStore();
     const { setView } = useUIStore();
 
@@ -20,6 +22,7 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
             try {
                 const data = await pagesApi.getPageByHandle(handle);
                 setPage(data);
+                setEditData({ name: data.name, bio: data.bio || '', avatarUrl: data.avatarUrl || '' });
             } catch (err) {
                 console.error(err);
             } finally {
@@ -79,6 +82,19 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
         }
     };
 
+    const handleUpdatePage = async () => {
+        if (!page) return;
+        try {
+            await pagesApi.updatePage(page.id, editData);
+            setPage(prev => prev ? { ...prev, ...editData } : null);
+            setIsEditing(false);
+            alert('Page updated successfully!');
+        } catch (err) {
+            console.error('Update failed', err);
+            alert('Failed to update page.');
+        }
+    };
+
     if (loading) return <div className="p-10 flex justify-center"><div className="animate-spin w-8 h-8 rounded-full border-4 border-brand border-t-transparent" /></div>;
     if (!page) return <div className="p-10 text-center">Page not found.</div>;
 
@@ -126,19 +142,55 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                                 </>
                             )}
                             {isOwner && (
-                                <button onClick={() => setView('CREATOR_STUDIO')} className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-bold transition-colors shadow-md">
-                                    Creator Studio
-                                </button>
+                                <>
+                                    <button 
+                                        onClick={() => setView('CREATOR_STUDIO')} 
+                                        className="bg-[#f0f2f5] hover:bg-gray-200 text-text-primary px-4 py-2 rounded-xl font-bold transition-colors shadow-sm"
+                                    >
+                                        Studio
+                                    </button>
+                                    <button 
+                                        onClick={() => setIsEditing(!isEditing)} 
+                                        className="bg-brand hover:bg-brand-dark text-white px-6 py-2 rounded-xl font-bold transition-colors shadow-md"
+                                    >
+                                        {isEditing ? 'Cancel Edit' : 'Edit Profile'}
+                                    </button>
+                                </>
                             )}
                         </div>
                     </div>
                     
-                    <h1 className="text-3xl font-black text-text-primary flex items-center gap-2">
-                        {page.name}
-                        {page.isVerified && <span className="text-blue-500 text-2xl" title="Verified Account">☑️</span>}
-                    </h1>
-                    <p className="text-text-secondary font-medium">@{page.handle} • {page._count?.followers || 0} followers</p>
-                    <p className="mt-4 text-text-primary max-w-2xl">{page.bio}</p>
+                    {isEditing ? (
+                        <div className="space-y-4 max-w-lg">
+                            <input 
+                                className="text-3xl font-black text-text-primary bg-bg-secondary w-full px-2 py-1 rounded"
+                                value={editData.name}
+                                onChange={e => setEditData({...editData, name: e.target.value})}
+                                placeholder="Page Name"
+                            />
+                            <textarea 
+                                className="mt-4 text-text-primary w-full p-3 bg-bg-secondary rounded-xl min-h-[100px]"
+                                value={editData.bio}
+                                onChange={e => setEditData({...editData, bio: e.target.value})}
+                                placeholder="Describe your page..."
+                            />
+                            <button 
+                                onClick={handleUpdatePage}
+                                className="bg-brand text-white px-8 py-2 rounded-xl font-bold hover:bg-brand-dark transition-all"
+                            >
+                                Save Changes
+                            </button>
+                        </div>
+                    ) : (
+                        <>
+                            <h1 className="text-3xl font-black text-text-primary flex items-center gap-2">
+                                {page.name}
+                                {page.isVerified && <span className="text-blue-500 text-2xl" title="Verified Account">☑️</span>}
+                            </h1>
+                            <p className="text-text-secondary font-medium">@{page.handle} • {page._count?.followers || 0} followers</p>
+                            <p className="mt-4 text-text-primary max-w-2xl">{page.bio}</p>
+                        </>
+                    )}
                 </div>
             </div>
 

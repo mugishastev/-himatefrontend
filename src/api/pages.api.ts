@@ -26,8 +26,13 @@ export interface PagePost {
 }
 
 export const pagesApi = {
-    getDiscoverPages: async () => {
-        const response = await api.get<Page[]>('/pages/discover');
+    getDiscoverPages: async (search?: string) => {
+        const response = await api.get<Page[]>(`/pages/discover${search ? `?search=${search}` : ''}`);
+        return response.data;
+    },
+
+    updatePage: async (pageId: number, data: Partial<Page>) => {
+        const response = await api.patch<Page>(`/pages/${pageId}`, data);
         return response.data;
     },
     
