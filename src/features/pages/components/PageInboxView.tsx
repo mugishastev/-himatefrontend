@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { pagesApi } from '../../../api/pages.api';
+import { messagesApi } from '../../../api/messages.api';
 import { useUIStore } from '../../../store/ui.store';
 
 interface Ticket {
@@ -18,40 +19,61 @@ export const PageInboxView: React.FC = () => {
     const [activeTicket, setActiveTicket] = useState<Ticket | null>(null);
     const [tickets, setTickets] = useState<Ticket[]>([]);
     const [loading, setLoading] = useState(true);
+    const [replyText, setReplyText] = useState('');
+    const [sending, setSending] = useState(false);
+
+    const fetchIncomingSupport = useCallback(async () => {
+        try {
+            const myPages = await pagesApi.getMyPages();
+            if (myPages.length > 0) {
+                const pageId = myPages[0].id;
+                const convs = await pagesApi.getPageConversations(pageId);
+                
+                const mappedTickets: Ticket[] = convs.map((c: any) => {
+                    const lastMsg = c.messages[0];
+                    const otherParticipant = c.participants.find((p: any) => p.user.id !== myPages[0].ownerId);
+                    
+                    return {
+                        id: c.id.toString(),
+                        userName: otherParticipant?.user?.username || 'Guest',
+                        lastMessage: lastMsg?.content || 'Started a conversation',
+                        time: lastMsg ? new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
+                        status: 'UNASSIGNED', // Real status logic could be added to Conversation schema
+                        unread: lastMsg ? !lastMsg.isRead : false,
+                        rawConversation: c
+                    };
+                });
+                setTickets(mappedTickets);
+            }
+        } catch (err) {
+            console.error('Failed to load support tickets:', err);
+        } finally {
+            setLoading(false);
+        }
+    }, [pagesApi]);
 
     useEffect(() => {
-        const fetchIncomingSupport = async () => {
-            try {
-                const myPages = await pagesApi.getMyPages();
-                if (myPages.length > 0) {
-                    const pageId = myPages[0].id; // Handling first page for demo
-                    const convs = await pagesApi.getPageConversations(pageId);
-                    
-                    const mappedTickets: Ticket[] = convs.map(c => {
-                        const lastMsg = c.messages[0];
-                        const otherParticipant = c.participants.find((p: any) => p.user.id !== myPages[0].ownerId);
-                        
-                        return {
-                            id: c.id.toString(),
-                            userName: otherParticipant?.user?.username || 'Guest',
-                            lastMessage: lastMsg?.content || 'Started a conversation',
-                            time: lastMsg ? new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
-                            status: 'UNASSIGNED', // Real status logic could be added to Conversation schema
-                            unread: lastMsg ? !lastMsg.isRead : false,
-                            rawConversation: c
-                        };
-                    });
-                    setTickets(mappedTickets);
-                }
-            } catch (err) {
-                console.error('Failed to load support tickets:', err);
-            } finally {
-                setLoading(true); // Should be false but keeping it simple
-                setLoading(false);
-            }
-        };
         fetchIncomingSupport();
-    }, []);
+    }, [fetchIncomingSupport]);
+
+    const handleSendReply = async () => {
+        if (!replyText.trim() || !activeTicket || sending) return;
+        setSending(true);
+        try {
+            await messagesApi.sendMessage({
+                conversationId: Number(activeTicket.id),
+                content: replyText.trim(),
+                type: 'TEXT'
+            });
+            setReplyText('');
+            // Refresh tickets to update last message
+            fetchIncomingSupport();
+        } catch (err) {
+            console.error('Failed to send reply:', err);
+        } finally {
+            setSending(false);
+        }
+    };
 
     const filteredTickets = tickets.filter(t => t.status === activeTab);
 
@@ -155,27 +177,21 @@ export const PageInboxView: React.FC = () => {
                         </div>
                         
                         <div className="bg-[#f0f2f5] p-3 relative z-10">
-                            {/* Canned Responses Helper */}
-                            <div className="flex gap-2 mb-2 px-1 overflow-x-auto hide-scrollbar">
-                                <button className="bg-white border border-gray-200 text-text-secondary px-3 py-1 rounded-full text-xs font-medium hover:bg-gray-50 whitespace-nowrap hidden sm:block">
-                                    /hours
-                                </button>
-                                <button className="bg-white border border-gray-200 text-text-secondary px-3 py-1 rounded-full text-xs font-medium hover:bg-gray-50 whitespace-nowrap">
-                                    /thanks
-                                </button>
-                                <button className="bg-white border border-gray-200 text-text-secondary px-3 py-1 rounded-full text-xs font-medium hover:bg-gray-50 whitespace-nowrap">
-                                    "Yes, it is available!"
-                                </button>
-                            </div>
                             <div className="flex items-center gap-2 bg-white rounded-xl overflow-hidden px-2 shadow-sm border border-border-light">
-                                <button className="p-2 text-text-secondary hover:text-brand transition-colors"><span className="text-xl">📎</span></button>
                                 <input 
                                     type="text" 
                                     className="flex-1 py-3 focus:outline-none placeholder:text-text-secondary text-[15px]" 
                                     placeholder="Reply as the Page..."
+                                    value={replyText}
+                                    onChange={(e) => setReplyText(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleSendReply()}
                                 />
-                                <button className="p-2 text-brand hover:text-brand-dark transition-colors font-bold pr-3">
-                                    Send
+                                <button 
+                                    onClick={handleSendReply}
+                                    disabled={sending || !replyText.trim()}
+                                    className="p-2 text-brand hover:text-brand-dark transition-colors font-bold pr-3 disabled:opacity-50"
+                                >
+                                    {sending ? '...' : 'Send'}
                                 </button>
                             </div>
                         </div>
@@ -231,7 +247,7 @@ export const PageInboxView: React.FC = () => {
                                 </div>
                                 <div className="flex justify-between border-b border-gray-50 pb-2">
                                     <span className="text-text-primary">Response Time</span>
-                                    <span className="font-bold text-brand">~2 mins</span>
+                                    <span className="font-bold text-brand">Real-time</span>
                                 </div>
                             </div>
                         </div>

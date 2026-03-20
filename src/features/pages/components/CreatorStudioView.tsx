@@ -11,6 +11,8 @@ export const CreatorStudioView: React.FC = () => {
     const [mediaUrl, setMediaUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const loadDashboard = async () => {
@@ -56,6 +58,21 @@ export const CreatorStudioView: React.FC = () => {
         }
     };
 
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setUploading(true);
+        try {
+            const res = await pagesApi.uploadMedia(file);
+            setMediaUrl(res.url);
+        } catch (err) {
+            console.error('Upload failed', err);
+            alert('Failed to upload image.');
+        } finally {
+            setUploading(false);
+        }
+    };
+
     if (fetching) return <div className="flex-1 flex items-center justify-center bg-bg-secondary text-text-secondary font-bold">Synchronizing Studio...</div>;
     if (!myPage) return <div className="flex-1 flex flex-col items-center justify-center bg-bg-secondary p-8 text-center uppercase">
         <h2 className="text-2xl font-black mb-4">No Page Found</h2>
@@ -73,7 +90,7 @@ export const CreatorStudioView: React.FC = () => {
                     </div>
                     <div className="bg-brand text-white px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2">
                         <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                        Status: Active
+                        Status: Live
                     </div>
                 </div>
 
@@ -140,18 +157,20 @@ export const CreatorStudioView: React.FC = () => {
 
                             <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
                                 <div className="flex gap-2">
+                                    <input 
+                                        type="file" 
+                                        ref={fileInputRef} 
+                                        className="hidden" 
+                                        accept="image/*" 
+                                        onChange={handleFileChange}
+                                    />
                                     <button 
                                         type="button" 
-                                        className="p-3 text-brand bg-brand/10 hover:bg-brand/20 rounded-xl transition-colors font-bold flex items-center gap-2"
-                                        onClick={() => {
-                                            const url = prompt('Enter Image URL (Demo):');
-                                            if (url) setMediaUrl(url);
-                                        }}
+                                        className="p-3 text-brand bg-brand/10 hover:bg-brand/20 rounded-xl transition-colors font-bold flex items-center gap-2 disabled:opacity-50"
+                                        onClick={() => fileInputRef.current?.click()}
+                                        disabled={uploading}
                                     >
-                                        📷 Attach Media
-                                    </button>
-                                    <button type="button" className="p-3 text-text-secondary bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors font-bold flex items-center gap-2">
-                                        📊 Add Poll
+                                        📷 {uploading ? 'Uploading...' : 'Attach Image'}
                                     </button>
                                 </div>
                                 <button 

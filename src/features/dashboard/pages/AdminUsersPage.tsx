@@ -68,7 +68,7 @@ export const AdminUsersPage: React.FC = () => {
         }
     };
 
-    const totalPages = data ? Math.ceil(data.total / 20) : 1;
+    const totalPages = Math.max(1, data && typeof data.total === 'number' ? Math.ceil(data.total / 20) : 1);
 
     return (
         <div className="p-8 space-y-6">

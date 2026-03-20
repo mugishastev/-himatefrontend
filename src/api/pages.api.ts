@@ -35,6 +35,15 @@ export const pagesApi = {
         const response = await api.patch<Page>(`/pages/${pageId}`, data);
         return response.data;
     },
+
+    uploadMedia: async (file: File) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await api.post<{ url: string }>('/pages/upload', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        return response.data;
+    },
     
     getPageByHandle: async (handle: string) => {
         const response = await api.get<Page & { posts: PagePost[] }>(`/pages/${handle}`);
