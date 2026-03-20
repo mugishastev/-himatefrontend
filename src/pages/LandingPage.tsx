@@ -2,8 +2,10 @@ import React from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.store';
 import { ROUTES } from '../app/routes.config';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export const LandingPage: React.FC = () => {
+    useDocumentTitle('Welcome');
     const { isAuthenticated } = useAuthStore();
 
     if (isAuthenticated) {

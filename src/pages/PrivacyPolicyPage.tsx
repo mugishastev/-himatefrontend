@@ -2,8 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ShieldCheck, Mail, Lock } from 'lucide-react';
 import { ROUTES } from '../app/routes.config';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export const PrivacyPolicyPage: React.FC = () => {
+    useDocumentTitle('Privacy Policy');
     return (
         <div className="min-h-screen bg-bg-secondary p-6 flex justify-center">
             <div className="max-w-4xl w-full animate-in fade-in slide-in-from-bottom-4 duration-500">

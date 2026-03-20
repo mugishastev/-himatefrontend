@@ -11,6 +11,7 @@ import { usersApi } from '../../../api/users.api';
 import { callsApi } from '../../../api/calls.api';
 import { socketEmitters } from '../../../socket/socket.emitters';
 import { WallpaperPicker, WALLPAPER_OPTIONS, WALLPAPER_STORAGE_KEY } from './WallpaperPicker';
+import { useDocumentTitle } from '../../../hooks/useDocumentTitle';
 
 export const ChatWindow: React.FC = () => {
     const { activeConversationId, conversations, setActiveConversation, setConversations } = useConversationStore();
@@ -60,6 +61,8 @@ export const ChatWindow: React.FC = () => {
     const subtitle = activeConversation?.isGroup
         ? `${activeConversation.participants.length} members`
         : (otherParticipant?.user?.status || 'Active');
+
+    useDocumentTitle(activeConversationId ? `Chatting with ${displayName}` : 'Dashboard');
 
     const handleDeleteChat = async () => {
         setIsMenuOpen(false);
