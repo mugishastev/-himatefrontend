@@ -16,4 +16,7 @@ export const ROUTES = {
     PROFILE: '/profile',
     CONTACTS: '/contacts',
     NOTIFICATIONS: '/notifications',
+    PRIVACY: '/privacy',
+    SUPPORT: '/support',
+    GUIDE: '/guide',
 } as const;

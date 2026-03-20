@@ -22,6 +22,9 @@ import { AdminSupportTicketsPage } from '../features/dashboard/pages/AdminSuppor
 import { AdminAnnouncementsPage } from '../features/dashboard/pages/AdminAnnouncementsPage';
 import { AdminMediaGalleryPage } from '../features/dashboard/pages/AdminMediaGalleryPage';
 import { AdminRolesPage } from '../features/dashboard/pages/AdminRolesPage';
+import PrivacyPolicyPage from '../pages/PrivacyPolicyPage';
+import SupportFaqPage from '../pages/SupportFaqPage';
+import UserGuidePage from '../pages/UserGuidePage';
 
 export const router = createBrowserRouter([
     {
@@ -83,6 +86,21 @@ export const router = createBrowserRouter([
     {
         path: ROUTES.AUTH.VERIFY_EMAIL,
         element: <VerifyEmailPage />,
+        errorElement: <RootErrorPage />,
+    },
+    {
+        path: ROUTES.PRIVACY,
+        element: <PrivacyPolicyPage />,
+        errorElement: <RootErrorPage />,
+    },
+    {
+        path: ROUTES.SUPPORT,
+        element: <SupportFaqPage />,
+        errorElement: <RootErrorPage />,
+    },
+    {
+        path: ROUTES.GUIDE,
+        element: <UserGuidePage />,
         errorElement: <RootErrorPage />,
     },
     {

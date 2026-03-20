@@ -47,9 +47,14 @@ export const LandingPage: React.FC = () => {
                     </Link>
                 </div>
 
-                {/* Footer Footer */}
+                {/* Footer Links */}
                 <div className="mt-24 text-text-secondary font-medium space-y-4">
-                    <p className="italic uppercase tracking-widest text-xs opacity-50">Stay connected, everywhere.</p>
+                    <p className="italic uppercase tracking-widest text-xs opacity-50 mb-4">Stay connected, everywhere.</p>
+                    <div className="flex items-center justify-center gap-6 text-sm">
+                        <Link to={ROUTES.GUIDE} className="hover:text-brand transition-colors">User Guide</Link>
+                        <Link to={ROUTES.SUPPORT} className="hover:text-brand transition-colors">Support & FAQ</Link>
+                        <Link to={ROUTES.PRIVACY} className="hover:text-brand transition-colors">Privacy Policy</Link>
+                    </div>
                 </div>
             </div>
 
