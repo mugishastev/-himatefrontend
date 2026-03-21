@@ -64,7 +64,8 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
         }
 
         // No existing conversation — create a new one
-        await createConversation([userId]);
+        const newConv = await createConversation([userId]);
+        if (newConv?.id) storeSetActive(newConv.id);
         onClose();
     };
 

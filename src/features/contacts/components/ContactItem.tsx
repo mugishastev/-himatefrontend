@@ -10,7 +10,7 @@ interface ContactItemProps {
 export const ContactItem: React.FC<ContactItemProps> = ({ contact, onOpenProfile }) => {
     return (
         <div
-            className="bg-white rounded-2xl p-5 hover:shadow-md border border-transparent hover:border-brand/20 transition-all duration-300 flex flex-col items-center text-center group relative overflow-hidden"
+            className="bg-white rounded-2xl p-5 hover:shadow-md border border-transparent hover:border-brand/20 transition-all duration-300 flex flex-col items-center text-center group relative overflow-hidden cursor-pointer"
             onClick={() => onOpenProfile?.(contact)}
         >
             <div className="absolute top-0 left-0 w-full h-1 bg-brand/0 group-hover:bg-brand transition-colors duration-300"></div>

@@ -20,7 +20,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({ user, size = 'md', showS
     const imageUrl = user.avatarUrl || user.profileImage;
 
     return (
-        <div className={`relative ${size === 'full' ? 'w-full h-full' : 'inline-block'} ${className}`}>
+        <div className={`relative ${size === 'full' ? 'w-full h-full' : 'inline-block'} cursor-pointer ${className}`}>
             <div className={`${sizeClasses[size]} rounded-full bg-brand/10 border-2 border-white flex items-center justify-center font-bold text-brand overflow-hidden shadow-sm`}>
                 {imageUrl ? (
                     <img src={imageUrl} alt={user.username} className="w-full h-full object-cover" />
