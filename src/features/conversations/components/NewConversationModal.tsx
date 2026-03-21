@@ -70,7 +70,7 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
     };
 
     return (
-        <div className="fixed inset-y-0 left-[60px] lg:left-[64px] z-50 w-full sm:w-[380px] bg-[#111827] flex flex-col shadow-2xl border-r border-[#1F2937] animate-in slide-in-from-left duration-200">
+        <div className="fixed inset-y-0 left-0 md:left-[64px] bottom-[60px] md:bottom-0 z-50 w-full sm:w-[380px] bg-[#111827] flex flex-col shadow-2xl border-r border-[#1F2937] animate-in slide-in-from-left duration-200">
             {/* Header */}
             <div className="h-[108px] bg-[#111827] flex items-end px-5 pb-4 shrink-0 text-white">
                 <div className="flex items-center gap-6 w-full translate-y-2">
