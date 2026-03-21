@@ -18,6 +18,7 @@ import { InfoSidebar } from '../../features/messages/components/InfoSidebar';
 import { ImageViewerModal } from '../../features/messages/components/ImageViewerModal';
 import { useNotifications } from '../../hooks/useNotifications';
 import { useConversations } from '../../hooks/useConversations';
+import { useConversationStore } from '../../store/conversation.store';
 import { StartCallModal } from '../../features/calls/components/StartCallModal';
 import { DialpadModal } from '../../features/calls/components/DialpadModal';
 import { ScheduleCallModal } from '../../features/calls/components/ScheduleCallModal';
