@@ -86,7 +86,7 @@ export const setupInterceptors = (instance: AxiosInstance) => {
                 }
             } else if (status === 401) {
                 useAuthStore.getState().logout();
-                if (!['/login', '/register', '/'].includes(path)) {
+                if (!['/login', '/register', '/', '/verify-email', '/forgot-password', '/reset-password'].includes(path)) {
                     window.location.replace('/login');
                 }
             } else {
