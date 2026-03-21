@@ -127,6 +127,16 @@ export const ChatWindow: React.FC = () => {
             {activeConversationId ? (
                 <>
                     <header className="h-[60px] bg-[#f0f2f5] border-b border-gray-200 flex items-center justify-between px-4 shrink-0 z-10 relative">
+                        {/* Mobile Back Button */}
+                        <button 
+                            onClick={() => setActiveConversation(null)}
+                            className="md:hidden mr-2 p-2 rounded-full hover:bg-black/5 text-[#54656f] transition-colors"
+                        >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                        </button>
+
                         <div
                             className="flex items-center space-x-3 cursor-pointer flex-1 min-w-0 h-full"
                             onClick={() => setInfoPane(!isInfoPaneOpen, activeConversation?.isGroup ? 'GROUP' : 'CONTACT')}

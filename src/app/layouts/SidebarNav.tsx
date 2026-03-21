@@ -122,14 +122,14 @@ export const SidebarNav: React.FC = () => {
     ];
 
     return (
-        <div className="w-[60px] lg:w-[64px] bg-[#111827] flex flex-col items-center py-4 h-full border-r border-[#1F2937] shrink-0 z-20">
-            {/* Logo */}
-            <div className="w-10 h-10 flex items-center justify-center mb-4 shrink-0 cursor-pointer hover:opacity-80 transition-opacity" title="Himate">
+        <div className="w-full md:w-[64px] h-[60px] md:h-full bg-[#111827] flex flex-row md:flex-col items-center py-0 md:py-4 px-2 md:px-0 border-t md:border-t-0 md:border-r border-[#1F2937] shrink-0 z-20 order-last md:order-first">
+            {/* Logo - Hidden on mobile bottom bar */}
+            <div className="hidden md:flex w-10 h-10 items-center justify-center mb-4 shrink-0 cursor-pointer hover:opacity-80 transition-opacity" title="Himate">
                 <img src="/logo.png" alt="Himate" className="w-15 h-105 object-contain" />
             </div>
 
-            {/* Top Container */}
-            <div className="w-full flex flex-col gap-3 items-center">
+            {/* Top Items (Main Nav) */}
+            <div className="flex-1 md:flex-none w-full flex flex-row md:flex-col gap-1 md:gap-3 items-center justify-around md:justify-start">
                 {topItems.map((item) => (
                     <button
                         key={item.id}
@@ -149,9 +149,9 @@ export const SidebarNav: React.FC = () => {
                 ))}
             </div>
 
-            {/* Bottom Container */}
-            <div className="w-full flex-1 flex flex-col gap-3 items-center justify-end pb-2">
-                {bottomItems.map((item) => (
+            {/* Bottom Items (Profile/Settings) - Only show select on mobile if needed, or keep all */}
+            <div className="w-auto md:w-full flex md:flex-1 flex-row md:flex-col gap-1 md:gap-3 items-center justify-end md:pb-2">
+                {[...bottomItems].map((item) => (
                     <button
                         key={item.id}
                         onClick={() => setView(item.id as any)}
@@ -167,7 +167,7 @@ export const SidebarNav: React.FC = () => {
                     </button>
                 ))}
 
-                <div className="w-8 h-[1px] bg-[#1F2937] my-1" />
+                <div className="hidden md:block w-8 h-[1px] bg-[#1F2937] my-1" />
 
                 <button
                     onClick={() => setView('PROFILE')}
@@ -185,7 +185,7 @@ export const SidebarNav: React.FC = () => {
 
                 <button
                     onClick={logout}
-                    className="group flex items-center justify-center relative text-[#9CA3AF] hover:text-red-400 hover:bg-[#1F2937] rounded-full transition-colors w-10 h-10 mt-1"
+                    className="hidden md:flex items-center justify-center relative text-[#9CA3AF] hover:text-red-400 hover:bg-[#1F2937] rounded-full transition-colors w-10 h-10 mt-1"
                     title="Logout"
                 >
                     <svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

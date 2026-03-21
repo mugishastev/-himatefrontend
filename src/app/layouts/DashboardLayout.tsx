@@ -41,15 +41,21 @@ export const DashboardLayout: React.FC = () => {
         }
     }, [currentView]);
 
+    const { activeConversationId } = useConversationStore();
+
     const renderMainView = () => {
         switch (currentView) {
             case 'CHATS':
                 return (
                     <>
-                        <aside className="w-[380px] flex-shrink-0 flex flex-col bg-white border-r border-[#d1d7db] z-10 transition-all duration-300">
+                        <aside className={`w-full md:w-[320px] lg:w-[380px] flex-shrink-0 flex flex-col bg-white border-r border-[#d1d7db] z-10 transition-all duration-300 ${
+                            activeConversationId ? 'hidden md:flex' : 'flex'
+                        }`}>
                             <ConversationList />
                         </aside>
-                        <main className="flex-1 flex flex-col min-w-0 bg-[#efeae2] relative z-0">
+                        <main className={`flex-1 flex flex-col min-w-0 bg-[#efeae2] relative z-0 transition-all duration-300 ${
+                            !activeConversationId ? 'hidden md:flex' : 'flex'
+                        }`}>
                             <div
                                 className="absolute inset-0 pointer-events-none opacity-[0.06]"
                                 style={{ backgroundImage: 'url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png")' }}
@@ -189,17 +195,21 @@ export const DashboardLayout: React.FC = () => {
 
     return (
         <div className="h-screen w-screen overflow-hidden flex flex-col bg-[#d1d7db]">
-            {/* ── Three-pane app shell ────────────────────────────────── */}
+            {/* ── Adaptive App Shell ────────────────────────────────── */}
             <div className="flex-1 flex overflow-hidden lg:p-3">
-                <div className="flex-1 flex overflow-hidden bg-[#f0f2f5] lg:rounded-lg lg:shadow-2xl ring-1 ring-black/10">
-                    {/* Narrow left nav */}
+                <div className="flex-1 flex flex-col md:flex-row overflow-hidden bg-[#f0f2f5] lg:rounded-lg lg:shadow-2xl ring-1 ring-black/10">
+                    {/* Narrow navigation - side on desktop, bottom on mobile */}
                     <SidebarNav />
 
-                    {/* Dynamic Main App Area */}
-                    {renderMainView()}
-
-                    {/* Right info pane (only visible when in CHATS and InfoSidebar is toggled) */}
-                    {currentView === 'CHATS' && <InfoSidebar />}
+                    {/* Main Content Area */}
+                    <div className="flex-1 flex overflow-hidden min-w-0">
+                        {renderMainView()}
+                        {currentView === 'CHATS' && (
+                            <div className="hidden lg:block h-full">
+                                <InfoSidebar />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
             <CallOverlay />
