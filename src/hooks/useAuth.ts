@@ -3,6 +3,7 @@ import { authApi } from '../api/auth.api';
 import { useAuthStore } from '../store/auth.store';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../app/routes.config';
+import { extractErrorMessage } from '../utils/error-handler';
 
 export const useAuth = () => {
     const { setAuth, logout: clearAuth, user, isAuthenticated } = useAuthStore();
@@ -23,7 +24,7 @@ export const useAuth = () => {
                 navigate(ROUTES.DASHBOARD);
             }
         } catch (err: any) {
-            setError(err.message || 'Login failed');
+            setError(extractErrorMessage(err));
             // Re-throw if needed, but the original code didn't
         } finally {
             setIsLoading(false);
@@ -38,7 +39,7 @@ export const useAuth = () => {
             // After registration, redirect to verify email with the email in state
             navigate(ROUTES.AUTH.VERIFY_EMAIL, { state: { email: data.email } });
         } catch (err: any) {
-            setError(err.message || 'Registration failed');
+            setError(extractErrorMessage(err));
         } finally {
             setIsLoading(false);
         }
@@ -57,7 +58,7 @@ export const useAuth = () => {
                 navigate(ROUTES.DASHBOARD);
             }
         } catch (err: any) {
-            setError(err.message || 'Verification failed');
+            setError(extractErrorMessage(err));
             throw err;
         } finally {
             setIsLoading(false);
@@ -69,7 +70,7 @@ export const useAuth = () => {
         try {
             await authApi.resendOtp(email);
         } catch (err: any) {
-            setError(err.message || 'Failed to resend OTP');
+            setError(extractErrorMessage(err));
             throw err;
         }
     };
