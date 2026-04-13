@@ -5,11 +5,11 @@ import { ROUTES } from '../app/routes.config';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export const LandingPage: React.FC = () => {
+    const { isAuthenticated, user } = useAuthStore();
     useDocumentTitle('Welcome');
-    const { isAuthenticated } = useAuthStore();
 
     if (isAuthenticated) {
-        return <Navigate to={ROUTES.DASHBOARD} replace />;
+        return <Navigate to={user?.isAdmin ? ROUTES.ADMIN : ROUTES.DASHBOARD} replace />;
     }
 
     return (
