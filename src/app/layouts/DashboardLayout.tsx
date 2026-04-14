@@ -70,10 +70,10 @@ export const DashboardLayout: React.FC = () => {
             case 'CALLS':
                 return (
                     <>
-                        <aside className="w-[380px] flex-shrink-0 flex flex-col bg-[#111827] border-r border-[#1F2937] z-10 transition-all duration-300">
+                        <aside className="w-full md:w-[380px] flex-shrink-0 flex flex-col bg-[#111827] border-r border-[#1F2937] z-10 transition-all duration-300">
                             <CallsView />
                         </aside>
-                        <main className="flex-1 flex flex-col min-w-0 bg-[#111827] relative z-0 items-center justify-center">
+                        <main className="hidden md:flex flex-1 flex-col min-w-0 bg-[#111827] relative z-0 items-center justify-center">
                             <div className="grid grid-cols-2 gap-8 max-w-lg mb-8">
                                 <button onClick={() => openModal('START_CALL')} className="flex flex-col items-center gap-3 group">
                                     <div className="w-20 h-20 rounded-2xl bg-[#1F2937] group-hover:bg-[#374248] flex items-center justify-center transition-colors shadow-lg border border-white/5">
@@ -195,7 +195,7 @@ export const DashboardLayout: React.FC = () => {
     };
 
     return (
-        <div className="h-screen w-screen overflow-hidden flex flex-col bg-[#d1d7db]">
+        <div className="min-h-dvh w-full overflow-hidden flex flex-col bg-[#d1d7db]">
             {/* ── Adaptive App Shell ────────────────────────────────── */}
             <div className="flex-1 flex overflow-hidden lg:p-3">
                 <div className="flex-1 flex flex-col md:flex-row overflow-hidden bg-[#f0f2f5] lg:rounded-lg lg:shadow-2xl ring-1 ring-black/10">

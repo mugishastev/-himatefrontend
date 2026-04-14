@@ -81,12 +81,18 @@ export const PagesDiscoverView: React.FC = () => {
                                     <div className="flex-1 min-w-0">
                                         <h4 className="font-bold text-text-primary truncate flex items-center gap-1">
                                             {page.name}
-                                            {page.isVerified && <span className="text-blue-500" title="Verified">☑️</span>}
+                                            {page.isVerified && (
+                                                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-500/10 text-blue-600" title="Verified">
+                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </span>
+                                            )}
                                         </h4>
-                                        <p className="text-xs text-text-secondary truncate">@{page.handle} • {page._count?.followers || 0} followers</p>
+                                        <p className="text-xs text-text-secondary truncate">@{page.handle} - {page._count?.followers || 0} followers</p>
                                     </div>
                                 </div>
-                                <p className="text-sm text-text-secondary mb-5 line-clamp-2 min-h[2.5rem]">
+                                <p className="text-sm text-text-secondary mb-5 line-clamp-2 min-h-[2.5rem]">
                                     {page.bio || "No description provided."}
                                 </p>
                                 <button 

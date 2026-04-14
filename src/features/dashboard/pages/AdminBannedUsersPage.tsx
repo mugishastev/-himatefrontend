@@ -27,19 +27,19 @@ export const AdminBannedUsersPage: React.FC = () => {
     };
 
     return (
-        <div className="p-8 space-y-6">
-            <div className="flex items-center justify-between">
+        <div className="p-4 sm:p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-white">Banned Users</h1>
                     <p className="text-slate-400 text-sm mt-1">Users who have been suspended from the platform</p>
                 </div>
-                <form onSubmit={(e) => { e.preventDefault(); setPage(1); setSearch(searchInput); }} className="flex gap-2">
+                <form onSubmit={(e) => { e.preventDefault(); setPage(1); setSearch(searchInput); }} className="flex gap-2 w-full sm:w-auto">
                     <input
                         type="text"
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
                         placeholder="Search banned users..."
-                        className="w-64 bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-red-500"
+                        className="flex-1 sm:w-64 bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-red-500"
                     />
                     <button type="submit" className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-medium rounded-lg text-sm transition-colors border border-red-500/20">Search</button>
                 </form>
@@ -55,7 +55,8 @@ export const AdminBannedUsersPage: React.FC = () => {
                 </div>
             ) : (
                 <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
-                    <table className="w-full text-sm">
+                    <div className="w-full overflow-x-auto">
+                        <table className="min-w-[900px] w-full text-sm">
                         <thead className="border-b border-slate-800">
                             <tr>
                                 <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">User</th>
@@ -98,7 +99,8 @@ export const AdminBannedUsersPage: React.FC = () => {
                                 ))
                             )}
                         </tbody>
-                    </table>
+                        </table>
+                    </div>
                     
                     {/* Pagination */}
                     {data && data.total > 20 && (

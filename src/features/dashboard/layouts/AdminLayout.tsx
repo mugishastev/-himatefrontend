@@ -76,6 +76,7 @@ export const AdminLayout: React.FC = () => {
     const { user, logout } = useAuthStore();
     const navigate = useNavigate();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -83,9 +84,21 @@ export const AdminLayout: React.FC = () => {
     };
 
     return (
-        <div className="flex h-screen bg-slate-950 text-slate-100 font-sans overflow-hidden">
+        <div className="flex min-h-dvh w-full bg-slate-950 text-slate-100 font-sans overflow-hidden relative">
+            {/* Mobile overlay */}
+            {isMobileSidebarOpen && (
+                <button
+                    type="button"
+                    className="fixed inset-0 z-40 bg-black/60 md:hidden"
+                    onClick={() => setIsMobileSidebarOpen(false)}
+                    aria-label="Close sidebar"
+                />
+            )}
+
             {/* Sidebar */}
-            <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} transition-all duration-300 bg-slate-900 border-r border-slate-800 flex flex-col flex-shrink-0 overflow-y-auto`}>
+            <aside
+                className={`fixed inset-y-0 left-0 z-50 w-64 md:static md:z-auto ${isSidebarOpen ? 'md:w-64' : 'md:w-20'} transform transition-transform duration-300 bg-slate-900 border-r border-slate-800 flex flex-col flex-shrink-0 overflow-y-auto ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+            >
                 {/* Logo */}
                 <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-800 sticky top-0 bg-slate-900 z-10">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/5 p-1 border border-white/10">
@@ -113,6 +126,7 @@ export const AdminLayout: React.FC = () => {
                                         to={item.path}
                                         end={item.end}
                                         title={!isSidebarOpen ? item.label : undefined}
+                                        onClick={() => setIsMobileSidebarOpen(false)}
                                         className={({ isActive }) =>
                                             `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 text-sm font-medium ${isActive
                                                 ? 'bg-brand/15 text-brand'
@@ -159,7 +173,7 @@ export const AdminLayout: React.FC = () => {
             {/* Collapse Button */}
             <button
                 onClick={() => setIsSidebarOpen((v) => !v)}
-                className="absolute left-[calc(var(--sidebar-w)-12px)] top-6 z-50 w-6 h-6 rounded-full bg-brand/20 border border-brand/30 text-brand flex items-center justify-center hover:bg-brand/30 transition-colors"
+                className="hidden md:flex absolute left-[calc(var(--sidebar-w)-12px)] top-6 z-50 w-6 h-6 rounded-full bg-brand/20 border border-brand/30 text-brand items-center justify-center hover:bg-brand/30 transition-colors"
                 style={{ '--sidebar-w': isSidebarOpen ? '256px' : '80px' } as React.CSSProperties}
             >
                 <svg className={`w-3 h-3 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" /></svg>
@@ -167,6 +181,29 @@ export const AdminLayout: React.FC = () => {
 
             {/* Main Content */}
             <main className="flex-1 overflow-y-auto">
+                <div className="md:hidden sticky top-0 z-30 bg-slate-950/95 backdrop-blur border-b border-slate-900 px-4 py-3 flex items-center justify-between">
+                    <button
+                        type="button"
+                        onClick={() => setIsMobileSidebarOpen(true)}
+                        className="p-2 -ml-2 rounded-lg hover:bg-white/5 text-slate-200"
+                        aria-label="Open sidebar"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <div className="text-sm font-bold tracking-wide">Admin</div>
+                    <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="p-2 -mr-2 rounded-lg hover:bg-red-500/10 text-slate-200 hover:text-red-300"
+                        aria-label="Logout"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </button>
+                </div>
                 <Outlet />
             </main>
         </div>

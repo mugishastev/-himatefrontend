@@ -82,7 +82,7 @@ export const PageInboxView: React.FC = () => {
     return (
         <div className="flex h-full w-full bg-bg-secondary overflow-hidden">
             {/* Inbox Sidebar Options */}
-            <div className="w-[300px] flex-shrink-0 bg-white border-r border-border-light flex flex-col z-10">
+            <div className={`w-full md:w-[300px] flex-shrink-0 bg-white border-r border-border-light flex flex-col z-10 ${activeTicket ? 'hidden md:flex' : 'flex'}`}>
                 <div className="p-4 border-b border-border-light flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <button onClick={() => setView('CREATOR_STUDIO')} className="hover:bg-gray-100 p-2 rounded-full transition-colors">
@@ -134,7 +134,7 @@ export const PageInboxView: React.FC = () => {
             </div>
 
             {/* Conversation Area */}
-            <div className="flex-1 flex flex-col bg-[#efeae2] relative min-w-0">
+            <div className={`flex-1 flex flex-col bg-[#efeae2] relative min-w-0 ${activeTicket ? 'flex' : 'hidden md:flex'}`}>
                 <div
                     className="absolute inset-0 pointer-events-none opacity-[0.06]"
                     style={{ backgroundImage: 'url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png")' }}
@@ -142,8 +142,18 @@ export const PageInboxView: React.FC = () => {
                 
                 {activeTicket ? (
                     <>
-                        <div className="h-[60px] bg-white border-b border-border-light flex justify-between items-center px-6 relative z-10 shadow-sm">
+                        <div className="h-[60px] bg-white border-b border-border-light flex justify-between items-center px-4 sm:px-6 relative z-10 shadow-sm">
                             <div className="flex items-center gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setActiveTicket(null)}
+                                    className="md:hidden hover:bg-gray-100 p-2 rounded-full transition-colors"
+                                    aria-label="Back"
+                                >
+                                    <svg className="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </button>
                                 <div className="w-10 h-10 rounded-full bg-brand/10 text-brand flex items-center justify-center font-bold text-lg">
                                     {activeTicket.userName.charAt(0)}
                                 </div>

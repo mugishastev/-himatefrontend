@@ -80,7 +80,7 @@ export const CreatorStudioView: React.FC = () => {
     </div>;
 
     return (
-        <div className="flex-1 overflow-y-auto bg-bg-secondary w-full p-8 transition-all duration-500">
+        <div className="flex-1 overflow-y-auto bg-bg-secondary w-full p-4 sm:p-8 transition-all duration-500">
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* Header */}
                 <div className="flex justify-between items-center">
@@ -122,7 +122,7 @@ export const CreatorStudioView: React.FC = () => {
                             onClick={() => setView('PAGE_INBOX')}
                             className="text-xs bg-white text-brand font-bold mt-4 py-1.5 px-3 rounded-full w-max hover:bg-gray-100 transition-colors"
                         >
-                            Open Inbox →
+                            Open Inbox
                         </button>
                     </div>
                 </div>
@@ -130,7 +130,12 @@ export const CreatorStudioView: React.FC = () => {
                 {/* The Publisher Console */}
                 <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                     <div className="p-6 border-b border-gray-100 bg-gray-50 flex items-center gap-3">
-                        <span className="text-2xl">✍️</span>
+                        <span className="w-9 h-9 rounded-2xl bg-brand/10 text-brand flex items-center justify-center">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 20h9" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z" />
+                            </svg>
+                        </span>
                         <h2 className="text-xl font-bold text-text-primary">Publish New Blog</h2>
                     </div>
                     <div className="p-6">
@@ -150,7 +155,9 @@ export const CreatorStudioView: React.FC = () => {
                                         onClick={() => setMediaUrl('')}
                                         className="absolute top-2 right-2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70"
                                     >
-                                        ✕
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
                                     </button>
                                 </div>
                             )}
@@ -170,7 +177,11 @@ export const CreatorStudioView: React.FC = () => {
                                         onClick={() => fileInputRef.current?.click()}
                                         disabled={uploading}
                                     >
-                                        📷 {uploading ? 'Uploading...' : 'Attach Image'}
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7h3l2-2h8l2 2h3v12H3V7z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 17a4 4 0 100-8 4 4 0 000 8z" />
+                                        </svg>
+                                        {uploading ? 'Uploading...' : 'Attach Image'}
                                     </button>
                                 </div>
                                 <button 

@@ -2,10 +2,15 @@ import React, { useEffect, useMemo, useState, useRef } from "react";
 import { ConversationItem } from "./ConversationItem";
 import { useConversations } from "../../../hooks/useConversations";
 import { useUIStore } from "../../../store/ui.store";
+import { useFavoritesStore } from "../../../store/favorites.store";
+import { useConversationStore } from "../../../store/conversation.store";
+import { messagesApi } from "../../../api/messages.api";
 
 export const ConversationList: React.FC = () => {
     const { conversations, fetchConversations, isLoading } = useConversations();
     const { isSidebarOpen, openModal } = useUIStore();
+    const { favoriteConversationIds } = useFavoritesStore();
+    const setConversations = useConversationStore((s) => s.setConversations);
     const [query, setQuery] = useState("");
     const [filter, setFilter] = useState<"ALL" | "UNREAD" | "FAVORITES">("ALL");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,16 +45,28 @@ export const ConversationList: React.FC = () => {
             if (filter === "UNREAD") {
                 if (!conversation.unreadCount || conversation.unreadCount === 0) return false;
             } else if (filter === "FAVORITES") {
-                // Not supported in schema yet, fallback to all or empty
-                // For now, let's just make it empty if no favorites are stored locally
-                return false; 
+                const key = String(conversation.id);
+                if (!favoriteConversationIds[key]) return false;
             }
 
             return true;
         });
-    }, [conversations, query, filter]);
+    }, [conversations, query, filter, favoriteConversationIds]);
 
     const globalUnreadCount = conversations.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
+
+    const handleMarkAllAsRead = async () => {
+        setIsMenuOpen(false);
+        if (!conversations.length) return;
+
+        // Best-effort: clear on backend per conversation, then update local unread counts.
+        await Promise.all(
+            conversations.map((c) =>
+                messagesApi.markConversationAsRead(c.id).catch(() => null)
+            )
+        );
+        setConversations(conversations.map((c) => ({ ...c, unreadCount: 0 })));
+    };
 
     if (!isSidebarOpen) return null;
 
@@ -92,25 +109,7 @@ export const ConversationList: React.FC = () => {
                                 </button>
                                 <button
                                     className="w-full text-left px-4 py-2 text-[#d1d7db] hover:bg-[#111827] transition-colors text-[14px]"
-                                    onClick={() => {
-                                        setIsMenuOpen(false);
-                                    }}
-                                >
-                                    Starred messages
-                                </button>
-                                <button
-                                    className="w-full text-left px-4 py-2 text-[#d1d7db] hover:bg-[#111827] transition-colors text-[14px]"
-                                    onClick={() => {
-                                        setIsMenuOpen(false);
-                                    }}
-                                >
-                                    Select chats
-                                </button>
-                                <button
-                                    className="w-full text-left px-4 py-2 text-[#d1d7db] hover:bg-[#111827] transition-colors text-[14px]"
-                                    onClick={() => {
-                                        setIsMenuOpen(false);
-                                    }}
+                                    onClick={handleMarkAllAsRead}
                                 >
                                     Mark all as read
                                 </button>

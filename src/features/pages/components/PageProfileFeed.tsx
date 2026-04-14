@@ -14,12 +14,14 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState({ name: '', bio: '', avatarUrl: '' });
+    const [isFollowing, setIsFollowing] = useState(false);
     const { user } = useAuthStore();
     const { setView } = useUIStore();
 
     useEffect(() => {
         const fetchFeed = async () => {
             try {
+                setIsFollowing(false);
                 const data = await pagesApi.getPageByHandle(handle);
                 setPage(data);
                 setEditData({ name: data.name, bio: data.bio || '', avatarUrl: data.avatarUrl || '' });
@@ -36,16 +38,28 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
         if (!page) return;
         try {
             await pagesApi.followPage(page.id);
-            alert(`You are now following ${page.name}!`);
             setPage(prev => prev ? { ...prev, _count: { ...prev._count, followers: (prev._count?.followers || 0) + 1 } } : null);
+            setIsFollowing(true);
         } catch (err) {
             console.error('Error following', err);
         }
     };
 
+    const handleUnfollow = async () => {
+        if (!page) return;
+        if (!confirm(`Unfollow ${page.name}?`)) return;
+        try {
+            await pagesApi.unfollowPage(page.id);
+            setPage(prev => prev ? { ...prev, _count: { ...prev._count, followers: Math.max(0, (prev._count?.followers || 0) - 1) } } : null);
+            setIsFollowing(false);
+        } catch (err) {
+            console.error('Error unfollowing', err);
+        }
+    };
+
     const handleReact = async (postId: number) => {
         try {
-            await pagesApi.reactToPost(postId, '❤️');
+            await pagesApi.reactToPost(postId, 'LOVE');
             // Refresh feed or local state
             const updated = await pagesApi.getPageByHandle(handle);
             setPage(updated);
@@ -108,12 +122,12 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                     {page.coverPhotoUrl && <img src={page.coverPhotoUrl} alt="Cover" className="w-full h-full object-cover opacity-60" />}
                     {onBack && (
                         <button onClick={onBack} className="absolute top-4 left-4 bg-black/30 text-white p-2 rounded-full hover:bg-black/50 backdrop-blur-md">
-                            ← Back
+                            Back
                         </button>
                     )}
                 </div>
                 
-                <div className="px-8 pb-6 relative">
+                <div className="px-4 sm:px-8 pb-6 relative">
                     <div className="flex justify-between items-end -mt-12 mb-4">
                         <div className="w-24 h-24 rounded-full border-4 border-white bg-white overflow-hidden shadow-lg">
                             {page.avatarUrl ? (
@@ -128,10 +142,10 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                             {!isOwner && (
                                 <>
                                     <button 
-                                        onClick={handleFollow}
+                                        onClick={isFollowing ? handleUnfollow : handleFollow}
                                         className="bg-[#f0f2f5] hover:bg-gray-200 text-text-primary px-6 py-2 rounded-full font-bold transition-colors shadow-sm"
                                     >
-                                        Follow
+                                        {isFollowing ? 'Following' : 'Follow'}
                                     </button>
                                     <button 
                                         onClick={handleMessageSupport}
@@ -185,9 +199,15 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                         <>
                             <h1 className="text-3xl font-black text-text-primary flex items-center gap-2">
                                 {page.name}
-                                {page.isVerified && <span className="text-blue-500 text-2xl" title="Verified Account">☑️</span>}
+                                {page.isVerified && (
+                                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/10 text-blue-600" title="Verified Account">
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </span>
+                                )}
                             </h1>
-                            <p className="text-text-secondary font-medium">@{page.handle} • {page._count?.followers || 0} followers</p>
+                            <p className="text-text-secondary font-medium">@{page.handle} - {page._count?.followers || 0} followers</p>
                             <p className="mt-4 text-text-primary max-w-2xl">{page.bio}</p>
                         </>
                     )}
@@ -245,10 +265,24 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                                     onClick={() => handleReact(post.id)}
                                     className="flex items-center gap-1 hover:text-red-500 transition-colors"
                                 >
-                                    <span className="text-xl">❤️</span> {post._count?.reactions || 0}
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 21s-7.5-4.35-9.6-9.18C.98 8.43 3.1 5.5 6.3 5.5c1.77 0 3.38.86 4.4 2.2 1.02-1.34 2.63-2.2 4.4-2.2 3.2 0 5.32 2.93 3.9 6.32C19.5 16.65 12 21 12 21z" />
+                                    </svg>
+                                    {post._count?.reactions || 0}
                                 </button>
-                                <button className="flex items-center gap-1 hover:text-blue-500 transition-colors font-medium text-sm">
-                                    Share to Chat
+                                <button
+                                    className="flex items-center gap-1 hover:text-blue-500 transition-colors font-medium text-sm"
+                                    onClick={async () => {
+                                        const link = `${window.location.origin}/pages/${page.handle}?post=${post.id}`;
+                                        try {
+                                            await navigator.clipboard.writeText(link);
+                                            alert('Post link copied.');
+                                        } catch {
+                                            alert(link);
+                                        }
+                                    }}
+                                >
+                                    Copy link
                                 </button>
                                 <span className="ml-auto text-xs">{post.views} views</span>
                             </div>

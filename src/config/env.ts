@@ -1,5 +1,3 @@
-console.log('Current API URL:', import.meta.env.VITE_API_URL || 'https://himateappbackend.vercel.app/api');
-
 const normalizeSocketUrl = (url: string) => url.replace(/\/api\/?$/, '');
 
 export const env = {

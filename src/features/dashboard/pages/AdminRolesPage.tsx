@@ -67,13 +67,13 @@ export const AdminRolesPage: React.FC = () => {
     };
 
     return (
-        <div className="p-8">
+        <div className="p-4 sm:p-8">
             <h1 className="text-2xl font-bold text-white mb-2">Admin Roles</h1>
             <p className="text-slate-400 text-sm mb-8">Define who can do what in the admin panel. Assign roles to staff members.</p>
 
-            <div className="flex gap-6">
+            <div className="flex flex-col md:flex-row gap-6">
                 {/* Role List */}
-                <div className="w-72 flex-shrink-0 space-y-3">
+                <div className="w-full md:w-72 flex-shrink-0 space-y-3">
                     {loading ? (
                         <div className="text-sm text-slate-500">Loading roles...</div>
                     ) : roles.map((role) => (

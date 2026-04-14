@@ -44,7 +44,6 @@ export const useConversations = () => {
                 title,
                 isGroup
             });
-            console.log('Conversation created successfully:', response);
             await fetchConversations();
             return response.data || response;
         } catch (error: any) {

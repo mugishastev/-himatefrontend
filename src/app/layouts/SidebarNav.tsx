@@ -125,7 +125,7 @@ export const SidebarNav: React.FC = () => {
         <div className="w-full md:w-[64px] h-[60px] md:h-full bg-[#111827] flex flex-row md:flex-col items-center py-0 md:py-4 px-2 md:px-0 border-t md:border-t-0 md:border-r border-[#1F2937] shrink-0 z-20 order-last md:order-first">
             {/* Logo - Hidden on mobile bottom bar */}
             <div className="hidden md:flex w-10 h-10 items-center justify-center mb-4 shrink-0 cursor-pointer hover:opacity-80 transition-opacity" title="Himate">
-                <img src="/logo.png" alt="Himate" className="w-15 h-105 object-contain" />
+                <img src="/logo.png" alt="Himate" className="w-10 h-10 object-contain" />
             </div>
 
             {/* Top Items (Main Nav) */}

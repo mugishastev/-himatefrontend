@@ -55,6 +55,11 @@ export const pagesApi = {
         return response.data;
     },
 
+    unfollowPage: async (pageId: number) => {
+        const response = await api.delete(`/pages/${pageId}/follow`);
+        return response.data;
+    },
+
     createPage: async (data: Partial<Page>) => {
         const response = await api.post<Page>('/pages', data);
         return response.data;
@@ -85,8 +90,8 @@ export const pagesApi = {
         return response.data;
     },
 
-    reactToPost: async (postId: number, emoji: string) => {
-        const response = await api.post(`/pages/posts/${postId}/react`, { emoji });
+    reactToPost: async (postId: number, type: string) => {
+        const response = await api.post(`/pages/posts/${postId}/react`, { type });
         return response.data;
     },
 

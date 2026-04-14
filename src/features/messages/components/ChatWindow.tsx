@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { MessageList } from './MessageList';
 import { MessageInput } from './MessageInput';
 import { useConversationStore } from '../../../store/conversation.store';
@@ -12,6 +12,7 @@ import { callsApi } from '../../../api/calls.api';
 import { socketEmitters } from '../../../socket/socket.emitters';
 import { WallpaperPicker, WALLPAPER_OPTIONS, WALLPAPER_STORAGE_KEY } from './WallpaperPicker';
 import { useDocumentTitle } from '../../../hooks/useDocumentTitle';
+import { useMessageStore } from '../../../store/message.store';
 
 export const ChatWindow: React.FC = () => {
     const { activeConversationId, conversations, setActiveConversation, setConversations } = useConversationStore();
@@ -23,6 +24,39 @@ export const ChatWindow: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isWallpaperOpen, setIsWallpaperOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const searchInputRef = useRef<HTMLInputElement>(null);
+
+    const conversationMessages = useMessageStore((s) => {
+        if (!activeConversationId) return [];
+        return s.messages[String(activeConversationId)] || [];
+    });
+
+    const searchResults = useMemo(() => {
+        const q = searchQuery.trim().toLowerCase();
+        if (!q) return [];
+        return conversationMessages
+            .filter((m: any) => String(m.content || '').toLowerCase().includes(q))
+            .slice(-50)
+            .reverse();
+    }, [conversationMessages, searchQuery]);
+
+    useEffect(() => {
+        setIsSearchOpen(false);
+        setSearchQuery('');
+    }, [activeConversationId]);
+
+    useEffect(() => {
+        if (isSearchOpen) {
+            setTimeout(() => searchInputRef.current?.focus(), 0);
+        }
+    }, [isSearchOpen]);
+
+    const scrollToMessage = (messageId: string | number) => {
+        const el = document.getElementById(`message-${messageId}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
 
     // ── Wallpaper persistence ──────────────────────────────────
     const savedWallpaper = (() => {
@@ -192,10 +226,7 @@ export const ChatWindow: React.FC = () => {
                                 type="button"
                                 className="p-2 hover:bg-black/5 rounded-full transition-colors"
                                 title="Search messages"
-                                onClick={() => {
-                                    // Normally this opens a search pane on the right. We simulate it for now.
-                                    alert('Search messages functionality coming soon!');
-                                }}
+                                onClick={() => setIsSearchOpen(true)}
                             >
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M15.07 14.25h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0a4.75 4.75 0 1 1 0-9.5 4.75 4.75 0 0 1 0 9.5z" /></svg>
                             </button>
@@ -263,6 +294,75 @@ export const ChatWindow: React.FC = () => {
                             )}
                         </div>
                     </header>
+
+                    {isSearchOpen && (
+                        <div className="fixed inset-0 z-50">
+                            <button
+                                type="button"
+                                className="absolute inset-0 bg-black/40"
+                                onClick={() => setIsSearchOpen(false)}
+                                aria-label="Close search"
+                            />
+                            <div className="absolute right-0 top-0 h-full w-full sm:w-[420px] bg-white shadow-2xl border-l border-gray-200 flex flex-col">
+                                <div className="p-4 border-b border-gray-200 flex items-center gap-2">
+                                    <input
+                                        ref={searchInputRef}
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder="Search in this chat..."
+                                        className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-brand"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="p-2 rounded-xl hover:bg-gray-100 text-gray-600"
+                                        onClick={() => setIsSearchOpen(false)}
+                                        aria-label="Close"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div className="flex-1 overflow-y-auto p-3">
+                                    {!searchQuery.trim() ? (
+                                        <div className="text-sm text-gray-500 p-3">
+                                            Type to search message text in this conversation.
+                                        </div>
+                                    ) : searchResults.length === 0 ? (
+                                        <div className="text-sm text-gray-500 p-3">
+                                            No matches found.
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-2">
+                                            {searchResults.map((m: any) => (
+                                                <button
+                                                    key={m.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setIsSearchOpen(false);
+                                                        setTimeout(() => scrollToMessage(m.id), 0);
+                                                    }}
+                                                    className="w-full text-left p-3 rounded-xl border border-gray-200 hover:border-brand/40 hover:bg-brand/5 transition-colors"
+                                                >
+                                                    <div className="flex items-center justify-between gap-2">
+                                                        <span className="text-xs font-semibold text-gray-600 truncate">
+                                                            {m.sender?.username || 'User'}
+                                                        </span>
+                                                        <span className="text-[11px] text-gray-400 whitespace-nowrap">
+                                                            {new Date(m.createdAt || m.timestamp || Date.now()).toLocaleString()}
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-sm text-gray-700 mt-1 line-clamp-2">
+                                                        {m.content || ''}
+                                                    </p>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     <MessageList />
                     <MessageInput />

@@ -37,7 +37,7 @@ export const AdminReportsPage: React.FC = () => {
     const totalPages = Math.ceil(total / 30) || 1;
 
     return (
-        <div className="p-8 space-y-6">
+        <div className="p-4 sm:p-8 space-y-6">
             <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-white">Audit Logs</h1>
@@ -59,7 +59,8 @@ export const AdminReportsPage: React.FC = () => {
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
-                <table className="w-full text-sm">
+                <div className="w-full overflow-x-auto">
+                    <table className="min-w-[900px] w-full text-sm">
                     <thead className="border-b border-slate-800">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Action</th>
@@ -106,7 +107,8 @@ export const AdminReportsPage: React.FC = () => {
                             ))
                         )}
                     </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
 
             <div className="flex items-center justify-between">

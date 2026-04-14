@@ -68,6 +68,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
 
     return (
         <div
+            id={`message-${message.id}`}
             className={`flex ${isOwn ? "justify-end" : "justify-start"} group mb-1.5 px-4 sm:px-12 relative`}
         >
             <div

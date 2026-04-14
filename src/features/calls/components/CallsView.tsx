@@ -4,6 +4,7 @@ import { useAuthStore } from '../../../store/auth.store';
 import { useCallStore } from '../../../store/call.store';
 import { UserAvatar } from '../../users/components/UserAvatar';
 import { socketEmitters } from '../../../socket/socket.emitters';
+import { useUIStore } from '../../../store/ui.store';
 
 export const CallsView: React.FC = () => {
     const [copied, setCopied] = useState(false);
@@ -11,6 +12,7 @@ export const CallsView: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const { user } = useAuthStore();
     const { startCall } = useCallStore();
+    const { openModal } = useUIStore();
 
     useEffect(() => {
         const fetchCalls = async () => {
@@ -67,7 +69,11 @@ export const CallsView: React.FC = () => {
             <header className="h-[60px] flex items-center justify-between px-4 shrink-0 mt-2">
                 <h1 className="text-[22px] font-bold text-white">Calls</h1>
                 <div className="flex items-center gap-3 text-[#aebac1]">
-                    <button className="p-2 hover:bg-white/5 rounded-full transition-colors group" title="New call">
+                    <button
+                        className="p-2 hover:bg-white/5 rounded-full transition-colors group"
+                        title="New call"
+                        onClick={() => openModal('START_CALL')}
+                    >
                         <svg className="w-5 h-5 text-[#aebac1] group-hover:text-[#d1d7db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
                         </svg>

@@ -62,14 +62,14 @@ export const AdminOverviewPage: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-full min-h-screen">
+            <div className="flex items-center justify-center h-full min-h-dvh">
                 <div className="text-brand animate-pulse text-xl font-bold">Loading dashboard...</div>
             </div>
         );
     }
 
     return (
-        <div className="p-8 space-y-8">
+        <div className="p-4 sm:p-8 space-y-8">
             {/* Header */}
             <div>
                 <h1 className="text-2xl font-bold text-white">Platform Overview</h1>
@@ -77,7 +77,7 @@ export const AdminOverviewPage: React.FC = () => {
             </div>
 
             {/* Stat Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                     label="Total Users"
                     value={stats?.users?.total ?? 0}
@@ -171,7 +171,7 @@ export const AdminOverviewPage: React.FC = () => {
                         <div className="flex items-center justify-between">
                             <span className="text-slate-400">Avg Response (min)</span>
                             <span className="text-slate-200 font-semibold">
-                                {stats?.engagement?.avgResponseTimeMinutes != null ? stats.engagement.avgResponseTimeMinutes.toFixed(1) : 'â€“'}
+                                {stats?.engagement?.avgResponseTimeMinutes != null ? stats.engagement.avgResponseTimeMinutes.toFixed(1) : '-'}
                             </span>
                         </div>
                         <div className="flex items-center justify-between">

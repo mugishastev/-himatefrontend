@@ -6,6 +6,7 @@ import { useUIStore } from '../../../store/ui.store';
 import { formatChatPreviewTime } from '../../../utils/chat';
 import { conversationsApi } from '../../../api/conversations.api';
 import { usersApi } from '../../../api/users.api';
+import { useFavoritesStore } from '../../../store/favorites.store';
 
 interface ConversationItemProps {
     conversation: Conversation;
@@ -15,7 +16,9 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
     const { activeConversationId, setActiveConversation, conversations, setConversations } = useConversationStore();
     const { openImage } = useUIStore();
     const { user } = useAuthStore();
+    const { isFavoriteConversation, toggleFavoriteConversation } = useFavoritesStore();
     const isActive = String(activeConversationId) === String(conversation.id);
+    const isFavorite = isFavoriteConversation(conversation.id);
 
     const [isDeleting, setIsDeleting] = useState(false);
     const [isBlocking, setIsBlocking] = useState(false);
@@ -140,8 +143,13 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
             {/* Content */}
             <div className="ml-3 flex-1 min-w-0 py-1 border-b border-[#1F2937] pb-3">
                 <div className="flex justify-between items-baseline gap-2">
-                    <h3 className="text-[17px] font-normal text-white truncate leading-snug">
-                        {displayName}
+                    <h3 className="text-[17px] font-normal text-white truncate leading-snug flex items-center gap-2">
+                        <span className="truncate">{displayName}</span>
+                        {isFavorite && (
+                            <svg className="w-4 h-4 text-amber-300 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-label="Favorite">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        )}
                     </h3>
                     {/* Show time normally, hide it when menu button is visible on hover */}
                     <span className={`text-[12px] shrink-0 group-hover:hidden ${showUnread ? 'text-[#00a884] font-medium' : 'text-[#aebac1]'}`}>
@@ -168,6 +176,20 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
 
                         {menuOpen && (
                             <div className="absolute right-0 top-7 w-44 bg-[#233138] rounded-lg shadow-2xl border border-[#313d45] py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-100">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleFavoriteConversation(conversation.id);
+                                        setMenuOpen(false);
+                                    }}
+                                    className="w-full text-left px-4 py-2.5 text-[14px] text-[#d1d7db] hover:bg-[#182229] transition-colors flex items-center gap-3"
+                                >
+                                    <svg className="w-4 h-4 text-amber-300" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                    </svg>
+                                    {isFavorite ? 'Remove favorite' : 'Add to favorites'}
+                                </button>
+                                <div className="h-px bg-[#313d45] mx-2" />
                                 <button
                                     onClick={handleBlock}
                                     disabled={isBlocking}
