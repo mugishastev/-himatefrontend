@@ -5,14 +5,19 @@ export const AdminConversationsPage: React.FC = () => {
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
+    const [search, setSearch] = useState('');
+    const [searchInput, setSearchInput] = useState('');
 
     useEffect(() => {
         setLoading(true);
-        adminApi.getConversations(page, 20).then((res) => {
+        const request = search
+            ? adminApi.searchConversations(search, page, 20)
+            : adminApi.getConversations(page, 20);
+        request.then((res) => {
             setData(res);
             setLoading(false);
         }).catch(() => setLoading(false));
-    }, [page]);
+    }, [page, search]);
 
     const totalPages = data ? Math.ceil(data.total / 20) : 1;
 
@@ -22,6 +27,19 @@ export const AdminConversationsPage: React.FC = () => {
                 <h1 className="text-2xl font-bold text-white">Conversations</h1>
                 <p className="text-slate-400 text-sm mt-1">{data?.total?.toLocaleString() ?? '–'} total conversations</p>
             </div>
+
+            <form onSubmit={(e) => { e.preventDefault(); setPage(1); setSearch(searchInput); }} className="flex gap-2">
+                <input
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    placeholder="Search by participant..."
+                    className="w-64 bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-brand"
+                />
+                <button type="submit" className="px-4 py-2 bg-brand/15 hover:bg-brand/25 text-brand font-medium rounded-lg text-sm transition-colors border border-brand/20">
+                    Search
+                </button>
+            </form>
 
             <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
                 <table className="w-full text-sm">

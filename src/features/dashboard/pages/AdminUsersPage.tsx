@@ -30,7 +30,11 @@ export const AdminUsersPage: React.FC = () => {
 
     const fetchUsers = () => {
         setLoading(true);
-        adminApi.getUsers(page, 20, search || undefined).then((res) => {
+        const request = search
+            ? adminApi.searchUsers(search, page, 20)
+            : adminApi.getUsers(page, 20);
+
+        request.then((res) => {
             setData(res);
             setLoading(false);
         }).catch(() => setLoading(false));

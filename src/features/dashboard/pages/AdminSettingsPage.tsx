@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { adminApi } from '../../../api/admin.api';
 
 export const AdminSettingsPage: React.FC = () => {
     const [isSaving, setIsSaving] = useState(false);
+    const [health, setHealth] = useState<any>(null);
+
+    useEffect(() => {
+        adminApi.getHealth().then(setHealth).catch(() => setHealth(null));
+    }, []);
 
     const handleSave = () => {
         setIsSaving(true);
@@ -25,6 +31,28 @@ export const AdminSettingsPage: React.FC = () => {
             </div>
 
             <div className="space-y-6">
+                {/* System Health */}
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                    <h2 className="text-lg font-semibold text-white mb-4">System Health</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                        {[
+                            { label: 'Database', ok: health?.database?.ok },
+                            { label: 'Redis', ok: health?.redis?.ok },
+                            { label: 'Firebase', ok: health?.firebase?.configured },
+                        ].map((item) => (
+                            <div key={item.label} className="bg-slate-950 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+                                <span className="text-slate-400">{item.label}</span>
+                                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${item.ok ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/10' : 'text-red-400 border-red-500/20 bg-red-500/10'}`}>
+                                    {item.ok ? 'Healthy' : 'Degraded'}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    {health?.timestamp && (
+                        <p className="text-xs text-slate-500 mt-3">Last check: {new Date(health.timestamp).toLocaleString()}</p>
+                    )}
+                </div>
+
                 {/* General Settings */}
                 <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                     <h2 className="text-lg font-semibold text-white mb-6">General Configuration</h2>

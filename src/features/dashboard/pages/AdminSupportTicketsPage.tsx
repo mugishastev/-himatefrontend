@@ -1,11 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { adminApi } from '../../../api/admin.api';
+import { conversationsApi } from '../../../api/conversations.api';
 
 type Ticket = { id: number; user: string; subject: string; status: 'Open' | 'In Progress' | 'Resolved'; date: string; preview: string };
 
 export const AdminSupportTicketsPage: React.FC = () => {
-    const [tickets] = useState<Ticket[]>([]);
+    const [tickets, setTickets] = useState<Ticket[]>([]);
     const [selected, setSelected] = useState<Ticket | null>(null);
+    const [selectedConversation, setSelectedConversation] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
     const [reply, setReply] = useState('');
+
+    useEffect(() => {
+        setLoading(true);
+        adminApi.getConversations(1, 50).then((res) => {
+            const conversations = res.data ?? [];
+            const pageConvos = conversations.filter((c: any) => c.pageId != null);
+            const mapped = pageConvos.map((c: any) => ({
+                id: c.id,
+                user: c.participants?.[0]?.user?.username || 'unknown',
+                subject: c.title || 'Page Inquiry',
+                status: 'Open' as const,
+                date: new Date(c.createdAt).toLocaleDateString(),
+                preview: c.messages?.[0]?.content || 'No messages yet',
+            }));
+            setTickets(mapped);
+            setLoading(false);
+        }).catch(() => setLoading(false));
+    }, []);
+
+    const loadConversation = async (ticket: Ticket) => {
+        setSelected(ticket);
+        try {
+            const convo = await conversationsApi.getConversationDetails(ticket.id);
+            setSelectedConversation(convo);
+        } catch {
+            setSelectedConversation(null);
+        }
+    };
 
     return (
         <div className="p-8">
@@ -15,16 +47,18 @@ export const AdminSupportTicketsPage: React.FC = () => {
             <div className="flex gap-6 h-[calc(100vh-200px)]">
                 {/* Ticket List */}
                 <div className="w-80 flex-shrink-0 space-y-2 overflow-y-auto">
-                    {tickets.length > 0 ? (
+                    {loading ? (
+                        <div className="text-sm text-slate-500 p-4">Loading tickets...</div>
+                    ) : tickets.length > 0 ? (
                         tickets.map((t) => (
                             <button
                                 key={t.id}
-                                onClick={() => setSelected(t)}
+                                onClick={() => loadConversation(t)}
                                 className={`w-full text-left p-4 rounded-xl border transition-all ${selected?.id === t.id ? 'bg-brand/10 border-brand/30' : 'bg-slate-900 border-slate-800 hover:border-slate-700'}`}
                             >
                                 <div className="flex items-center justify-between mb-1">
                                     <span className="font-semibold text-slate-200 text-sm">@{t.user}</span>
-                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border text-amber-400 bg-amber-500/10 border-amber-500/20`}>{t.status}</span>
+                                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border text-amber-400 bg-amber-500/10 border-amber-500/20">{t.status}</span>
                                 </div>
                                 <p className="text-sm text-slate-300 font-medium">{t.subject}</p>
                                 <p className="text-xs text-slate-500 mt-1 truncate">{t.preview}</p>
@@ -51,13 +85,24 @@ export const AdminSupportTicketsPage: React.FC = () => {
                                         <h2 className="text-lg font-bold text-white">{selected.subject}</h2>
                                         <p className="text-sm text-slate-400 mt-1">From @{selected.user} · {selected.date}</p>
                                     </div>
-                                    <span className={`text-xs font-bold px-3 py-1 rounded-full border text-amber-400 bg-amber-500/10 border-amber-500/20`}>{selected.status}</span>
+                                    <span className="text-xs font-bold px-3 py-1 rounded-full border text-amber-400 bg-amber-500/10 border-amber-500/20">{selected.status}</span>
                                 </div>
                             </div>
                             <div className="flex-1 p-6 overflow-y-auto">
-                                <div className="bg-slate-800/50 rounded-xl p-4 max-w-2xl">
-                                    <p className="text-sm text-slate-300">{selected.preview}</p>
-                                </div>
+                                {(selectedConversation?.messages ?? []).length > 0 ? (
+                                    <div className="space-y-3">
+                                        {selectedConversation.messages.map((m: any) => (
+                                            <div key={m.id} className="bg-slate-800/50 rounded-xl p-4 max-w-2xl">
+                                                <p className="text-xs text-slate-500 mb-1">{m.sender?.username ?? 'User'} · {new Date(m.timestamp).toLocaleString()}</p>
+                                                <p className="text-sm text-slate-300">{m.content}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="bg-slate-800/50 rounded-xl p-4 max-w-2xl">
+                                        <p className="text-sm text-slate-300">{selected.preview}</p>
+                                    </div>
+                                )}
                             </div>
                             <div className="p-4 border-t border-slate-800 flex gap-3">
                                 <textarea

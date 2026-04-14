@@ -11,7 +11,7 @@ interface StatCardProps {
 
 const StatCard: React.FC<StatCardProps> = ({ label, value, subLabel, icon, color }) => (
     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex items-start gap-4 hover:border-slate-700 transition-colors">
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${color}`}>
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${color}`}>
             {icon}
         </div>
         <div>
@@ -27,7 +27,7 @@ const BAR_MAX_HEIGHT = 80;
 const ActivityChart: React.FC<{ data: { date: string; messages: number }[] }> = ({ data }) => {
     const max = Math.max(...data.map((d) => d.messages), 1);
     return (
-        <div className="flex items-end gap-3 h-[90px]">
+        <div className="flex items-end gap-3 h-22.5">
             {data.map((d) => (
                 <div key={d.date} className="flex flex-col items-center gap-1 flex-1 group">
                     <div
@@ -47,13 +47,17 @@ const ActivityChart: React.FC<{ data: { date: string; messages: number }[] }> = 
 
 export const AdminOverviewPage: React.FC = () => {
     const [stats, setStats] = useState<any>(null);
+    const [health, setHealth] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        adminApi.getStats().then((data) => {
-            setStats(data);
-            setLoading(false);
-        }).catch(() => setLoading(false));
+        Promise.all([adminApi.getStats(), adminApi.getHealth()])
+            .then(([statsData, healthData]) => {
+                setStats(statsData);
+                setHealth(healthData);
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
     }, []);
 
     if (loading) {
@@ -104,6 +108,80 @@ export const AdminOverviewPage: React.FC = () => {
                 />
             </div>
 
+            {/* Health + Engagement */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                    <h2 className="text-base font-semibold text-slate-200 mb-4">System Health</h2>
+                    <div className="space-y-3 text-sm">
+                        {[
+                            { label: 'Database', ok: health?.database?.ok },
+                            { label: 'Redis', ok: health?.redis?.ok },
+                            { label: 'Firebase', ok: health?.firebase?.configured },
+                        ].map((item) => (
+                            <div key={item.label} className="flex items-center justify-between">
+                                <span className="text-slate-400">{item.label}</span>
+                                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${item.ok ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/10' : 'text-red-400 border-red-500/20 bg-red-500/10'}`}>
+                                    {item.ok ? 'Healthy' : 'Degraded'}
+                                </span>
+                            </div>
+                        ))}
+                        {health?.timestamp && (
+                            <p className="text-[10px] text-slate-500 mt-2">Last check: {new Date(health.timestamp).toLocaleString()}</p>
+                        )}
+                    </div>
+                </div>
+
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                    <h2 className="text-base font-semibold text-slate-200 mb-4">User Health</h2>
+                    <div className="space-y-3 text-sm">
+                        <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Verified</span>
+                            <span className="text-slate-200 font-semibold">{(stats?.users?.verified ?? 0).toLocaleString()}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Unverified</span>
+                            <span className="text-slate-200 font-semibold">{(stats?.users?.unverified ?? 0).toLocaleString()}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Banned</span>
+                            <span className="text-red-300 font-semibold">{(stats?.users?.banned ?? 0).toLocaleString()}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Bans Today</span>
+                            <span className="text-red-300 font-semibold">{(stats?.moderation?.bansToday ?? 0).toLocaleString()}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Active 24h</span>
+                            <span className="text-slate-200 font-semibold">{(stats?.users?.active?.last24h ?? 0).toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                    <h2 className="text-base font-semibold text-slate-200 mb-4">Engagement</h2>
+                    <div className="space-y-3 text-sm">
+                        <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Pending Inboxes</span>
+                            <span className="text-slate-200 font-semibold">{(stats?.engagement?.pendingInboxConversations ?? 0).toLocaleString()}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Page Inbox</span>
+                            <span className="text-slate-200 font-semibold">{(stats?.engagement?.pageInboxConversations ?? 0).toLocaleString()}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Avg Response (min)</span>
+                            <span className="text-slate-200 font-semibold">
+                                {stats?.engagement?.avgResponseTimeMinutes != null ? stats.engagement.avgResponseTimeMinutes.toFixed(1) : 'â€“'}
+                            </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Failed Notifications (24h)</span>
+                            <span className="text-amber-300 font-semibold">{(stats?.notifications?.failedToday ?? 0).toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* Activity Chart */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                 <h2 className="text-base font-semibold text-slate-200 mb-6">7-Day Message Activity</h2>
@@ -144,7 +222,7 @@ export const AdminOverviewPage: React.FC = () => {
                     <div className="space-y-3">
                         {(stats?.recentUsers ?? []).map((user: any) => (
                             <div key={user.id} className="flex items-center gap-3">
-                                <div className="w-9 h-9 rounded-full bg-brand/10 border border-brand/20 overflow-hidden flex items-center justify-center text-brand font-bold text-sm flex-shrink-0">
+                                <div className="w-9 h-9 rounded-full bg-brand/10 border border-brand/20 overflow-hidden flex items-center justify-center text-brand font-bold text-sm shrink-0">
                                     {user.profileImage ? (
                                         <img src={user.profileImage} alt="" className="w-full h-full object-cover" />
                                     ) : (
