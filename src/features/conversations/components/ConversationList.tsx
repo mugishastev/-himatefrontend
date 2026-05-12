@@ -74,7 +74,7 @@ export const ConversationList: React.FC = () => {
     return (
         <div className="flex flex-col h-full bg-[#111827] border-r border-[#1F2937] w-full overflow-hidden text-[#d1d7db]">
             {/* Chats Header */}
-            <header className="h-[64px] flex items-center justify-between px-4 shrink-0 mt-1">
+            <header className="h-[64px] flex items-center justify-between px-4 shrink-0 mt-1 sticky top-0 bg-[#111827] z-20">
                 <h1 className="text-[24px] font-black text-white tracking-tight">Chats</h1>
 
                 <div className="flex items-center gap-1 text-[#aebac1]">

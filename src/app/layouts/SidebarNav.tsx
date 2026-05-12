@@ -67,14 +67,14 @@ export const SidebarNav: React.FC = () => {
     ];
 
     return (
-        <div className="w-full md:w-[64px] h-[64px] md:h-full bg-[#111827] flex flex-row md:flex-col items-center py-0 md:py-4 px-2 md:px-0 border-t md:border-t-0 md:border-r border-[#1F2937] shrink-0 z-20 order-last md:order-first">
+        <div className="w-full md:w-[64px] h-[64px] md:h-full bg-[#111827] flex flex-row md:flex-col items-center py-0 md:py-4 px-2 md:px-0 border-t md:border-t-0 md:border-r border-[#1F2937] shrink-0 z-30 order-last md:order-first overflow-hidden">
             {/* Logo - Hidden on mobile bottom bar */}
             <div className="hidden md:flex w-10 h-10 items-center justify-center mb-6 shrink-0 cursor-pointer hover:opacity-80 transition-opacity" title="Himate">
                 <img src="/logo.png" alt="Himate" className="w-8 h-8 object-contain" />
             </div>
 
-            {/* Top Items (Main Nav) */}
-            <div className="flex-1 md:flex-none w-full flex flex-row md:flex-col gap-1 md:gap-4 items-center justify-around md:justify-start">
+            {/* Top Items (Main Nav) - Scrollable area for icons if they overflow */}
+            <div className="flex-1 w-full flex flex-row md:flex-col gap-1 md:gap-4 items-center justify-around md:justify-start overflow-x-auto md:overflow-y-auto scrollbar-hide py-2 md:py-0">
                 {topItems.map((item) => {
                     const Icon = item.Icon;
                     const isActive = currentView === item.id;

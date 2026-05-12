@@ -84,7 +84,7 @@ export const AdminLayout: React.FC = () => {
     };
 
     return (
-        <div className="flex min-h-dvh w-full bg-slate-950 text-slate-100 font-sans overflow-hidden relative">
+        <div className="flex h-dvh w-full bg-slate-950 text-slate-100 font-sans overflow-hidden relative select-none">
             {/* Mobile overlay */}
             {isMobileSidebarOpen && (
                 <button
@@ -97,10 +97,10 @@ export const AdminLayout: React.FC = () => {
 
             {/* Sidebar */}
             <aside
-                className={`fixed inset-y-0 left-0 z-50 w-64 md:static md:z-auto ${isSidebarOpen ? 'md:w-64' : 'md:w-20'} transform transition-transform duration-300 bg-slate-900 border-r border-slate-800 flex flex-col flex-shrink-0 overflow-y-auto ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+                className={`fixed inset-y-0 left-0 z-50 w-64 md:static md:z-auto ${isSidebarOpen ? 'md:w-64' : 'md:w-20'} transform transition-transform duration-300 bg-slate-900 border-r border-slate-800 flex flex-col flex-shrink-0 overflow-hidden ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
             >
                 {/* Logo */}
-                <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-800 sticky top-0 bg-slate-900 z-10">
+                <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-800 shrink-0 bg-slate-900 z-10">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/5 p-1 border border-white/10">
                         <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
                     </div>
@@ -113,7 +113,7 @@ export const AdminLayout: React.FC = () => {
                 </div>
 
                 {/* Grouped Nav */}
-                <nav className="flex-1 py-4 px-3 space-y-6">
+                <nav className="flex-1 py-4 px-3 space-y-6 overflow-y-auto no-scrollbar">
                     {navGroups.map((group) => (
                         <div key={group.heading}>
                             {isSidebarOpen && (
@@ -144,7 +144,7 @@ export const AdminLayout: React.FC = () => {
                 </nav>
 
                 {/* User footer */}
-                <div className="p-4 border-t border-slate-800 sticky bottom-0 bg-slate-900">
+                <div className="p-4 border-t border-slate-800 shrink-0 bg-slate-900">
                     {isSidebarOpen ? (
                         <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-brand/20 flex items-center justify-center text-brand text-xs font-bold overflow-hidden flex-shrink-0">
@@ -180,8 +180,8 @@ export const AdminLayout: React.FC = () => {
             </button>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto">
-                <div className="md:hidden sticky top-0 z-30 bg-slate-950/95 backdrop-blur border-b border-slate-900 px-4 py-3 flex items-center justify-between">
+            <main className="flex-1 overflow-y-auto no-scrollbar relative">
+                <div className="md:hidden sticky top-0 z-30 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-3 flex items-center justify-between">
                     <button
                         type="button"
                         onClick={() => setIsMobileSidebarOpen(true)}
@@ -192,7 +192,7 @@ export const AdminLayout: React.FC = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <div className="text-sm font-bold tracking-wide">Admin</div>
+                    <div className="text-sm font-bold tracking-widest uppercase">Admin Dashboard</div>
                     <button
                         type="button"
                         onClick={handleLogout}

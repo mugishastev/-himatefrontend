@@ -66,7 +66,7 @@ export const CallsView: React.FC = () => {
     return (
         <div className="flex flex-col h-full bg-[#111827] w-full text-[#d1d7db]">
             {/* Header */}
-            <header className="h-[60px] flex items-center justify-between px-4 shrink-0 mt-2">
+            <header className="h-[60px] flex items-center justify-between px-4 shrink-0 mt-2 sticky top-0 bg-[#111827] z-20">
                 <h1 className="text-[22px] font-bold text-white">Calls</h1>
                 <div className="flex items-center gap-3 text-[#aebac1]">
                     <button

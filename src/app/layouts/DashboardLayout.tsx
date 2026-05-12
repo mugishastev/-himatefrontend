@@ -195,10 +195,10 @@ export const DashboardLayout: React.FC = () => {
     };
 
     return (
-        <div className="min-h-dvh w-full overflow-hidden flex flex-col bg-[#d1d7db]">
+        <div className="h-dvh w-full overflow-hidden flex flex-col bg-[#d1d7db] select-none">
             {/* ── Adaptive App Shell ────────────────────────────────── */}
-            <div className="flex-1 flex overflow-hidden lg:p-3">
-                <div className="flex-1 flex flex-col md:flex-row overflow-hidden bg-[#f0f2f5] lg:rounded-lg lg:shadow-2xl ring-1 ring-black/10">
+            <div className="flex-1 flex overflow-hidden lg:p-3 relative">
+                <div className="flex-1 flex flex-col md:flex-row overflow-hidden bg-[#f0f2f5] lg:rounded-lg lg:shadow-2xl ring-1 ring-black/10 relative">
                     {/* Narrow navigation - side on desktop, bottom on mobile */}
                     <SidebarNav />
 

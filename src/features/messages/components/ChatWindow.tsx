@@ -175,7 +175,7 @@ export const ChatWindow: React.FC = () => {
         <div className="flex-1 flex flex-col h-full min-w-0 relative" style={wallpaper.style}>
             {activeConversationId ? (
                 <>
-                    <header className="h-[60px] bg-[#f0f2f5] border-b border-gray-200 flex items-center justify-between px-4 shrink-0 z-10 relative">
+                    <header className="h-[60px] bg-[#f0f2f5] border-b border-gray-200 flex items-center justify-between px-4 shrink-0 z-20 sticky top-0">
                         {/* Mobile Back Button */}
                         <button 
                             onClick={() => setActiveConversation(null)}

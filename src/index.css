@@ -1,30 +1,18 @@
 @import "tailwindcss";
 
-@theme {
-    /* ── Official Himate Color Palette ── */
-
-    /* Primary brand: Vibrant Orange */
-    --color-brand: #F97316;
-    --color-brand-light: #FB923C;
-    --color-brand-dark: #EA6C0A;
-
-    /* App backgrounds: Deep Navy */
-    --color-bg-primary: #111827;
-    --color-bg-secondary: #111827;
-
-    /* Surfaces: Charcoal Grey */
-    --color-surface: #1F2937;
-    --color-surface-raised: #374151;
-
-    /* Typography */
-    --color-text-primary: #FFFFFF;
-    --color-text-secondary: #9CA3AF;
-    --color-text-muted: #6B7280;
-}
-
 @layer base {
     body {
         background-color: #111827;
         color: #FFFFFF;
+    }
+}
+
+@layer utilities {
+    .scrollbar-hide, .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+    .scrollbar-hide::-webkit-scrollbar, .no-scrollbar::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
     }
 }
