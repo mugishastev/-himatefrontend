@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
+import { PlusCircle, MoreVertical, Search } from "lucide-react";
 import { ConversationItem } from "./ConversationItem";
 import { useConversations } from "../../../hooks/useConversations";
 import { useUIStore } from "../../../store/ui.store";
@@ -73,18 +74,16 @@ export const ConversationList: React.FC = () => {
     return (
         <div className="flex flex-col h-full bg-[#111827] border-r border-[#1F2937] w-full overflow-hidden text-[#d1d7db]">
             {/* Chats Header */}
-            <header className="h-[60px] flex items-center justify-between px-4 shrink-0 mt-2">
-                <h1 className="text-[22px] font-bold text-white">Chats</h1>
+            <header className="h-[64px] flex items-center justify-between px-4 shrink-0 mt-1">
+                <h1 className="text-[24px] font-black text-white tracking-tight">Chats</h1>
 
-                <div className="flex items-center gap-3 text-[#aebac1]">
+                <div className="flex items-center gap-1 text-[#aebac1]">
                     <button
                         className="p-2 hover:bg-white/5 rounded-full transition-colors group"
                         onClick={() => openModal("NEW_CONVERSATION")}
                         title="New chat"
                     >
-                        <svg className="w-5 h-5 text-[#aebac1] group-hover:text-[#d1d7db]" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M19.05 4.91a9.96 9.96 0 0 0-14.1 0 9.96 9.96 0 0 0 0 14.1c3.9 3.9 10.2 3.9 14.1 0a9.96 9.96 0 0 0 0-14.1zm-1.41 12.69a7.97 7.97 0 0 1-11.28 0 7.97 7.97 0 0 1 0-11.28 7.97 7.97 0 0 1 11.28 0 7.97 7.97 0 0 1 0 11.28zm-4.64-8.64h-2v2h-2v2h2v2h2v-2h2v-2h-2v-2z" />
-                        </svg>
+                        <PlusCircle className="w-6 h-6 text-[#aebac1] group-hover:text-brand" />
                     </button>
                     <div className="relative" ref={menuRef}>
                         <button
@@ -92,12 +91,10 @@ export const ConversationList: React.FC = () => {
                             title="Menu"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                         >
-                            <svg className="w-5 h-5 text-[#aebac1] group-hover:text-[#d1d7db]" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 4.001A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 4.001A2 2 0 0 0 12 15z" />
-                            </svg>
+                            <MoreVertical className="w-5 h-5 text-[#aebac1] group-hover:text-[#d1d7db]" />
                         </button>
                         {isMenuOpen && (
-                            <div className="absolute right-0 top-full mt-2 w-48 bg-[#202c33] rounded-lg shadow-xl border border-[#313d45] py-2 z-50">
+                            <div className="absolute right-0 top-full mt-2 w-48 bg-[#202c33] rounded-xl shadow-2xl border border-[#313d45] py-2 z-50 animate-in fade-in zoom-in-95 duration-150">
                                 <button
                                     className="w-full text-left px-4 py-2 text-[#d1d7db] hover:bg-[#111827] transition-colors text-[14px]"
                                     onClick={() => {
@@ -120,19 +117,17 @@ export const ConversationList: React.FC = () => {
             </header>
 
             {/* Search Bar */}
-            <div className="px-3 py-2 flex items-center gap-2 shrink-0">
-                <div className="flex-1 relative bg-[#1F2937] rounded-lg h-9">
+            <div className="px-4 py-2 flex items-center gap-2 shrink-0">
+                <div className="flex-1 relative bg-[#1F2937] rounded-xl h-10 group transition-all focus-within:ring-2 focus-within:ring-brand/30">
                     <input
                         type="text"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Search or start a new chat"
-                        className="w-full h-full bg-transparent pl-12 pr-4 text-[14px] text-white outline-none placeholder:text-[#aebac1]"
+                        className="w-full h-full bg-transparent pl-11 pr-4 text-[14px] text-white outline-none placeholder:text-[#aebac1]"
                     />
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#aebac1]">
-                        <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#aebac1] group-focus-within:text-brand transition-colors">
+                        <Search className="w-4 h-4" />
                     </div>
                 </div>
             </div>

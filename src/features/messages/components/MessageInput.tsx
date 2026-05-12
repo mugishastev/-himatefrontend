@@ -1,4 +1,17 @@
 import React, { useRef, useState } from 'react';
+import { 
+    Paperclip, 
+    Mic, 
+    Send, 
+    Smile, 
+    Image as ImageIcon, 
+    FileText, 
+    MapPin, 
+    Trash2, 
+    Check, 
+    X,
+    Edit3
+} from 'lucide-react';
 import { useMessages } from '../../../hooks/useMessages';
 import { AttachmentPreview } from './AttachmentPreview';
 import { useConversationStore } from '../../../store/conversation.store';
@@ -185,11 +198,11 @@ export const MessageInput: React.FC = () => {
             {editingMessage && (
                 <div className="flex items-center justify-between bg-brand/5 border border-brand/10 p-2 rounded-xl animate-in fade-in slide-in-from-top-1 duration-200">
                     <div className="flex items-center gap-2 text-brand">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                        <Edit3 className="w-4 h-4" />
                         <span className="text-xs font-bold uppercase">Editing Message</span>
                     </div>
                     <button onClick={() => setEditingMessage(null)} className="p-1 hover:bg-white/50 rounded-full text-text-muted transition-colors">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        <X className="w-4 h-4" />
                     </button>
                 </div>
             )}
@@ -211,7 +224,7 @@ export const MessageInput: React.FC = () => {
                             className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                             title="Discard voice note"
                         >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            <Trash2 className="w-5 h-5" />
                         </button>
 
                         <div className="flex items-center gap-4 flex-1 justify-center">
@@ -234,10 +247,10 @@ export const MessageInput: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => setIsEmojiOpen((v) => !v)}
-                                className="p-2.5 text-[#54656f] hover:text-[#111b21] transition-colors rounded-full hover:bg-black/5"
+                                className="p-2.5 text-[#54656f] hover:text-[#111b21] transition-colors rounded-full hover:bg-black/5 flex items-center justify-center"
                                 title="Emoji"
                             >
-                                <span className="text-2xl leading-none">😊</span>
+                                <Smile className="w-6 h-6" />
                             </button>
                             {isEmojiOpen && (
                                 <div className="absolute bottom-14 left-0 z-30 bg-white rounded-2xl border border-gray-100 shadow-xl p-3 w-56">
@@ -264,20 +277,21 @@ export const MessageInput: React.FC = () => {
                                 className="p-2.5 text-[#54656f] hover:text-[#111b21] transition-colors rounded-full hover:bg-black/5"
                                 title="Attachments"
                             >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                </svg>
+                                <Paperclip className="w-6 h-6" />
                             </button>
 
                             {isAttachMenuOpen && (
-                                <div className="absolute bottom-14 left-0 z-30 bg-white rounded-2xl border border-gray-100 shadow-xl p-2 w-44 space-y-1">
-                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-bg-secondary text-sm font-medium text-text-primary" onClick={() => mediaInputRef.current?.click()}>
+                                <div className="absolute bottom-14 left-0 z-30 bg-white rounded-2xl border border-gray-100 shadow-xl p-2 w-48 space-y-1">
+                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-bg-secondary text-sm font-medium text-text-primary flex items-center gap-2" onClick={() => mediaInputRef.current?.click()}>
+                                        <ImageIcon className="w-4 h-4 text-brand" />
                                         Media (Image/Video)
                                     </button>
-                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-bg-secondary text-sm font-medium text-text-primary" onClick={() => documentInputRef.current?.click()}>
+                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-bg-secondary text-sm font-medium text-text-primary flex items-center gap-2" onClick={() => documentInputRef.current?.click()}>
+                                        <FileText className="w-4 h-4 text-blue-500" />
                                         Document
                                     </button>
-                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-bg-secondary text-sm font-medium text-text-primary" onClick={handleSendLocation}>
+                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-bg-secondary text-sm font-medium text-text-primary flex items-center gap-2" onClick={handleSendLocation}>
+                                        <MapPin className="w-4 h-4 text-green-500" />
                                         Live Location
                                     </button>
                                 </div>
@@ -327,12 +341,10 @@ export const MessageInput: React.FC = () => {
                     <button
                         type="button"
                         onClick={startRecording}
-                        className="w-11 h-11 rounded-full flex items-center justify-center transition-all shrink-0 bg-[#F97316] text-white hover:bg-[#EA6C0A] hover:scale-105"
+                        className="w-11 h-11 rounded-full flex items-center justify-center transition-all shrink-0 bg-[#F97316] text-white hover:bg-[#EA6C0A] hover:scale-105 shadow-lg shadow-brand/20"
                         title="Record Voice Note"
                     >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14a3 3 0 003-3V7a3 3 0 10-6 0v4a3 3 0 003 3zm0 0v4m-4 0h8" />
-                        </svg>
+                        <Mic className="w-5 h-5" />
                     </button>
                 ) : isRecording ? (
                     <button
@@ -348,17 +360,13 @@ export const MessageInput: React.FC = () => {
                 ) : (
                     <button
                         type="submit"
-                        className="w-11 h-11 rounded-full bg-[#F97316] hover:bg-[#EA6C0A] text-white flex items-center justify-center transition-all shrink-0 shadow-sm disabled:opacity-50"
+                        className="w-11 h-11 rounded-full bg-[#F97316] hover:bg-[#EA6C0A] text-white flex items-center justify-center transition-all shrink-0 shadow-lg shadow-brand/20 disabled:opacity-50"
                         disabled={!content.trim() && !file}
                     >
                         {editingMessage ? (
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-                            </svg>
+                            <Check className="w-6 h-6" strokeWidth={3} />
                         ) : (
-                            <svg className="w-5 h-5 rotate-90" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                            </svg>
+                            <Send className="w-5 h-5 fill-white/10" />
                         )}
                     </button>
                 )}

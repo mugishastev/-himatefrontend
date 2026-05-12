@@ -1,4 +1,19 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
+import { 
+    ChevronLeft, 
+    Video, 
+    Phone, 
+    Search, 
+    MoreVertical, 
+    Image as ImageIcon, 
+    X, 
+    Info, 
+    Trash2, 
+    Ban, 
+    Lock,
+    Zap,
+    Paperclip
+} from 'lucide-react';
 import { MessageList } from './MessageList';
 import { MessageInput } from './MessageInput';
 import { useConversationStore } from '../../../store/conversation.store';
@@ -166,9 +181,7 @@ export const ChatWindow: React.FC = () => {
                             onClick={() => setActiveConversation(null)}
                             className="md:hidden mr-2 p-2 rounded-full hover:bg-black/5 text-[#54656f] transition-colors"
                         >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7m0 0l7-7m-7 7h18" />
-                            </svg>
+                            <ChevronLeft className="w-6 h-6" />
                         </button>
 
                         <div
@@ -200,7 +213,7 @@ export const ChatWindow: React.FC = () => {
                                     title="Video call"
                                     onClick={() => handleCall('VIDEO')}
                                 >
-                                    <svg className="w-[22px] h-[22px]" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                    <Video className="w-5 h-5" strokeWidth={2} />
                                 </button>
                             )}
                             
@@ -212,7 +225,7 @@ export const ChatWindow: React.FC = () => {
                                     title="Voice call"
                                     onClick={() => handleCall('AUDIO')}
                                 >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                    <Phone className="w-5 h-5" strokeWidth={2} />
                                 </button>
                             )}
 
@@ -228,7 +241,7 @@ export const ChatWindow: React.FC = () => {
                                 title="Search messages"
                                 onClick={() => setIsSearchOpen(true)}
                             >
-                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M15.07 14.25h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0a4.75 4.75 0 1 1 0-9.5 4.75 4.75 0 0 1 0 9.5z" /></svg>
+                                <Search className="w-5 h-5" strokeWidth={2} />
                             </button>
                             <button
                                 type="button"
@@ -236,61 +249,63 @@ export const ChatWindow: React.FC = () => {
                                 title="Menu"
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                             >
-                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 4.001A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 4.001A2 2 0 0 0 12 15z" /></svg>
+                                <MoreVertical className="w-5 h-5" strokeWidth={2} />
                             </button>
 
                             {/* Dropdown Menu */}
                             {isMenuOpen && (
                                 <div className="absolute right-0 top-12 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-100">
                                     <button
-                                        onClick={() => {
-                                            setIsMenuOpen(false);
-                                            setInfoPane(!isInfoPaneOpen, activeConversation?.isGroup ? 'GROUP' : 'CONTACT');
-                                        }}
-                                        className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54]"
-                                    >
-                                        Contact info
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setIsMenuOpen(false);
-                                            setIsWallpaperOpen(true);
-                                        }}
-                                        className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54] flex items-center gap-2"
-                                    >
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        Change wallpaper
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setIsMenuOpen(false);
-                                            setActiveConversation(null);
-                                        }}
-                                        className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54]"
-                                    >
-                                        Close chat
-                                    </button>
-                                    
-                                    <div className="h-px bg-gray-100 my-1 mx-2"></div>
-                                    
-                                    {/* Action items */}
-                                    {!activeConversation?.isGroup && (
-                                        <button
-                                            onClick={handleBlockUser}
-                                            className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54]"
-                                        >
-                                            Block user
-                                        </button>
-                                    )}
-                                    <button
-                                        onClick={handleDeleteChat}
-                                        className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-500 transition-colors text-[14.5px]"
-                                    >
-                                        Delete chat
-                                    </button>
-                                </div>
+                                         onClick={() => {
+                                             setIsMenuOpen(false);
+                                             setInfoPane(!isInfoPaneOpen, activeConversation?.isGroup ? 'GROUP' : 'CONTACT');
+                                         }}
+                                         className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54] flex items-center gap-2"
+                                     >
+                                         <Info className="w-4 h-4" />
+                                         Contact info
+                                     </button>
+                                     <button
+                                         onClick={() => {
+                                             setIsMenuOpen(false);
+                                             setIsWallpaperOpen(true);
+                                         }}
+                                         className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54] flex items-center gap-2"
+                                     >
+                                         <ImageIcon className="w-4 h-4" />
+                                         Change wallpaper
+                                     </button>
+                                     <button
+                                         onClick={() => {
+                                             setIsMenuOpen(false);
+                                             setActiveConversation(null);
+                                         }}
+                                         className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54] flex items-center gap-2"
+                                     >
+                                         <X className="w-4 h-4" />
+                                         Close chat
+                                     </button>
+                                     
+                                     <div className="h-px bg-gray-100 my-1 mx-2"></div>
+                                     
+                                     {/* Action items */}
+                                     {!activeConversation?.isGroup && (
+                                         <button
+                                             onClick={handleBlockUser}
+                                             className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54] flex items-center gap-2"
+                                         >
+                                             <Ban className="w-4 h-4" />
+                                             Block user
+                                         </button>
+                                     )}
+                                     <button
+                                         onClick={handleDeleteChat}
+                                         className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-500 transition-colors text-[14.5px] flex items-center gap-2"
+                                     >
+                                         <Trash2 className="w-4 h-4" />
+                                         Delete chat
+                                     </button>
+                                 </div>
                             )}
                         </div>
                     </header>
@@ -318,9 +333,7 @@ export const ChatWindow: React.FC = () => {
                                         onClick={() => setIsSearchOpen(false)}
                                         aria-label="Close"
                                     >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
+                                        <X className="w-5 h-5" />
                                     </button>
                                 </div>
                                 <div className="flex-1 overflow-y-auto p-3">
@@ -394,12 +407,13 @@ export const ChatWindow: React.FC = () => {
                     {/* Feature pills */}
                     <div className="flex flex-wrap gap-3 justify-center">
                         {[
-                            { icon: '🔒', label: 'End-to-end encrypted' },
-                            { icon: '⚡', label: 'Real-time messaging' },
-                            { icon: '📎', label: 'Share files & media' },
+                            { icon: Lock, label: 'End-to-end encrypted', color: 'text-green-500' },
+                            { icon: Zap, label: 'Real-time messaging', color: 'text-yellow-500' },
+                            { icon: Paperclip, label: 'Share files & media', color: 'text-blue-500' },
                         ].map(f => (
-                            <span key={f.label} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1F2937] border border-white/10 text-[#9CA3AF] text-xs font-medium">
-                                <span>{f.icon}</span>{f.label}
+                            <span key={f.label} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1F2937] border border-white/10 text-[#9CA3AF] text-xs font-medium">
+                                <f.icon className={`w-3.5 h-3.5 ${f.color}`} />
+                                {f.label}
                             </span>
                         ))}
                     </div>

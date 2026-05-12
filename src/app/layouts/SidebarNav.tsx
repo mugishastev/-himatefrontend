@@ -1,4 +1,14 @@
 import React from 'react';
+import { 
+    MessageSquare, 
+    Phone, 
+    CircleDashed, 
+    Users, 
+    Layout, 
+    Bell, 
+    Settings, 
+    LogOut 
+} from 'lucide-react';
 import { useUIStore } from '../../store/ui.store';
 import { useAuthStore } from '../../store/auth.store';
 import { useConversationStore } from '../../store/conversation.store';
@@ -16,74 +26,28 @@ export const SidebarNav: React.FC = () => {
     const topItems = [
         {
             id: 'CHATS',
-            activeIcon: (
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12c0 2.22.73 4.28 1.95 5.92L2.5 22l4.28-1.39C8.32 21.5 10.11 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm-2 13H8v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z" />
-                </svg>
-            ),
-            inactiveIcon: (
-                <svg className="w-6 h-6 text-[#aebac1] group-hover:text-[#d1d7db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-            ),
+            Icon: MessageSquare,
             label: 'Chats',
             badge: chatUnread
         },
         {
             id: 'CALLS',
-            activeIcon: (
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.03 21c.75 0 .99-.65.99-1.18v-3.45c0-.54-.45-.99-.99-.99z" />
-                </svg>
-            ),
-            inactiveIcon: (
-                <svg className="w-6 h-6 text-[#aebac1] group-hover:text-[#d1d7db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-            ),
+            Icon: Phone,
             label: 'Calls'
         },
         {
             id: 'STATUS',
-            activeIcon: (
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-                </svg>
-            ),
-            inactiveIcon: (
-                <svg className="w-6 h-6 text-[#aebac1] group-hover:text-[#d1d7db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="9" strokeWidth="1.8" strokeDasharray="3 1.5" />
-                    <circle cx="12" cy="12" r="4" strokeWidth="0" fill="currentColor" />
-                </svg>
-            ),
+            Icon: CircleDashed,
             label: 'Status'
         },
         {
             id: 'CONTACTS',
-            activeIcon: (
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
-                </svg>
-            ),
-            inactiveIcon: (
-                <svg className="w-6 h-6 text-[#aebac1] group-hover:text-[#d1d7db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-            ),
+            Icon: Users,
             label: 'Contacts'
         },
         {
             id: 'PAGES',
-            activeIcon: (
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
-                </svg>
-            ),
-            inactiveIcon: (
-                <svg className="w-6 h-6 text-[#aebac1] group-hover:text-[#d1d7db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2v16z" />
-                </svg>
-            ),
+            Icon: Layout,
             label: 'Pages'
         }
     ];
@@ -91,87 +55,83 @@ export const SidebarNav: React.FC = () => {
     const bottomItems = [
         {
             id: 'NOTIFICATIONS',
-            activeIcon: (
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
-                </svg>
-            ),
-            inactiveIcon: (
-                <svg className="w-6 h-6 text-[#aebac1] group-hover:text-[#d1d7db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0a3 3 0 11-6 0m6 0H9" />
-                </svg>
-            ),
+            Icon: Bell,
             label: 'Alerts',
             badge: unreadCount
         },
         {
             id: 'SETTINGS',
-            activeIcon: (
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.73 8.87a.49.49 0 00.12.61l2.03 1.58c-.05.3-.09.62-.09.94s.02.64.06.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.49-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
-                </svg>
-            ),
-            inactiveIcon: (
-                <svg className="w-6 h-6 text-[#aebac1] group-hover:text-[#d1d7db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-            ),
+            Icon: Settings,
             label: 'Settings'
         }
     ];
 
     return (
-        <div className="w-full md:w-[64px] h-[60px] md:h-full bg-[#111827] flex flex-row md:flex-col items-center py-0 md:py-4 px-2 md:px-0 border-t md:border-t-0 md:border-r border-[#1F2937] shrink-0 z-20 order-last md:order-first">
+        <div className="w-full md:w-[64px] h-[64px] md:h-full bg-[#111827] flex flex-row md:flex-col items-center py-0 md:py-4 px-2 md:px-0 border-t md:border-t-0 md:border-r border-[#1F2937] shrink-0 z-20 order-last md:order-first">
             {/* Logo - Hidden on mobile bottom bar */}
-            <div className="hidden md:flex w-10 h-10 items-center justify-center mb-4 shrink-0 cursor-pointer hover:opacity-80 transition-opacity" title="Himate">
-                <img src="/logo.png" alt="Himate" className="w-10 h-10 object-contain" />
+            <div className="hidden md:flex w-10 h-10 items-center justify-center mb-6 shrink-0 cursor-pointer hover:opacity-80 transition-opacity" title="Himate">
+                <img src="/logo.png" alt="Himate" className="w-8 h-8 object-contain" />
             </div>
 
             {/* Top Items (Main Nav) */}
-            <div className="flex-1 md:flex-none w-full flex flex-row md:flex-col gap-1 md:gap-3 items-center justify-around md:justify-start">
-                {topItems.map((item) => (
-                    <button
-                        key={item.id}
-                        onClick={() => setView(item.id as any)}
-                        className="group flex flex-col items-center justify-center relative w-12 h-12"
-                        title={item.label}
-                    >
-                        <span className={`flex items-center justify-center rounded-full w-10 h-10 transition-colors ${currentView === item.id ? 'bg-[#1F2937]' : 'bg-transparent'}`}>
-                            {currentView === item.id ? item.activeIcon : item.inactiveIcon}
-                        </span>
-                        {!!item.badge && (
-                            <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-[#F97316] text-[#FFFFFF] text-[10px] font-bold flex items-center justify-center shadow-[0_0_0_2px_#111827]">
-                                {item.badge > 9 ? '9+' : item.badge}
+            <div className="flex-1 md:flex-none w-full flex flex-row md:flex-col gap-1 md:gap-4 items-center justify-around md:justify-start">
+                {topItems.map((item) => {
+                    const Icon = item.Icon;
+                    const isActive = currentView === item.id;
+                    return (
+                        <button
+                            key={item.id}
+                            onClick={() => setView(item.id as any)}
+                            className="group flex flex-col items-center justify-center relative flex-1 md:flex-none h-14 md:w-12 md:h-12"
+                            title={item.label}
+                        >
+                            <span className={`flex items-center justify-center rounded-2xl w-10 h-10 transition-all duration-200 ${isActive ? 'bg-[#1F2937] text-[#F97316] shadow-lg shadow-black/20' : 'text-[#aebac1] hover:text-[#d1d7db] hover:bg-white/5'}`}>
+                                <Icon className={`w-6 h-6 ${isActive ? 'fill-[#F97316]/10' : ''}`} strokeWidth={isActive ? 2.5 : 2} />
                             </span>
-                        )}
-                    </button>
-                ))}
+                            {!!item.badge && (
+                                <span className="absolute top-1 right-2 md:top-0 md:right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-[#F97316] text-[#FFFFFF] text-[10px] font-bold flex items-center justify-center shadow-[0_0_0_2px_#111827]">
+                                    {item.badge > 9 ? '9+' : item.badge}
+                                </span>
+                            )}
+                            {/* Mobile Active Indicator */}
+                            {isActive && (
+                                <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[#F97316] md:hidden" />
+                            )}
+                        </button>
+                    );
+                })}
             </div>
 
-            {/* Bottom Items (Profile/Settings) - Only show select on mobile if needed, or keep all */}
-            <div className="w-auto md:w-full flex md:flex-1 flex-row md:flex-col gap-1 md:gap-3 items-center justify-end md:pb-2">
-                {[...bottomItems].map((item) => (
-                    <button
-                        key={item.id}
-                        onClick={() => setView(item.id as any)}
-                        className="group flex flex-col items-center justify-center relative w-12 h-12"
-                        title={item.label}
-                    >
-                        <span className={`flex items-center justify-center rounded-full w-10 h-10 transition-colors ${currentView === item.id ? 'bg-[#1F2937]' : 'bg-transparent'}`}>
-                            {currentView === item.id ? item.activeIcon : item.inactiveIcon}
-                        </span>
-                        {!!item.badge && (
-                            <span className="absolute top-1 right-1 w-[10px] h-[10px] rounded-full bg-[#F97316] shadow-[0_0_0_2px_#111827]"></span>
-                        )}
-                    </button>
-                ))}
+            {/* Bottom Items (Profile/Settings) */}
+            <div className="w-auto md:w-full flex md:flex-1 flex-row md:flex-col gap-1 md:gap-4 items-center justify-end md:pb-2">
+                {bottomItems.map((item) => {
+                    const Icon = item.Icon;
+                    const isActive = currentView === item.id;
+                    return (
+                        <button
+                            key={item.id}
+                            onClick={() => setView(item.id as any)}
+                            className={`group flex flex-col items-center justify-center relative h-14 md:w-12 md:h-12 ${item.id === 'SETTINGS' ? 'hidden sm:flex' : 'flex'}`}
+                            title={item.label}
+                        >
+                            <span className={`flex items-center justify-center rounded-2xl w-10 h-10 transition-all duration-200 ${isActive ? 'bg-[#1F2937] text-[#F97316] shadow-lg shadow-black/20' : 'text-[#aebac1] hover:text-[#d1d7db] hover:bg-white/5'}`}>
+                                <Icon className={`w-6 h-6 ${isActive ? 'fill-[#F97316]/10' : ''}`} strokeWidth={isActive ? 2.5 : 2} />
+                            </span>
+                            {!!item.badge && (
+                                <span className="absolute top-2 right-2 md:top-1 md:right-1 w-[10px] h-[10px] rounded-full bg-[#F97316] shadow-[0_0_0_2px_#111827]"></span>
+                            )}
+                            {isActive && (
+                                <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[#F97316] md:hidden" />
+                            )}
+                        </button>
+                    );
+                })}
 
-                <div className="hidden md:block w-8 h-[1px] bg-[#1F2937] my-1" />
+                <div className="hidden md:block w-8 h-[1px] bg-[#1F2937] my-2" />
 
                 <button
                     onClick={() => setView('PROFILE')}
-                    className="group flex items-center justify-center w-12 h-12 relative"
+                    className="group flex items-center justify-center h-14 md:w-12 md:h-12 relative px-2 md:px-0"
                     title="Profile"
                 >
                     <div className={`w-8 h-8 rounded-full overflow-hidden transition-all duration-200 ${currentView === 'PROFILE' ? 'ring-[2px] ring-[#F97316] ring-offset-[#111827] ring-offset-[2px]' : 'group-hover:opacity-80'}`}>
@@ -185,12 +145,10 @@ export const SidebarNav: React.FC = () => {
 
                 <button
                     onClick={logout}
-                    className="hidden md:flex items-center justify-center relative text-[#9CA3AF] hover:text-red-400 hover:bg-[#1F2937] rounded-full transition-colors w-10 h-10 mt-1"
+                    className="hidden md:flex items-center justify-center relative text-[#9CA3AF] hover:text-red-400 hover:bg-red-500/10 rounded-2xl transition-colors w-10 h-10 mt-1"
                     title="Logout"
                 >
-                    <svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                    </svg>
+                    <LogOut className="w-5 h-5 ml-1" />
                 </button>
             </div>
         </div>
