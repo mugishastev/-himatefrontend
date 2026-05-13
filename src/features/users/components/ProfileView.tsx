@@ -5,8 +5,8 @@ import { usersApi } from '../../../api/users.api';
 import { useUIStore } from '../../../store/ui.store';
 
 // ── Section wrapper ──────────────────────────────────────────────────────────
-const Section: React.FC<{ title: string; subtitle: string; children: React.ReactNode }> = ({ title, subtitle, children }) => (
-  <div className="bg-[#1F2937] rounded-2xl overflow-hidden border border-white/5">
+const Section: React.FC<{ title: string; subtitle: string; id?: string; children: React.ReactNode }> = ({ title, subtitle, id, children }) => (
+  <div id={id} className="bg-[#1F2937] rounded-2xl overflow-hidden border border-white/5 scroll-mt-24">
     <div className="px-6 py-4 border-b border-white/5 bg-white/[0.02]">
       <h3 className="text-base font-semibold text-white">{title}</h3>
       <p className="text-xs text-[#9CA3AF] mt-0.5">{subtitle}</p>
@@ -108,8 +108,21 @@ const STATUSES = [
 // ── Main component ────────────────────────────────────────────────────────────
 export const ProfileView: React.FC = () => {
   const { user, updateUser, logout } = useAuthStore();
-  const { setView } = useUIStore();
+  const { setView, activeSettingsSection, setSettingsSection } = useUIStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-scroll to section
+  useEffect(() => {
+    if (activeSettingsSection) {
+      const el = document.getElementById(`section-${activeSettingsSection.toLowerCase()}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      // Reset after scrolling so it doesn't fight user scroll later
+      const timer = setTimeout(() => setSettingsSection(null), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [activeSettingsSection, setSettingsSection]);
 
   // Password change state
   const [pwForm, setPwForm] = useState({ current: '', new: '', confirm: '' });
@@ -314,7 +327,7 @@ export const ProfileView: React.FC = () => {
           </div>
 
           {/* ── 1. Identity ── */}
-          <Section title="Identity" subtitle="Your visible name, bio and contact info">
+          <Section id="section-avatar" title="Identity" subtitle="Your visible name, bio and contact info">
             <EditRow label="Display Name" value={user.username || ''} placeholder="Your name" onSave={saveField('username')} />
             <EditRow label="Bio / About" value={(user as any).bio || ''} placeholder="Hey there! I'm using Himate." onSave={saveField('bio')} multiline />
             <EditRow label="Phone Number" value={(user as any).phoneNumber || ''} placeholder="+1 555 000 0000" onSave={saveField('phoneNumber')} type="tel" />
@@ -328,7 +341,7 @@ export const ProfileView: React.FC = () => {
           </Section>
 
           {/* ── 2. Account Security ── */}
-          <Section title="Account Security" subtitle="Change your password to keep your account safe">
+          <Section id="section-account" title="Account Security" subtitle="Change your password to keep your account safe">
             <form onSubmit={handleChangePassword} className="space-y-3">
               {[
                 { key: 'current', label: 'Current Password', placeholder: 'Enter current password' },
@@ -352,10 +365,16 @@ export const ProfileView: React.FC = () => {
                 {pwSaving ? 'Updating...' : 'Update Password'}
               </button>
             </form>
+            <div className="border-t border-white/5 pt-4" />
+            <ToggleRow 
+              label="Two-Step Verification" 
+              description="Add an extra layer of security to your account"
+              value={false} onChange={() => {}} 
+            />
           </Section>
 
           {/* ── 3. Privacy ── */}
-          <Section title="Privacy" subtitle="Control who can see your information">
+          <Section id="section-privacy" title="Privacy" subtitle="Control who can see your information">
             <ToggleRow label="Show Last Seen" description="Let others see when you were last active"
               value={privacy.showLastSeen} onChange={v => setPrivacy(p => ({ ...p, showLastSeen: v }))} />
             <div className="border-t border-white/5" />
@@ -367,7 +386,7 @@ export const ProfileView: React.FC = () => {
           </Section>
 
           {/* ── 4. Notifications & Preferences ── */}
-          <Section title="Notifications & Preferences" subtitle="Customize your notification and sound settings">
+          <Section id="section-notifications" title="Notifications & Preferences" subtitle="Customize your notification and sound settings">
             <ToggleRow label="Message Notifications" description="Show notifications for new messages"
               value={notifs.messageNotifs} onChange={v => setNotifs(p => ({ ...p, messageNotifs: v }))} />
             <div className="border-t border-white/5" />
@@ -376,6 +395,60 @@ export const ProfileView: React.FC = () => {
             <div className="border-t border-white/5" />
             <ToggleRow label="Desktop Notifications" description="Show browser notifications when Himate is in background"
               value={notifs.desktopNotifs} onChange={v => setNotifs(p => ({ ...p, desktopNotifs: v }))} />
+          </Section>
+
+          {/* ── 5. Chats ── */}
+          <Section id="section-chats" title="Chats" subtitle="Theme, wallpapers and chat history">
+            <div className="space-y-4">
+              <ToggleRow 
+                label="Enter to Send" 
+                description="Enter key will send your message"
+                value={true} onChange={() => {}} 
+              />
+              <div>
+                <p className="text-sm font-medium text-white mb-3">App Theme</p>
+                <div className="flex bg-[#111827] p-1 rounded-xl gap-1">
+                  {['Light', 'Dark', 'System'].map((t) => (
+                    <button
+                      key={t}
+                      className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all ${t === 'Dark' ? 'bg-[#F97316] text-white shadow-lg' : 'text-[#9CA3AF] hover:text-white'}`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="border-t border-white/5" />
+              <div>
+                <p className="text-sm font-medium text-white">Chat Wallpaper</p>
+                <div className="grid grid-cols-4 gap-2 mt-3">
+                  {['bg-[#0b141a]', 'bg-brand/10', 'bg-blue-500/10', 'bg-purple-500/10'].map((bg, i) => (
+                    <button key={i} className={`h-12 rounded-lg ${bg} border border-white/5 hover:border-brand/40 transition-all`} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Section>
+
+          {/* ── 6. Help ── */}
+          <Section id="section-help" title="Help" subtitle="Help center and legal information">
+            <div className="space-y-1">
+              {[
+                { label: 'Help Center', icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+                { label: 'Contact Us', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+                { label: 'Terms and Privacy Policy', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+              ].map((item, i) => (
+                <button key={i} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 transition-colors group">
+                  <div className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[#9CA3AF] group-hover:text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
+                    </svg>
+                    <span className="text-sm text-white">{item.label}</span>
+                  </div>
+                  <svg className="w-4 h-4 text-[#6B7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                </button>
+              ))}
+            </div>
           </Section>
 
           {/* ── 5. Danger Zone ── */}

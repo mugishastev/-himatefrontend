@@ -11,6 +11,8 @@ export type ModalType =
     | 'CREATE_PAGE'
     | null;
 
+export type SettingsSection = 'ACCOUNT' | 'PRIVACY' | 'NOTIFICATIONS' | 'CHATS' | 'HELP' | 'AVATAR' | null;
+
 interface UIState {
     isSidebarOpen: boolean;
     activeModal: ModalType;
@@ -18,6 +20,7 @@ interface UIState {
     viewingImageUrl: string | null;
     currentView: 'CHATS' | 'CALLS' | 'STATUS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES' | 'CREATOR_STUDIO' | 'PAGE_INBOX';
     viewingPageHandle: string | null;
+    activeSettingsSection: SettingsSection;
     isInfoPaneOpen: boolean;
     infoPaneType: 'CONTACT' | 'GROUP' | null;
     toggleSidebar: () => void;
@@ -27,6 +30,7 @@ interface UIState {
     setInfoPane: (isOpen: boolean, type?: 'CONTACT' | 'GROUP' | null) => void;
     closeModal: () => void;
     setView: (view: 'CHATS' | 'CALLS' | 'STATUS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES' | 'CREATOR_STUDIO' | 'PAGE_INBOX') => void;
+    setSettingsSection: (section: SettingsSection) => void;
     openPage: (handle: string | null) => void;
 }
 
@@ -37,6 +41,7 @@ export const useUIStore = create<UIState>((set) => ({
     viewingUserId: null,
     viewingImageUrl: null,
     currentView: 'CHATS',
+    activeSettingsSection: null,
     isInfoPaneOpen: false,
     infoPaneType: null,
     viewingPageHandle: null,
@@ -47,5 +52,6 @@ export const useUIStore = create<UIState>((set) => ({
     setInfoPane: (isOpen, type = null) => set({ isInfoPaneOpen: isOpen, infoPaneType: type }),
     closeModal: () => set({ activeModal: null, viewingUserId: null, viewingImageUrl: null }),
     setView: (view) => set({ currentView: view }),
+    setSettingsSection: (section) => set({ activeSettingsSection: section, currentView: section === 'AVATAR' ? 'PROFILE' : 'PROFILE' }),
     openPage: (handle) => set({ currentView: 'PAGES', viewingPageHandle: handle }),
 }));
