@@ -9,7 +9,7 @@ export const ScheduleCallModal: React.FC = () => {
     const { closeModal } = useUIStore();
     const { user } = useAuthStore();
     
-    const [contacts, setContacts] = useState<any[]>([]);
+    const [users, setUsers] = useState<any[]>([]);
     const [selectedUser, setSelectedUser] = useState<any | null>(null);
     const [scheduledDate, setScheduledDate] = useState('');
     const [scheduledTime, setScheduledTime] = useState('');
@@ -21,7 +21,7 @@ export const ScheduleCallModal: React.FC = () => {
                 // GET /users already excludes ADMIN role server-side
                 const response = await usersApi.findAll({ limit: 200 });
                 const raw: any[] = response.data ?? response ?? [];
-                setContacts(raw.filter((u: any) => u.id !== user?.id));
+                setUsers(raw.filter((u: any) => u.id !== user?.id));
             } catch (err) {
                 console.error('Failed to load users', err);
             }
@@ -78,7 +78,7 @@ export const ScheduleCallModal: React.FC = () => {
                         <label className="block text-[#00a884] text-[13px] font-semibold uppercase tracking-wide mb-3">Participant</label>
                         {!selectedUser ? (
                             <div className="max-h-48 overflow-y-auto no-scrollbar space-y-1 bg-[#1F2937]/50 rounded-xl p-2 border border-[#2a3942]">
-                                {contacts.map(u => {
+                                {users.map(u => {
                                     if (!u) return null;
                                     return (
                                         <div

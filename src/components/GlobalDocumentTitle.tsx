@@ -9,7 +9,6 @@ const TITLE_MAP: Record<string, string> = {
     '/reset-password': 'Reset Password',
     '/verify-email': 'Verify Email',
     '/dashboard': 'Dashboard',
-    '/contacts': 'Contacts',
     '/calls': 'Calls',
     '/settings': 'Settings',
     '/profile': 'Profile',
