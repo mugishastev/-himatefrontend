@@ -127,16 +127,46 @@ export const WallpaperPicker: React.FC<Props> = ({ onClose, onSelect, currentId 
     const handleCustomImage = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        const url = URL.createObjectURL(file);
-        onSelect({
-            id: 'custom',
-            style: {
-                backgroundImage: `url(${url})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            },
-        });
-        onClose();
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                // Max resolution for wallpaper
+                const MAX_DIMENSION = 1200;
+                if (width > height && width > MAX_DIMENSION) {
+                    height *= MAX_DIMENSION / width;
+                    width = MAX_DIMENSION;
+                } else if (height > MAX_DIMENSION) {
+                    width *= MAX_DIMENSION / height;
+                    height = MAX_DIMENSION;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const base64Str = canvas.toDataURL('image/jpeg', 0.8);
+                    
+                    onSelect({
+                        id: base64Str,
+                        style: {
+                            backgroundImage: `url(${base64Str})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                        },
+                    });
+                    onClose();
+                }
+            };
+            img.src = event.target?.result as string;
+        };
+        reader.readAsDataURL(file);
     };
 
     return (

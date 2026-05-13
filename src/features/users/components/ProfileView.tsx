@@ -4,6 +4,7 @@ import { UserAvatar } from './UserAvatar';
 import { usersApi } from '../../../api/users.api';
 import { useUIStore } from '../../../store/ui.store';
 import { type UpdateUserDto } from '../../../types/user.types';
+import { WALLPAPER_OPTIONS } from '../../messages/components/WallpaperPicker';
 
 // ── Section wrapper ──────────────────────────────────────────────────────────
 const Section: React.FC<{ title: string; subtitle: string; id?: string; children: React.ReactNode }> = ({ title, subtitle, id, children }) => (
@@ -420,11 +421,13 @@ export const ProfileView: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-white">Chat Wallpaper</p>
                 <div className="grid grid-cols-4 gap-2 mt-3">
-                  {['bg-[#0b141a]', 'bg-brand/10', 'bg-blue-500/10', 'bg-purple-500/10'].map((bg, i) => (
+                  {WALLPAPER_OPTIONS.slice(0, 4).map((w) => (
                     <button 
-                      key={i} 
-                      onClick={() => handlePreferenceChange('chatWallpaper')(bg)}
-                      className={`h-12 rounded-lg ${bg} border ${user.chatWallpaper === bg ? 'border-brand ring-2 ring-brand/20' : 'border-white/5'} hover:border-brand/40 transition-all`} 
+                      key={w.id} 
+                      onClick={() => handlePreferenceChange('chatWallpaper')(w.id)}
+                      title={w.label}
+                      style={{ background: w.preview }}
+                      className={`h-12 rounded-lg border ${user.chatWallpaper === w.id ? 'border-brand ring-2 ring-brand/20' : 'border-white/5'} hover:border-brand/40 transition-all`} 
                     />
                   ))}
                 </div>

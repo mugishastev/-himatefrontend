@@ -86,6 +86,18 @@ export const ChatWindow: React.FC = () => {
     // ── Wallpaper persistence (now synced with backend) ──
     const activeWallpaper = useMemo(() => {
         const id = user?.chatWallpaper || 'dark-default';
+        if (id.startsWith('data:image/')) {
+            return {
+                id,
+                label: 'Custom',
+                style: {
+                    backgroundImage: `url(${id})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                },
+                preview: id,
+            };
+        }
         return WALLPAPER_OPTIONS.find(w => w.id === id) || WALLPAPER_OPTIONS[0];
     }, [user?.chatWallpaper]);
 
