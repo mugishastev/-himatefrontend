@@ -12,7 +12,13 @@ import {
     Ban, 
     Lock,
     Zap,
-    Paperclip
+    Paperclip,
+    ChevronDown,
+    UserPlus,
+    Link as LinkIcon,
+    Calendar,
+    Check,
+    CheckSquare
 } from 'lucide-react';
 import { MessageList } from './MessageList';
 import { MessageInput } from './MessageInput';
@@ -48,7 +54,9 @@ export const ChatWindow: React.FC = () => {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isWallpaperOpen, setIsWallpaperOpen] = useState(false);
+    const [isCallMenuOpen, setIsCallMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const callMenuRef = useRef<HTMLDivElement>(null);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const searchInputRef = useRef<HTMLInputElement>(null);
@@ -117,10 +125,13 @@ export const ChatWindow: React.FC = () => {
             if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
                 setIsMenuOpen(false);
             }
+            if (callMenuRef.current && !callMenuRef.current.contains(e.target as Node)) {
+                setIsCallMenuOpen(false);
+            }
         };
-        if (isMenuOpen) document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isMenuOpen]);
+    }, []);
 
     const otherParticipant = activeConversation?.participants.find(
         (p) => Number(p.userId) !== Number(user?.id)
@@ -204,11 +215,11 @@ export const ChatWindow: React.FC = () => {
 
             {activeConversationId ? (
                 <div className="flex-1 flex flex-col relative z-10">
-                    <header className="h-[60px] bg-[#f0f2f5] border-b border-gray-200 flex items-center justify-between px-4 shrink-0 z-20 sticky top-0">
+                    <header className="h-[60px] bg-[#202c33] flex items-center justify-between px-4 shrink-0 z-20 sticky top-0">
                         {/* Mobile Back Button */}
                         <button 
                             onClick={() => setActiveConversation(null)}
-                            className="md:hidden mr-2 p-2 rounded-full hover:bg-black/5 text-[#54656f] transition-colors"
+                            className="md:hidden mr-2 p-2 rounded-full hover:bg-white/10 text-[#aebac1] transition-colors"
                         >
                             <ChevronLeft className="w-6 h-6" />
                         </button>
@@ -220,122 +231,187 @@ export const ChatWindow: React.FC = () => {
                             {otherParticipant?.user ? (
                                 <UserAvatar user={otherParticipant.user} size="sm" />
                             ) : (
-                                <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center font-bold text-brand shadow-sm border border-gray-200 shrink-0">
+                                <div className="w-10 h-10 rounded-full bg-[#005c4b] flex items-center justify-center font-bold text-white shadow-sm shrink-0">
                                     {(displayName || 'C').charAt(0).toUpperCase()}
                                 </div>
                             )}
                             <div className="flex-1 min-w-0">
-                                <h3 className="font-medium text-[#111b21] leading-tight truncate">
+                                <h3 className="font-medium text-[#e9edef] leading-tight truncate">
                                     {displayName || 'Chat'}
                                 </h3>
-                                <p className="text-[13px] text-[#667781] truncate">
+                                <p className="text-[13px] text-[#8696a0] truncate">
                                     {activeConversation?.isGroup ? subtitle : 'click here for contact info'}
                                 </p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-1 text-[#54656f] relative" ref={menuRef}>
-                            {/* Video Call Button */}
+                        <div className="flex items-center gap-3 text-[#aebac1] relative">
+                            {/* Call Dropdown */}
                             {!activeConversation?.isGroup && (
-                                <button
-                                    type="button"
-                                    className="p-2 hover:bg-black/5 rounded-full transition-colors hidden sm:block"
-                                    title="Video call"
-                                    onClick={() => handleCall('VIDEO')}
-                                >
-                                    <Video className="w-5 h-5" strokeWidth={2} />
-                                </button>
-                            )}
-                            
-                            {/* Audio Call Button */}
-                            {!activeConversation?.isGroup && (
-                                <button
-                                    type="button"
-                                    className="p-2 mr-1 hover:bg-black/5 rounded-full transition-colors hidden sm:block"
-                                    title="Voice call"
-                                    onClick={() => handleCall('AUDIO')}
-                                >
-                                    <Phone className="w-5 h-5" strokeWidth={2} />
-                                </button>
-                            )}
+                                <div className="relative" ref={callMenuRef}>
+                                    <button
+                                        onClick={() => setIsCallMenuOpen(!isCallMenuOpen)}
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-[#2a3942] hover:bg-[#3b4a54] text-[#aebac1] rounded-full transition-colors text-sm font-medium"
+                                    >
+                                        <Video className="w-4 h-4" />
+                                        <span>Call</span>
+                                        <ChevronDown className="w-4 h-4" />
+                                    </button>
+                                    
+                                    {isCallMenuOpen && (
+                                        <div className="absolute right-0 top-12 w-72 bg-[#233138] rounded-xl shadow-2xl border border-[#2a3942] py-4 z-50 animate-in fade-in slide-in-from-top-2">
+                                            {/* Header of Call Menu */}
+                                            <div className="flex items-center gap-3 px-5 mb-4">
+                                                {otherParticipant?.user ? (
+                                                    <UserAvatar user={otherParticipant.user} size="sm" />
+                                                ) : (
+                                                    <div className="w-8 h-8 rounded-full bg-[#005c4b] flex items-center justify-center text-white text-xs">
+                                                        {(displayName || 'C').charAt(0).toUpperCase()}
+                                                    </div>
+                                                )}
+                                                <span className="text-[#e9edef] font-medium truncate">{displayName}</span>
+                                            </div>
 
-                            {/* Optional small separator if desired */}
-                            {!activeConversation?.isGroup && (
-                                <div className="h-6 w-px bg-gray-300 hidden sm:block mx-1"></div>
+                                            <div className="flex gap-2 px-4 mb-4">
+                                                <button onClick={() => { setIsCallMenuOpen(false); handleCall('AUDIO'); }} className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-[#111b21] py-2.5 rounded-xl font-medium hover:bg-[#20c25a] transition-colors">
+                                                    <Phone className="w-4 h-4" />
+                                                    Voice
+                                                </button>
+                                                <button onClick={() => { setIsCallMenuOpen(false); handleCall('VIDEO'); }} className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-[#111b21] py-2.5 rounded-xl font-medium hover:bg-[#20c25a] transition-colors">
+                                                    <Video className="w-4 h-4" />
+                                                    Video
+                                                </button>
+                                            </div>
+                                            <button className="w-full flex items-center gap-3 px-5 py-3 hover:bg-[#111b21] text-[#d1d7db] transition-colors text-sm">
+                                                <UserPlus className="w-5 h-5 text-[#8696a0]" />
+                                                <span>New group call</span>
+                                            </button>
+                                            <button className="w-full flex items-center gap-3 px-5 py-3 hover:bg-[#111b21] text-[#d1d7db] transition-colors text-sm">
+                                                <LinkIcon className="w-5 h-5 text-[#8696a0]" />
+                                                <span>Send call link</span>
+                                            </button>
+                                            <button className="w-full flex items-center gap-3 px-5 py-3 hover:bg-[#111b21] text-[#d1d7db] transition-colors text-sm">
+                                                <Calendar className="w-5 h-5 text-[#8696a0]" />
+                                                <span>Schedule call</span>
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             )}
 
                             {/* Search Button */}
                             <button
                                 type="button"
-                                className="p-2 hover:bg-black/5 rounded-full transition-colors"
+                                className="p-2 hover:bg-white/10 rounded-full transition-colors"
                                 title="Search messages"
                                 onClick={() => setIsSearchOpen(true)}
                             >
-                                <Search className="w-5 h-5" strokeWidth={2} />
+                                <Search className="w-5 h-5" />
                             </button>
-                            <button
-                                type="button"
-                                className={`p-2 rounded-full transition-colors ${isMenuOpen ? 'bg-black/10' : 'hover:bg-black/5'}`}
-                                title="Menu"
-                                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            >
-                                <MoreVertical className="w-5 h-5" strokeWidth={2} />
-                            </button>
+                            
+                            {/* More Menu */}
+                            <div className="relative" ref={menuRef}>
+                                <button
+                                    type="button"
+                                    className={`p-2 rounded-full transition-colors ${isMenuOpen ? 'bg-white/10' : 'hover:bg-white/10'}`}
+                                    title="Menu"
+                                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                >
+                                    <MoreVertical className="w-5 h-5" />
+                                </button>
 
-                            {/* Dropdown Menu */}
-                            {isMenuOpen && (
-                                <div className="absolute right-0 top-12 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-100">
-                                    <button
-                                         onClick={() => {
-                                             setIsMenuOpen(false);
-                                             setInfoPane(!isInfoPaneOpen, activeConversation?.isGroup ? 'GROUP' : 'CONTACT');
-                                         }}
-                                         className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54] flex items-center gap-2"
-                                     >
-                                         <Info className="w-4 h-4" />
-                                         Contact info
-                                     </button>
-                                     <button
-                                         onClick={() => {
-                                             setIsMenuOpen(false);
-                                             setIsWallpaperOpen(true);
-                                         }}
-                                         className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54] flex items-center gap-2"
-                                     >
-                                         <ImageIcon className="w-4 h-4" />
-                                         Change wallpaper
-                                     </button>
-                                     <button
-                                         onClick={() => {
-                                             setIsMenuOpen(false);
-                                             setActiveConversation(null);
-                                         }}
-                                         className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54] flex items-center gap-2"
-                                     >
-                                         <X className="w-4 h-4" />
-                                         Close chat
-                                     </button>
-                                     
-                                     <div className="h-px bg-gray-100 my-1 mx-2"></div>
-                                     
-                                     {/* Action items */}
-                                     {!activeConversation?.isGroup && (
-                                         <button
-                                             onClick={handleBlockUser}
-                                             className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-[14.5px] text-[#3b4a54] flex items-center gap-2"
-                                         >
-                                             <Ban className="w-4 h-4" />
-                                             Block user
-                                         </button>
-                                     )}
-                                     <button
-                                         onClick={handleDeleteChat}
-                                         className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-500 transition-colors text-[14.5px] flex items-center gap-2"
-                                     >
-                                         <Trash2 className="w-4 h-4" />
-                                         Delete chat
-                                     </button>
-                                 </div>
-                            )}
+                                {/* Dropdown Menu (Screenshot 2 styling) */}
+                                {isMenuOpen && (
+                                    <div className="absolute right-0 top-12 mt-1 w-56 bg-[#233138] rounded-xl shadow-2xl border border-[#2a3942] py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-100">
+                                        <button
+                                            onClick={() => {
+                                                setIsMenuOpen(false);
+                                                setInfoPane(!isInfoPaneOpen, activeConversation?.isGroup ? 'GROUP' : 'CONTACT');
+                                            }}
+                                            className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db]"
+                                        >
+                                            Contact info
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setIsMenuOpen(false);
+                                                setIsSearchOpen(true);
+                                            }}
+                                            className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db]"
+                                        >
+                                            Search
+                                        </button>
+                                        <button
+                                            onClick={() => { setIsMenuOpen(false); alert('Select messages feature coming soon.'); }}
+                                            className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db]"
+                                        >
+                                            Select messages
+                                        </button>
+                                        <button
+                                            onClick={() => { setIsMenuOpen(false); alert('Mute notifications feature coming soon.'); }}
+                                            className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db] flex justify-between items-center"
+                                        >
+                                            Mute notifications
+                                            <ChevronDown className="w-4 h-4 -rotate-90 text-[#8696a0]" />
+                                        </button>
+                                        <button
+                                            onClick={() => { setIsMenuOpen(false); alert('Disappearing messages feature coming soon.'); }}
+                                            className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db]"
+                                        >
+                                            Disappearing messages
+                                        </button>
+                                        <button
+                                            onClick={() => { setIsMenuOpen(false); alert('Add to favourites feature coming soon.'); }}
+                                            className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db]"
+                                        >
+                                            Add to favourites
+                                        </button>
+                                        <button
+                                            onClick={() => { setIsMenuOpen(false); alert('Add to list feature coming soon.'); }}
+                                            className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db]"
+                                        >
+                                            Add to list
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setIsMenuOpen(false);
+                                                setActiveConversation(null);
+                                            }}
+                                            className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db]"
+                                        >
+                                            Close chat
+                                        </button>
+                                        
+                                        <div className="h-px bg-[#2a3942] my-1 mx-2"></div>
+                                        
+                                        <button
+                                            onClick={() => { setIsMenuOpen(false); alert('Report feature coming soon.'); }}
+                                            className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db]"
+                                        >
+                                            Report
+                                        </button>
+                                        {!activeConversation?.isGroup && (
+                                            <button
+                                                onClick={handleBlockUser}
+                                                className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db]"
+                                            >
+                                                Block
+                                            </button>
+                                        )}
+                                        <button
+                                            onClick={() => { setIsMenuOpen(false); alert('Clear chat feature coming soon.'); }}
+                                            className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db]"
+                                        >
+                                            Clear chat
+                                        </button>
+                                        <button
+                                            onClick={handleDeleteChat}
+                                            className="w-full text-left px-5 py-2.5 hover:bg-[#111b21] transition-colors text-sm text-[#d1d7db]"
+                                        >
+                                            Delete chat
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </header>
 

@@ -72,7 +72,7 @@ export const MessageList: React.FC = () => {
     }
 
     return (
-        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-white/50 backdrop-blur-sm">
+        <div className="flex-1 overflow-y-auto p-4 space-y-2 relative z-10">
             {orderedMessages.map((message, index) => {
                 const prev = index > 0 ? orderedMessages[index - 1] : null;
                 const currentDay = formatChatDayDivider(message);
@@ -82,8 +82,8 @@ export const MessageList: React.FC = () => {
                 return (
                     <React.Fragment key={String(message.id)}>
                         {showDivider && (
-                            <div className="flex justify-center py-1">
-                                <span className="px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-text-secondary bg-white border border-gray-100 rounded-full">
+                            <div className="flex justify-center my-1">
+                                <span className="px-3 py-1.5 text-[11px] font-medium text-[#8696a0] bg-[#182229] rounded-lg shadow-sm">
                                     {currentDay}
                                 </span>
                             </div>

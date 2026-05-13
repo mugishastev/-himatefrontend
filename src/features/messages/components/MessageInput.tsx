@@ -198,7 +198,7 @@ export const MessageInput: React.FC = () => {
     };
 
     return (
-        <div className="shrink-0 bg-[#f0f2f5] border-t border-[#e9edef] px-3 py-2 space-y-2">
+        <div className="shrink-0 bg-[#202c33] px-4 py-3 flex items-center gap-2">
             {editingMessage && (
                 <div className="flex items-center justify-between bg-brand/5 border border-brand/10 p-2 rounded-xl animate-in fade-in slide-in-from-top-1 duration-200">
                     <div className="flex items-center gap-2 text-brand">
@@ -217,7 +217,7 @@ export const MessageInput: React.FC = () => {
                 </div>
             )}
 
-            <form onSubmit={handleSend} className="flex items-end gap-2 relative">
+            <form onSubmit={handleSend} className="flex items-end gap-2 flex-1 relative">
 
                 {isRecording ? (
                     // Recording UI
@@ -251,13 +251,13 @@ export const MessageInput: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => setIsEmojiOpen((v) => !v)}
-                                className="p-2.5 text-[#54656f] hover:text-[#111b21] transition-colors rounded-full hover:bg-black/5 flex items-center justify-center"
+                                className="p-2 text-[#8696a0] hover:text-[#d1d7db] transition-colors rounded-full flex items-center justify-center"
                                 title="Emoji"
                             >
                                 <Smile className="w-6 h-6" />
                             </button>
                             {isEmojiOpen && (
-                                <div className="absolute bottom-14 left-0 z-30 bg-white rounded-2xl border border-gray-100 shadow-xl p-3 w-56">
+                                <div className="absolute bottom-14 left-0 z-30 bg-[#233138] rounded-2xl border border-[#2a3942] shadow-xl p-3 w-56">
                                     <div className="grid grid-cols-6 gap-1">
                                         {emojiList.map((emoji) => (
                                             <button
@@ -278,24 +278,24 @@ export const MessageInput: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => setIsAttachMenuOpen((v) => !v)}
-                                className="p-2.5 text-[#54656f] hover:text-[#111b21] transition-colors rounded-full hover:bg-black/5"
+                                className="p-2 text-[#8696a0] hover:text-[#d1d7db] transition-colors rounded-full"
                                 title="Attachments"
                             >
                                 <Paperclip className="w-6 h-6" />
                             </button>
 
                             {isAttachMenuOpen && (
-                                <div className="absolute bottom-14 left-0 z-30 bg-white rounded-2xl border border-gray-100 shadow-xl p-2 w-48 space-y-1">
-                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-bg-secondary text-sm font-medium text-text-primary flex items-center gap-2" onClick={() => mediaInputRef.current?.click()}>
+                                <div className="absolute bottom-14 left-0 z-30 bg-[#233138] rounded-2xl border border-[#2a3942] shadow-xl p-2 w-48 space-y-1">
+                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#111b21] text-sm font-medium text-[#d1d7db] flex items-center gap-3" onClick={() => mediaInputRef.current?.click()}>
                                         <ImageIcon className="w-4 h-4 text-brand" />
                                         Media (Image/Video)
                                     </button>
-                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-bg-secondary text-sm font-medium text-text-primary flex items-center gap-2" onClick={() => documentInputRef.current?.click()}>
-                                        <FileText className="w-4 h-4 text-blue-500" />
+                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#111b21] text-sm font-medium text-[#d1d7db] flex items-center gap-3" onClick={() => documentInputRef.current?.click()}>
+                                        <FileText className="w-4 h-4 text-[#7f66ff]" />
                                         Document
                                     </button>
-                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-bg-secondary text-sm font-medium text-text-primary flex items-center gap-2" onClick={handleSendLocation}>
-                                        <MapPin className="w-4 h-4 text-green-500" />
+                                    <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#111b21] text-sm font-medium text-[#d1d7db] flex items-center gap-3" onClick={handleSendLocation}>
+                                        <MapPin className="w-4 h-4 text-[#00a884]" />
                                         Live Location
                                     </button>
                                 </div>
@@ -328,7 +328,7 @@ export const MessageInput: React.FC = () => {
                                 }}
                                 placeholder="Type a message"
                                 rows={1}
-                                className="w-full px-4 py-2.5 bg-[#1F2937] border border-white/10 rounded-xl outline-none focus:border-[#F97316]/60 resize-none transition-all duration-200 text-white placeholder:text-[#9CA3AF] text-[15px] overflow-y-auto max-h-40"
+                                className="w-full px-4 py-2.5 bg-[#2a3942] rounded-lg outline-none resize-none text-[#d1d7db] placeholder:text-[#8696a0] text-[15px] overflow-y-auto max-h-32"
                                 onKeyDown={(e) => {
                                     const enterToSend = user?.enterToSend ?? true;
                                     if (e.key === 'Enter' && !e.shiftKey) {
@@ -348,32 +348,30 @@ export const MessageInput: React.FC = () => {
                     <button
                         type="button"
                         onClick={startRecording}
-                        className="w-11 h-11 rounded-full flex items-center justify-center transition-all shrink-0 bg-[#F97316] text-white hover:bg-[#EA6C0A] hover:scale-105 shadow-lg shadow-brand/20"
+                        className="w-10 h-10 flex items-center justify-center text-[#8696a0] hover:text-[#d1d7db] transition-colors shrink-0"
                         title="Record Voice Note"
                     >
-                        <Mic className="w-5 h-5" />
+                        <Mic className="w-6 h-6" />
                     </button>
                 ) : isRecording ? (
                     <button
                         type="button"
                         onClick={stopAndSendRecording}
-                        className="w-11 h-11 rounded-full bg-[#F97316] hover:bg-[#EA6C0A] hover:scale-105 text-white flex items-center justify-center transition-all shrink-0 shadow-sm z-10"
+                        className="w-10 h-10 rounded-full bg-[#00a884] text-white flex items-center justify-center transition-transform shrink-0 hover:scale-105"
                         title="Send Voice Note"
                     >
-                        <svg className="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                        </svg>
+                        <Send className="w-4 h-4 -ml-0.5" />
                     </button>
                 ) : (
                     <button
                         type="submit"
-                        className="w-11 h-11 rounded-full bg-[#F97316] hover:bg-[#EA6C0A] text-white flex items-center justify-center transition-all shrink-0 shadow-lg shadow-brand/20 disabled:opacity-50"
+                        className="w-10 h-10 flex items-center justify-center text-[#8696a0] hover:text-[#d1d7db] transition-colors shrink-0 disabled:opacity-50"
                         disabled={!content.trim() && !file}
                     >
                         {editingMessage ? (
                             <Check className="w-6 h-6" strokeWidth={3} />
                         ) : (
-                            <Send className="w-5 h-5 fill-white/10" />
+                            <Send className="w-6 h-6" />
                         )}
                     </button>
                 )}

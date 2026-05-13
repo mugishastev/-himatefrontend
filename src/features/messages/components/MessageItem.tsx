@@ -92,17 +92,17 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
                     className={`flex flex-col ${isOwn ? "items-end" : "items-start"} relative group/msg max-w-[85%] sm:max-w-[70%]`}
                 >
                     <div
-                        className={`relative px-3 py-2 rounded-2xl text-[14.2px] leading-relaxed shadow-md transition-all duration-300 ${isOwn
-                                ? 'bg-[#F97316] text-white rounded-tr-sm'          /* Sent: Vibrant Orange */
-                                : 'bg-[#1F2937] text-white rounded-tl-sm border border-white/5'  /* Received: Charcoal Grey */
+                        className={`relative px-3 py-2 rounded-lg text-[14.2px] leading-relaxed shadow-sm transition-all duration-300 ${isOwn
+                                ? 'bg-[#005c4b] text-[#e9edef] rounded-tr-none'
+                                : 'bg-[#202c33] text-[#e9edef] rounded-tl-none'
                             }`}
                     >
                         {/* Tail Component */}
                         <div className={`absolute top-0 w-3 h-3 overflow-hidden ${isOwn ? '-right-2' : '-left-2'}`}>
                             <div
                                 className={`w-3 h-3 origin-center rotate-45 transform ${isOwn
-                                        ? 'bg-[#F97316] -translate-x-1.5'   /* Orange tail for sent */
-                                        : 'bg-[#1F2937] translate-x-1.5'    /* Charcoal tail for received */
+                                        ? 'bg-[#005c4b] -translate-x-1.5'
+                                        : 'bg-[#202c33] translate-x-1.5'
                                     }`}
                             /></div>
 
@@ -162,7 +162,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
                         )}
 
                         <div className="flex items-center justify-end gap-1 mt-1 -mr-0.5 ml-4 float-right h-4">
-                            <span className="text-[11px] text-[#667781] font-normal lowercase">
+                            <span className="text-[11px] text-[#8696a0] font-normal lowercase">
                                 {formatChatTime(message)}
                                 {message.createdAt !== message.updatedAt && " (edited)"}
                             </span>
@@ -199,16 +199,16 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
                                 </svg>
                             </button>
                             {showOptions && (
-                                <div className="absolute top-10 left-0 bg-white border border-gray-200 rounded shadow-xl py-1 w-32 z-50">
+                                <div className="absolute top-10 left-0 bg-[#233138] border border-[#2a3942] rounded shadow-xl py-1 w-32 z-50">
                                     <button
                                         onClick={handleEdit}
-                                        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
+                                        className="w-full text-left px-4 py-2 text-sm hover:bg-[#111b21] text-[#d1d7db] flex items-center gap-2"
                                     >
                                         Edit
                                     </button>
                                     <button
                                         onClick={handleDelete}
-                                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                                        className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-[#111b21] flex items-center gap-2"
                                     >
                                         Delete
                                     </button>
