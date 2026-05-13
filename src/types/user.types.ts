@@ -24,6 +24,7 @@ export interface User extends BaseEntity {
     twoStepEnabled?: boolean;
     enterToSend?: boolean;
     chatWallpaper?: string;
+    wallpaperOpacity?: number;
 }
 
 export interface UpdateUserDto {
@@ -48,4 +49,5 @@ export interface UpdateUserDto {
     twoStepEnabled?: boolean;
     enterToSend?: boolean;
     chatWallpaper?: string;
+    wallpaperOpacity?: number;
 }

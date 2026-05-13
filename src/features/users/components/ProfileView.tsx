@@ -429,6 +429,23 @@ export const ProfileView: React.FC = () => {
                   ))}
                 </div>
               </div>
+              
+              <div className="border-t border-white/5" />
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-medium text-white">Background Visibility</p>
+                  <span className="text-xs text-[#F97316] font-bold">{user.wallpaperOpacity ?? 100}%</span>
+                </div>
+                <input 
+                  type="range" 
+                  min="0" 
+                  max="100" 
+                  value={user.wallpaperOpacity ?? 100}
+                  onChange={(e) => handlePreferenceChange('wallpaperOpacity')(parseInt(e.target.value))}
+                  className="w-full h-1.5 bg-[#111827] rounded-lg appearance-none cursor-pointer accent-[#F97316]"
+                />
+                <p className="text-[11px] text-[#9CA3AF] mt-2">Adjust how clearly the background wallpaper is visible behind your messages.</p>
+              </div>
             </div>
           </Section>
 

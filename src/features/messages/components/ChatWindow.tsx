@@ -180,10 +180,18 @@ export const ChatWindow: React.FC = () => {
     };
 
     return (
-        <>
-        <div className="flex-1 flex flex-col h-full min-w-0 relative" style={activeWallpaper.style}>
+        <div className="flex-1 flex flex-col h-full min-w-0 relative overflow-hidden bg-[#0b141a]">
+            {/* Wallpaper Layer */}
+            <div 
+                className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-300" 
+                style={{ 
+                    ...activeWallpaper.style, 
+                    opacity: (user?.wallpaperOpacity ?? 100) / 100 
+                }} 
+            />
+
             {activeConversationId ? (
-                <>
+                <div className="flex-1 flex flex-col relative z-10">
                     <header className="h-[60px] bg-[#f0f2f5] border-b border-gray-200 flex items-center justify-between px-4 shrink-0 z-20 sticky top-0">
                         {/* Mobile Back Button */}
                         <button 
@@ -388,7 +396,7 @@ export const ChatWindow: React.FC = () => {
 
                     <MessageList />
                     <MessageInput />
-                </>
+                </div>
             ) : (
                 <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-[#111827] relative overflow-hidden z-20">
                     {/* Subtle background glow */}
@@ -428,15 +436,15 @@ export const ChatWindow: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            {/* Wallpaper picker modal */}
+            {isWallpaperOpen && (
+                <WallpaperPicker
+                    currentId={activeWallpaper.id}
+                    onSelect={handleWallpaperSelect}
+                    onClose={() => setIsWallpaperOpen(false)}
+                />
+            )}
         </div>
-        {/* Wallpaper picker modal */}
-        {isWallpaperOpen && (
-            <WallpaperPicker
-                currentId={activeWallpaper.id}
-                onSelect={handleWallpaperSelect}
-                onClose={() => setIsWallpaperOpen(false)}
-            />
-        )}
-        </>
     );
 };
