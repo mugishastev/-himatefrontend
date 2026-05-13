@@ -506,7 +506,7 @@ export const ChatWindow: React.FC = () => {
                     {/* Feature pills */}
                     <div className="flex flex-wrap gap-3 justify-center">
                         {[
-                            { icon: Lock, label: 'End-to-end encrypted', color: 'text-green-500' },
+                            { icon: Lock, label: 'End-to-end encrypted', color: 'text-[#F97316]' },
                             { icon: Zap, label: 'Real-time messaging', color: 'text-yellow-500' },
                             { icon: Paperclip, label: 'Share files & media', color: 'text-blue-500' },
                         ].map(f => (

@@ -10,12 +10,12 @@ export const SettingsView: React.FC = () => {
     if (!user) return null;
 
     return (
-        <div className="flex flex-col h-full bg-[#f0f2f5] animate-in fade-in duration-300">
+        <div className="flex flex-col h-full bg-[#111b21] animate-in fade-in duration-300">
             {/* Header */}
-            <header className="h-[108px] bg-brand flex items-end px-8 pb-4 shrink-0 text-white shadow-md z-10">
+            <header className="h-[108px] bg-[#202c33] flex items-end px-8 pb-4 shrink-0 text-[#e9edef] shadow-md z-10">
                 <button
                     onClick={() => setView('CHATS')}
-                    className="mr-6 hover:bg-white/20 p-2 rounded-full transition-colors flex items-center gap-2"
+                    className="mr-6 hover:bg-[#2a3942] p-2 rounded-full transition-colors flex items-center gap-2"
                 >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -30,33 +30,33 @@ export const SettingsView: React.FC = () => {
 
                     {/* Profile Card */}
                     <div
-                        className="bg-white rounded-2xl shadow-sm p-6 flex items-center gap-6 cursor-pointer hover:bg-brand/5 border border-transparent hover:border-brand/20 transition-all duration-300 group"
+                        className="bg-[#202c33] rounded-2xl shadow-sm p-6 flex items-center gap-6 cursor-pointer hover:bg-[#F97316]/5 border border-transparent hover:border-[#F97316]/50 transition-all duration-300 group"
                         onClick={() => setView('PROFILE')}
                     >
-                        <div className="w-[100px] h-[100px] rounded-full overflow-hidden shrink-0 shadow-md ring-2 ring-white">
+                        <div className="w-[100px] h-[100px] rounded-full overflow-hidden shrink-0 shadow-md ring-2 ring-[#202c33]">
                             <UserAvatar user={user} size="full" />
                         </div>
                         <div className="flex-1 min-w-0 flex flex-col justify-center">
-                            <h2 className="text-2xl font-bold text-[#111b21] leading-tight truncate group-hover:text-brand transition-colors">
+                            <h2 className="text-2xl font-bold text-[#e9edef] leading-tight truncate group-hover:text-[#F97316] transition-colors">
                                 {user.username}
                             </h2>
-                            <p className="text-[15px] text-[#667781] truncate mt-1">
+                            <p className="text-[15px] text-[#8696a0] truncate mt-1">
                                 {user.bio || 'Available'}
                             </p>
                         </div>
-                        <div className="text-brand opacity-0 group-hover:opacity-100 transition-opacity pr-4">
+                        <div className="text-[#F97316] opacity-0 group-hover:opacity-100 transition-opacity pr-4">
                             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
                         </div>
                     </div>
 
                     {/* Detailed Settings Grid */}
-                    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-                        <div className="px-8 py-5 border-b border-[#f0f2f5] bg-gray-50/50">
-                            <h3 className="text-lg font-semibold text-[#111b21]">Application Preferences</h3>
-                            <p className="text-sm text-[#667781]">Manage your account features and notification behaviors.</p>
+                    <div className="bg-[#202c33] rounded-2xl shadow-sm overflow-hidden border border-[#2a3942]">
+                        <div className="px-8 py-5 border-b border-[#2a3942] bg-[#182229]">
+                            <h3 className="text-lg font-semibold text-[#e9edef]">Application Preferences</h3>
+                            <p className="text-sm text-[#8696a0]">Manage your account features and notification behaviors.</p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#f0f2f5] border-b border-[#f0f2f5]">
+                        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#2a3942] border-b border-[#2a3942]">
                             <SettingItem
                                 icon={<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />}
                                 title="Account"
@@ -71,7 +71,7 @@ export const SettingsView: React.FC = () => {
                             />
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#f0f2f5] border-b border-[#f0f2f5]">
+                        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#2a3942] border-b border-[#2a3942]">
                             <SettingItem
                                 icon={<path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S8.33 8 7.5 8 6 8.67 6 9.5 6.67 11 7.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H7.89c.8 2.04 2.78 3.5 5.11 3.5z" />}
                                 title="Avatar"
@@ -86,7 +86,7 @@ export const SettingsView: React.FC = () => {
                             />
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#f0f2f5]">
+                        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#2a3942]">
                             <SettingItem
                                 icon={<path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z" />}
                                 title="Notifications"
@@ -106,7 +106,7 @@ export const SettingsView: React.FC = () => {
                     {/* Logout Button for Mobile */}
                     <button
                         onClick={() => logout()}
-                        className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-white shadow-sm border border-transparent hover:border-red-500/20 text-[#667781] hover:text-red-500 font-bold transition-all group mt-4"
+                        className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-[#202c33] shadow-sm border border-[#2a3942] hover:border-red-500/50 text-[#8696a0] hover:text-red-500 font-bold transition-all group mt-4"
                     >
                         <svg className="w-5 h-5 text-[#8696a0] group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -121,17 +121,17 @@ export const SettingsView: React.FC = () => {
 
 const SettingItem = ({ icon, title, description, onClick }: { icon: React.ReactNode, title: string, description: string, onClick?: () => void }) => (
     <div 
-        className="flex items-center p-6 cursor-pointer hover:bg-gray-50 transition-colors group"
+        className="flex items-center p-6 cursor-pointer hover:bg-[#2a3942] transition-colors group"
         onClick={onClick}
     >
-        <div className="text-[#8696a0] p-3 bg-gray-100 rounded-xl group-hover:text-brand group-hover:bg-brand/10 transition-colors mr-5">
+        <div className="text-[#8696a0] p-3 bg-[#182229] rounded-xl group-hover:text-[#F97316] group-hover:bg-[#F97316]/10 transition-colors mr-5">
             <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
                 {icon}
             </svg>
         </div>
         <div className="flex-1">
-            <div className="text-[17px] text-[#111b21] font-medium group-hover:text-brand transition-colors">{title}</div>
-            <div className="text-[14px] text-[#667781] mt-1">{description}</div>
+            <div className="text-[17px] text-[#e9edef] font-medium group-hover:text-[#F97316] transition-colors">{title}</div>
+            <div className="text-[14px] text-[#8696a0] mt-1">{description}</div>
         </div>
     </div>
 );

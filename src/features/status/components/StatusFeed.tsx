@@ -113,25 +113,25 @@ export const StatusFeed: React.FC<StatusFeedProps> = ({ refreshKey }) => {
     };
 
     return (
-        <div className="flex h-full overflow-hidden bg-white">
+        <div className="flex h-full overflow-hidden bg-[#111b21]">
 
             {/* ── Left Panel: Status List ───────────────────── */}
-            <div className="w-full flex flex-col h-full overflow-hidden border-r border-[#f0f2f5]">
+            <div className="w-full flex flex-col h-full overflow-hidden border-r border-[#2a3942]">
 
                 {/* Header */}
-                <header className="h-[60px] bg-[#f0f2f5] flex items-center justify-between px-4 shrink-0 border-b border-[#e9edef]">
-                    <h2 className="text-[19px] font-semibold text-[#111b21]">Status</h2>
-                    <div className="flex items-center gap-1 text-[#54656f]">
+                <header className="h-[60px] bg-[#202c33] flex items-center justify-between px-4 shrink-0 border-b border-[#2a3942]">
+                    <h2 className="text-[19px] font-semibold text-[#e9edef]">Status</h2>
+                    <div className="flex items-center gap-1 text-[#aebac1]">
                         <button
                             onClick={() => setShowComposer(true)}
-                            className="p-2 hover:bg-black/5 rounded-full transition-colors"
+                            className="p-2 hover:bg-white/10 rounded-full transition-colors"
                             title="New status"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                             </svg>
                         </button>
-                        <button className="p-2 hover:bg-black/5 rounded-full transition-colors" title="More options">
+                        <button className="p-2 hover:bg-white/10 rounded-full transition-colors" title="More options">
                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 4.001A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 4.001A2 2 0 0 0 12 15z" />
                             </svg>
@@ -143,13 +143,13 @@ export const StatusFeed: React.FC<StatusFeedProps> = ({ refreshKey }) => {
 
                     {/* My Status */}
                     <div
-                        className="flex items-center gap-3 px-4 py-3 hover:bg-[#f5f6f6] cursor-pointer border-b border-[#f0f2f5] transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-[#202c33] cursor-pointer border-b border-[#2a3942] transition-colors"
                         onClick={() => myStatuses.length > 0 ? openStory(myStatuses) : setShowComposer(true)}
                     >
                         {/* Avatar ring */}
                         <div className="relative shrink-0">
-                            <div className={`w-[49px] h-[49px] rounded-full p-[2px] ${myStatuses.length > 0 ? 'bg-brand' : 'bg-[#dfe5e7]'}`}>
-                                <div className="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center text-[#667781] font-medium text-xl">
+                            <div className={`w-[49px] h-[49px] rounded-full p-[2px] ${myStatuses.length > 0 ? 'bg-brand' : 'bg-[#2a3942]'}`}>
+                                <div className="w-full h-full rounded-full bg-[#1F2937] overflow-hidden flex items-center justify-center text-[#aebac1] font-medium text-xl">
                                     {user?.avatarUrl
                                         ? <img src={user.avatarUrl} alt="me" className="w-full h-full object-cover" />
                                         : (user?.username || 'M').charAt(0).toUpperCase()
@@ -157,12 +157,12 @@ export const StatusFeed: React.FC<StatusFeedProps> = ({ refreshKey }) => {
                                 </div>
                             </div>
                             {myStatuses.length === 0 && (
-                                <div className="absolute bottom-0 right-0 w-5 h-5 bg-brand rounded-full border-2 border-white flex items-center justify-center text-white text-[11px] font-bold">+</div>
+                                <div className="absolute bottom-0 right-0 w-5 h-5 bg-brand rounded-full border-2 border-[#111b21] flex items-center justify-center text-white text-[11px] font-bold">+</div>
                             )}
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-[17px] text-[#111b21] font-normal">My status</p>
-                            <p className="text-[13px] text-[#667781]">
+                            <p className="text-[17px] text-[#e9edef] font-normal">My status</p>
+                            <p className="text-[13px] text-[#8696a0]">
                                 {myStatuses.length > 0
                                     ? `${formatRelativeTime(myStatuses[0].createdAt)} · ${myStatuses.length} update${myStatuses.length > 1 ? 's' : ''}`
                                     : 'Tap to add status update'}
@@ -181,7 +181,7 @@ export const StatusFeed: React.FC<StatusFeedProps> = ({ refreshKey }) => {
 
                     {/* Status Composer (inline when visible) */}
                     {showComposer && (
-                        <div className="border-b border-[#f0f2f5]">
+                        <div className="border-b border-[#2a3942]">
                             <StatusComposer onCreated={() => { setShowComposer(false); loadStatuses(); }} />
                         </div>
                     )}
@@ -189,11 +189,11 @@ export const StatusFeed: React.FC<StatusFeedProps> = ({ refreshKey }) => {
                     {/* Recent updates header */}
                     {otherGroups.length > 0 && (
                         <>
-                            <div className="px-4 py-2 bg-[#f0f2f5]">
-                                <p className="text-[13px] text-[#667781] font-medium">Recent updates</p>
+                            <div className="px-4 py-2 bg-[#182229]">
+                                <p className="text-[13px] text-[#8696a0] font-medium">Recent updates</p>
                             </div>
                             {isLoading ? (
-                                <div className="px-4 py-6 text-[#667781] text-sm">Loading...</div>
+                                <div className="px-4 py-6 text-[#8696a0] text-sm">Loading...</div>
                             ) : (
                                 otherGroups.map(([uid, statuses]) => {
                                     const first = statuses[0];
@@ -201,11 +201,11 @@ export const StatusFeed: React.FC<StatusFeedProps> = ({ refreshKey }) => {
                                     return (
                                         <div
                                             key={uid}
-                                            className="flex items-center gap-3 px-4 py-3 hover:bg-[#f5f6f6] cursor-pointer border-b border-[#f0f2f5] transition-colors"
+                                            className="flex items-center gap-3 px-4 py-3 hover:bg-[#202c33] cursor-pointer border-b border-[#2a3942] transition-colors"
                                             onClick={() => openStory(statuses)}
                                         >
                                             <div className="shrink-0 w-[49px] h-[49px] rounded-full p-[2px] bg-brand">
-                                                <div className="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center text-[#667781] font-medium text-xl">
+                                                <div className="w-full h-full rounded-full bg-[#1F2937] overflow-hidden flex items-center justify-center text-[#aebac1] font-medium text-xl">
                                                     {first.user?.avatarUrl
                                                         ? <img src={first.user.avatarUrl} alt={name} className="w-full h-full object-cover" />
                                                         : name.charAt(0).toUpperCase()
@@ -213,8 +213,8 @@ export const StatusFeed: React.FC<StatusFeedProps> = ({ refreshKey }) => {
                                                 </div>
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-[17px] text-[#111b21] truncate">{name}</p>
-                                                <p className="text-[13px] text-[#667781]">
+                                                <p className="text-[17px] text-[#e9edef] truncate">{name}</p>
+                                                <p className="text-[13px] text-[#8696a0]">
                                                     {formatRelativeTime(first.createdAt)} · {statuses.length} update{statuses.length > 1 ? 's' : ''}
                                                 </p>
                                             </div>
@@ -232,8 +232,8 @@ export const StatusFeed: React.FC<StatusFeedProps> = ({ refreshKey }) => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
-                            <p className="text-[#111b21] font-medium mb-1">No updates yet</p>
-                            <p className="text-[13px] text-[#667781]">Status updates from people you know appear here.</p>
+                            <p className="text-[#e9edef] font-medium mb-1">No updates yet</p>
+                            <p className="text-[13px] text-[#8696a0]">Status updates from people you know appear here.</p>
                         </div>
                     )}
                 </div>

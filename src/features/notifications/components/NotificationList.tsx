@@ -22,19 +22,19 @@ export const NotificationList: React.FC = () => {
     }, [setNotifications, user?.id]);
 
     return (
-        <div className="w-full bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-            <div className="p-4 border-b border-gray-100 flex justify-between items-center">
-                <h3 className="font-bold text-text-primary">Notifications</h3>
+        <div className="w-full bg-[#111b21] rounded-2xl shadow-xl border border-[#2a3942] overflow-hidden">
+            <div className="p-4 border-b border-[#2a3942] flex justify-between items-center">
+                <h3 className="font-bold text-[#e9edef]">Notifications</h3>
                 <button
                     onClick={() => markAllAsRead()}
-                    className="text-xs text-brand hover:underline"
+                    className="text-xs text-[#F97316] hover:underline"
                 >
                     Mark all as read
                 </button>
             </div>
-            <div className="max-h-96 overflow-y-auto divide-y divide-gray-50">
+            <div className="max-h-96 overflow-y-auto divide-y divide-[#2a3942]">
                 {notifications.length === 0 ? (
-                    <div className="p-8 text-center text-text-secondary text-sm">
+                    <div className="p-8 text-center text-[#8696a0] text-sm">
                         No new notifications
                     </div>
                 ) : (

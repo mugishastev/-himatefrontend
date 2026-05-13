@@ -109,19 +109,19 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
         }
     };
 
-    if (loading) return <div className="p-10 flex justify-center"><div className="animate-spin w-8 h-8 rounded-full border-4 border-brand border-t-transparent" /></div>;
-    if (!page) return <div className="p-10 text-center">Page not found.</div>;
+    if (loading) return <div className="p-10 flex justify-center"><div className="animate-spin w-8 h-8 rounded-full border-4 border-[#F97316] border-t-transparent" /></div>;
+    if (!page) return <div className="p-10 text-center text-[#8696a0]">Page not found.</div>;
 
     const isOwner = user?.id === page.ownerId;
 
     return (
-        <div className="flex-1 flex flex-col h-full bg-[#efeae2] overflow-y-auto">
+        <div className="flex-1 flex flex-col h-full bg-[#111b21] overflow-y-auto">
             {/* Header / Banner */}
-            <div className="relative bg-white shadow-sm z-10">
-                <div className="h-48 bg-gradient-to-r from-brand/80 to-brand-dark w-full overflow-hidden relative">
+            <div className="relative bg-[#202c33] shadow-sm z-10">
+                <div className="h-48 bg-gradient-to-r from-[#F97316]/80 to-[#EA6C0A] w-full overflow-hidden relative">
                     {page.coverPhotoUrl && <img src={page.coverPhotoUrl} alt="Cover" className="w-full h-full object-cover opacity-60" />}
                     {onBack && (
-                        <button onClick={onBack} className="absolute top-4 left-4 bg-black/30 text-white p-2 rounded-full hover:bg-black/50 backdrop-blur-md">
+                        <button onClick={onBack} className="absolute top-4 left-4 bg-black/50 text-[#e9edef] p-2 rounded-full hover:bg-black/70 backdrop-blur-md transition-colors">
                             Back
                         </button>
                     )}
@@ -129,11 +129,11 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                 
                 <div className="px-4 sm:px-8 pb-6 relative">
                     <div className="flex justify-between items-end -mt-12 mb-4">
-                        <div className="w-24 h-24 rounded-full border-4 border-white bg-white overflow-hidden shadow-lg">
+                        <div className="w-24 h-24 rounded-full border-4 border-[#202c33] bg-[#202c33] overflow-hidden shadow-lg">
                             {page.avatarUrl ? (
                                 <img src={page.avatarUrl} alt={page.name} className="w-full h-full object-cover" />
                             ) : (
-                                <div className="w-full h-full bg-brand/10 flex items-center justify-center text-4xl font-bold text-brand">
+                                <div className="w-full h-full bg-[#F97316]/10 flex items-center justify-center text-4xl font-bold text-[#F97316]">
                                     {page.name.charAt(0)}
                                 </div>
                             )}
@@ -143,13 +143,13 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                                 <>
                                     <button 
                                         onClick={isFollowing ? handleUnfollow : handleFollow}
-                                        className="bg-[#f0f2f5] hover:bg-gray-200 text-text-primary px-6 py-2 rounded-full font-bold transition-colors shadow-sm"
+                                        className="bg-[#2a3942] hover:bg-[#374248] text-[#e9edef] px-6 py-2 rounded-full font-bold transition-colors shadow-sm"
                                     >
                                         {isFollowing ? 'Following' : 'Follow'}
                                     </button>
                                     <button 
                                         onClick={handleMessageSupport}
-                                        className="bg-brand hover:bg-brand-dark text-white px-6 py-2 rounded-full font-bold transition-colors shadow-md flex items-center gap-2"
+                                        className="bg-[#F97316] hover:bg-[#EA6C0A] text-[#111b21] px-6 py-2 rounded-full font-bold transition-colors shadow-md flex items-center gap-2"
                                     >
                                         Message
                                     </button>
@@ -159,13 +159,13 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                                 <>
                                     <button 
                                         onClick={() => setView('CREATOR_STUDIO')} 
-                                        className="bg-[#f0f2f5] hover:bg-gray-200 text-text-primary px-4 py-2 rounded-xl font-bold transition-colors shadow-sm"
+                                        className="bg-[#2a3942] hover:bg-[#374248] text-[#e9edef] px-4 py-2 rounded-xl font-bold transition-colors shadow-sm"
                                     >
                                         Studio
                                     </button>
                                     <button 
                                         onClick={() => setIsEditing(!isEditing)} 
-                                        className="bg-brand hover:bg-brand-dark text-white px-6 py-2 rounded-xl font-bold transition-colors shadow-md"
+                                        className="bg-[#F97316] hover:bg-[#EA6C0A] text-[#111b21] px-6 py-2 rounded-xl font-bold transition-colors shadow-md"
                                     >
                                         {isEditing ? 'Cancel Edit' : 'Edit Profile'}
                                     </button>
@@ -177,38 +177,38 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                     {isEditing ? (
                         <div className="space-y-4 max-w-lg">
                             <input 
-                                className="text-3xl font-black text-text-primary bg-bg-secondary w-full px-2 py-1 rounded"
+                                className="text-3xl font-black text-[#e9edef] bg-[#111b21] w-full px-2 py-1 rounded"
                                 value={editData.name}
                                 onChange={e => setEditData({...editData, name: e.target.value})}
                                 placeholder="Page Name"
                             />
                             <textarea 
-                                className="mt-4 text-text-primary w-full p-3 bg-bg-secondary rounded-xl min-h-[100px]"
+                                className="mt-4 text-[#e9edef] w-full p-3 bg-[#111b21] rounded-xl min-h-[100px]"
                                 value={editData.bio}
                                 onChange={e => setEditData({...editData, bio: e.target.value})}
                                 placeholder="Describe your page..."
                             />
                             <button 
                                 onClick={handleUpdatePage}
-                                className="bg-brand text-white px-8 py-2 rounded-xl font-bold hover:bg-brand-dark transition-all"
+                                className="bg-[#F97316] text-[#111b21] px-8 py-2 rounded-xl font-bold hover:bg-[#EA6C0A] transition-all"
                             >
                                 Save Changes
                             </button>
                         </div>
                     ) : (
                         <>
-                            <h1 className="text-3xl font-black text-text-primary flex items-center gap-2">
+                            <h1 className="text-3xl font-black text-[#e9edef] flex items-center gap-2">
                                 {page.name}
                                 {page.isVerified && (
-                                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/10 text-blue-600" title="Verified Account">
+                                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/10 text-[#53bdeb]" title="Verified Account">
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
                                         </svg>
                                     </span>
                                 )}
                             </h1>
-                            <p className="text-text-secondary font-medium">@{page.handle} - {page._count?.followers || 0} followers</p>
-                            <p className="mt-4 text-text-primary max-w-2xl">{page.bio}</p>
+                            <p className="text-[#8696a0] font-medium">@{page.handle} - {page._count?.followers || 0} followers</p>
+                            <p className="mt-4 text-[#e9edef] max-w-2xl">{page.bio}</p>
                         </>
                     )}
                 </div>
@@ -217,25 +217,25 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
             {/* The Blog Feed */}
             <div className="max-w-2xl mx-auto w-full p-4 space-y-6 pt-8 pb-20">
                 {page.posts.length === 0 ? (
-                    <div className="text-center text-text-secondary bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <div className="text-center text-[#8696a0] bg-[#202c33] p-8 rounded-2xl shadow-sm border border-[#2a3942]">
                         This page hasn't published any posts yet.
                     </div>
                 ) : (
                     page.posts.map(post => (
-                        <div key={post.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div key={post.id} className="bg-[#202c33] rounded-2xl shadow-sm border border-[#2a3942] overflow-hidden">
                             {/* Post Header */}
                             <div className="p-4 flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-brand/10 overflow-hidden">
+                                <div className="w-10 h-10 rounded-full bg-[#F97316]/10 overflow-hidden">
                                      {page.avatarUrl ? <img src={page.avatarUrl} className="w-full h-full object-cover" /> : null}
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-[15px]">{page.name}</h4>
-                                    <p className="text-xs text-text-secondary">{new Date(post.createdAt).toLocaleDateString()}</p>
+                                    <h4 className="font-bold text-[15px] text-[#e9edef]">{page.name}</h4>
+                                    <p className="text-xs text-[#8696a0]">{new Date(post.createdAt).toLocaleDateString()}</p>
                                 </div>
                                 {isOwner && (
                                     <button 
                                         onClick={() => handleDeletePost(post.id)}
-                                        className="ml-auto text-red-500 hover:bg-red-50 p-2 rounded-full transition-colors"
+                                        className="ml-auto text-red-500 hover:bg-red-900/30 p-2 rounded-full transition-colors"
                                         title="Delete Post"
                                     >
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -246,7 +246,7 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                             </div>
                             
                             {/* Post Content */}
-                            <div className="px-4 pb-2 text-[15px] leading-relaxed whitespace-pre-wrap">
+                            <div className="px-4 pb-2 text-[15px] leading-relaxed whitespace-pre-wrap text-[#e9edef]">
                                 {post.content}
                             </div>
                             
@@ -260,7 +260,7 @@ export const PageProfileFeed: React.FC<Props> = ({ handle, onBack }) => {
                             )}
                             
                             {/* Post Footer / Reactions */}
-                            <div className="p-3 border-t border-gray-100 flex items-center gap-4 text-text-secondary px-4">
+                            <div className="p-3 border-t border-[#2a3942] flex items-center gap-4 text-[#8696a0] px-4">
                                 <button 
                                     onClick={() => handleReact(post.id)}
                                     className="flex items-center gap-1 hover:text-red-500 transition-colors"

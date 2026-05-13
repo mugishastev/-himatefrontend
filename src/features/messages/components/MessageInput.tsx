@@ -200,12 +200,12 @@ export const MessageInput: React.FC = () => {
     return (
         <div className="shrink-0 bg-[#202c33] px-4 py-3 flex items-center gap-2">
             {editingMessage && (
-                <div className="flex items-center justify-between bg-brand/5 border border-brand/10 p-2 rounded-xl animate-in fade-in slide-in-from-top-1 duration-200">
-                    <div className="flex items-center gap-2 text-brand">
+                <div className="flex items-center justify-between bg-[#F97316]/5 border border-[#F97316]/10 p-2 rounded-xl animate-in fade-in slide-in-from-top-1 duration-200">
+                    <div className="flex items-center gap-2 text-[#F97316]">
                         <Edit3 className="w-4 h-4" />
                         <span className="text-xs font-bold uppercase">Editing Message</span>
                     </div>
-                    <button onClick={() => setEditingMessage(null)} className="p-1 hover:bg-white/50 rounded-full text-text-muted transition-colors">
+                    <button onClick={() => setEditingMessage(null)} className="p-1 hover:bg-[#2a3942]/50 rounded-full text-[#8696a0] transition-colors">
                         <X className="w-4 h-4" />
                     </button>
                 </div>
@@ -221,7 +221,7 @@ export const MessageInput: React.FC = () => {
 
                 {isRecording ? (
                     // Recording UI
-                    <div className="flex-1 flex items-center justify-between bg-white rounded-full px-4 py-2 border border-brand/20 shadow-sm animate-in fade-in slide-in-from-right-4 duration-300">
+                    <div className="flex-1 flex items-center justify-between bg-[#202c33] rounded-full px-4 py-2 border border-[#2a3942] shadow-sm animate-in fade-in slide-in-from-right-4 duration-300">
                         <button
                             type="button"
                             onClick={discardRecording}
@@ -238,7 +238,7 @@ export const MessageInput: React.FC = () => {
                             </span>
                             <div className="flex items-end gap-[3px] h-6 px-4">
                                 {waveform.map((bar, i) => (
-                                    <span key={i} className="w-1 rounded-full bg-brand/50 animate-[pulse_0.5s_ease-in-out_infinite]" style={{ height: `${bar + (i % 3) * 3}px` }} />
+                                    <span key={i} className="w-1 rounded-full bg-[#F97316]/50 animate-[pulse_0.5s_ease-in-out_infinite]" style={{ height: `${bar + (i % 3) * 3}px` }} />
                                 ))}
                             </div>
                         </div>
@@ -263,7 +263,7 @@ export const MessageInput: React.FC = () => {
                                             <button
                                                 key={emoji}
                                                 type="button"
-                                                className="text-xl hover:bg-bg-secondary rounded-md p-1"
+                                                className="text-xl hover:bg-[#2a3942] rounded-md p-1"
                                                 onClick={() => setContent((prev) => `${prev}${emoji}`)}
                                             >
                                                 {emoji}
@@ -287,7 +287,7 @@ export const MessageInput: React.FC = () => {
                             {isAttachMenuOpen && (
                                 <div className="absolute bottom-14 left-0 z-30 bg-[#233138] rounded-2xl border border-[#2a3942] shadow-xl p-2 w-48 space-y-1">
                                     <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#111b21] text-sm font-medium text-[#d1d7db] flex items-center gap-3" onClick={() => mediaInputRef.current?.click()}>
-                                        <ImageIcon className="w-4 h-4 text-brand" />
+                                        <ImageIcon className="w-4 h-4 text-[#F97316]" />
                                         Media (Image/Video)
                                     </button>
                                     <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#111b21] text-sm font-medium text-[#d1d7db] flex items-center gap-3" onClick={() => documentInputRef.current?.click()}>

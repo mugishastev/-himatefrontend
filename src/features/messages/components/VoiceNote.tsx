@@ -47,10 +47,10 @@ export const VoiceNote: React.FC<VoiceNoteProps> = ({ audioUrl, isOwn }) => {
     const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
     return (
-        <div className={`flex items-center gap-3 py-2 min-w-[200px] ${isOwn ? 'text-white' : 'text-text-primary'}`}>
+        <div className={`flex items-center gap-3 py-2 min-w-[200px] ${isOwn ? 'text-white' : 'text-[#e9edef]'}`}>
             <button
                 onClick={togglePlay}
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${isOwn ? 'bg-white/20 hover:bg-white/30 text-white' : 'bg-brand/10 hover:bg-brand/20 text-brand'
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${isOwn ? 'bg-white/20 hover:bg-white/30 text-white' : 'bg-[#F97316]/10 hover:bg-[#F97316]/20 text-[#F97316]'
                     }`}
             >
                 {isPlaying ? (

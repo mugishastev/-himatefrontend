@@ -73,44 +73,44 @@ export const CreatorStudioView: React.FC = () => {
         }
     };
 
-    if (fetching) return <div className="flex-1 flex items-center justify-center bg-bg-secondary text-text-secondary font-bold">Synchronizing Studio...</div>;
-    if (!myPage) return <div className="flex-1 flex flex-col items-center justify-center bg-bg-secondary p-8 text-center uppercase">
-        <h2 className="text-2xl font-black mb-4">No Page Found</h2>
-        <button onClick={() => setView('PAGES')} className="bg-brand text-white px-6 py-2 rounded-xl font-bold">Create a Page</button>
+    if (fetching) return <div className="flex-1 flex items-center justify-center bg-[#111b21] text-[#8696a0] font-bold">Synchronizing Studio...</div>;
+    if (!myPage) return <div className="flex-1 flex flex-col items-center justify-center bg-[#111b21] p-8 text-center uppercase">
+        <h2 className="text-2xl font-black mb-4 text-[#e9edef]">No Page Found</h2>
+        <button onClick={() => setView('PAGES')} className="bg-[#F97316] text-[#111b21] px-6 py-2 rounded-xl font-bold">Create a Page</button>
     </div>;
 
     return (
-        <div className="flex-1 overflow-y-auto bg-bg-secondary w-full p-4 sm:p-8 transition-all duration-500">
+        <div className="flex-1 overflow-y-auto bg-[#111b21] w-full p-4 sm:p-8 transition-all duration-500">
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* Header */}
                 <div className="flex justify-between items-center">
                     <div>
-                        <h1 className="text-3xl font-black text-text-primary tracking-tight">Creator Studio</h1>
-                        <p className="text-text-secondary mt-1">Broadcast to your fans and manage your brand.</p>
+                        <h1 className="text-3xl font-black text-[#e9edef] tracking-tight">Creator Studio</h1>
+                        <p className="text-[#8696a0] mt-1">Broadcast to your fans and manage your brand.</p>
                     </div>
-                    <div className="bg-brand text-white px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2">
-                        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <div className="bg-[#F97316] text-[#111b21] px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2">
+                        <span className="w-2 h-2 bg-[#111b21] rounded-full animate-pulse"></span>
                         Status: Live
                     </div>
                 </div>
 
                 {/* Dashboard Metrics */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-center">
-                        <span className="text-sm font-bold text-text-secondary uppercase">Total Followers</span>
-                        <div className="text-4xl font-black text-text-primary mt-2">
+                    <div className="bg-[#202c33] p-6 rounded-3xl shadow-sm border border-[#2a3942] flex flex-col justify-center">
+                        <span className="text-sm font-bold text-[#8696a0] uppercase">Total Followers</span>
+                        <div className="text-4xl font-black text-[#e9edef] mt-2">
                             {analytics?.followersCount ?? 0}
                         </div>
-                        <span className="text-xs text-green-500 font-bold mt-2">Live updates available</span>
+                        <span className="text-xs text-[#53bdeb] font-bold mt-2">Live updates available</span>
                     </div>
-                    <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-center">
-                        <span className="text-sm font-bold text-text-secondary uppercase">Total Posts</span>
-                        <div className="text-4xl font-black text-text-primary mt-2">
+                    <div className="bg-[#202c33] p-6 rounded-3xl shadow-sm border border-[#2a3942] flex flex-col justify-center">
+                        <span className="text-sm font-bold text-[#8696a0] uppercase">Total Posts</span>
+                        <div className="text-4xl font-black text-[#e9edef] mt-2">
                             {analytics?.postsCount ?? 0}
                         </div>
-                        <span className="text-xs text-text-secondary font-bold mt-2">Published content</span>
+                        <span className="text-xs text-[#8696a0] font-bold mt-2">Published content</span>
                     </div>
-                    <div className="bg-gradient-to-br from-brand to-brand-dark p-6 rounded-3xl shadow-lg flex flex-col justify-center text-white relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[#F97316] to-[#EA6C0A] p-6 rounded-3xl shadow-lg flex flex-col justify-center text-white relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-4 opacity-20">
                             <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
@@ -120,7 +120,7 @@ export const CreatorStudioView: React.FC = () => {
                         <div className="text-4xl font-black mt-2">{analytics?.unreadTickets ?? 0}</div>
                         <button 
                             onClick={() => setView('PAGE_INBOX')}
-                            className="text-xs bg-white text-brand font-bold mt-4 py-1.5 px-3 rounded-full w-max hover:bg-gray-100 transition-colors"
+                            className="text-xs bg-[#111b21] text-[#F97316] font-bold mt-4 py-1.5 px-3 rounded-full w-max hover:bg-[#202c33] transition-colors"
                         >
                             Open Inbox
                         </button>
@@ -128,27 +128,27 @@ export const CreatorStudioView: React.FC = () => {
                 </div>
 
                 {/* The Publisher Console */}
-                <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="p-6 border-b border-gray-100 bg-gray-50 flex items-center gap-3">
-                        <span className="w-9 h-9 rounded-2xl bg-brand/10 text-brand flex items-center justify-center">
+                <div className="bg-[#202c33] rounded-3xl shadow-sm border border-[#2a3942] overflow-hidden">
+                    <div className="p-6 border-b border-[#2a3942] bg-[#111b21] flex items-center gap-3">
+                        <span className="w-9 h-9 rounded-2xl bg-[#F97316]/10 text-[#F97316] flex items-center justify-center">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 20h9" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z" />
                             </svg>
                         </span>
-                        <h2 className="text-xl font-bold text-text-primary">Publish New Blog</h2>
+                        <h2 className="text-xl font-bold text-[#e9edef]">Publish New Blog</h2>
                     </div>
                     <div className="p-6">
                         <form onSubmit={handlePublish} className="space-y-4">
                             <textarea
-                                className="w-full text-lg p-0 focus:outline-none border-0 min-h-[150px] resize-y placeholder-gray-300 font-medium"
+                                className="w-full text-lg p-0 bg-transparent text-[#e9edef] focus:outline-none border-0 min-h-[150px] resize-y placeholder-[#8696a0] font-medium"
                                 placeholder="What's going on with your brand today? Drop an announcement..."
                                 value={content}
                                 onChange={e => setContent(e.target.value)}
                             />
                             
                             {mediaUrl && (
-                                <div className="relative rounded-2xl overflow-hidden border border-gray-100">
+                                <div className="relative rounded-2xl overflow-hidden border border-[#2a3942]">
                                     <img src={mediaUrl} className="w-full max-h-64 object-cover" alt="Attached preview" />
                                     <button 
                                         type="button" 
@@ -162,7 +162,7 @@ export const CreatorStudioView: React.FC = () => {
                                 </div>
                             )}
 
-                            <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
+                            <div className="pt-4 border-t border-[#2a3942] flex items-center justify-between">
                                 <div className="flex gap-2">
                                     <input 
                                         type="file" 
@@ -173,7 +173,7 @@ export const CreatorStudioView: React.FC = () => {
                                     />
                                     <button 
                                         type="button" 
-                                        className="p-3 text-brand bg-brand/10 hover:bg-brand/20 rounded-xl transition-colors font-bold flex items-center gap-2 disabled:opacity-50"
+                                        className="p-3 text-[#F97316] bg-[#F97316]/10 hover:bg-[#F97316]/20 rounded-xl transition-colors font-bold flex items-center gap-2 disabled:opacity-50"
                                         onClick={() => fileInputRef.current?.click()}
                                         disabled={uploading}
                                     >
@@ -185,7 +185,7 @@ export const CreatorStudioView: React.FC = () => {
                                     </button>
                                 </div>
                                 <button 
-                                    className="bg-brand text-white font-bold py-3 px-8 rounded-xl shadow-md hover:bg-brand-dark transition-colors disabled:opacity-50"
+                                    className="bg-[#F97316] text-[#111b21] font-bold py-3 px-8 rounded-xl shadow-md hover:bg-[#EA6C0A] transition-colors disabled:opacity-50"
                                     disabled={loading || !content.trim()}
                                 >
                                     {loading ? 'Broadcasting...' : 'Publish to Feed'}

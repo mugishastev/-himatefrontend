@@ -31,19 +31,19 @@ export const ProfilePage: React.FC = () => {
 
     return (
         <div className="max-w-4xl mx-auto p-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <header className="relative h-48 bg-gradient-to-r from-brand to-brand-secondary rounded-3xl shadow-lg overflow-hidden">
+            <header className="relative h-48 bg-gradient-to-r from-[#F97316] to-[#EA6C0A] rounded-3xl shadow-lg overflow-hidden">
                 <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                <div className="absolute -bottom-16 left-8 p-1 bg-white rounded-full shadow-xl">
+                <div className="absolute -bottom-16 left-8 p-1 bg-[#202c33] rounded-full shadow-xl">
                     <UserAvatar user={user} size="xl" showStatus={false} />
                 </div>
             </header>
 
             <div className="pt-16 px-8 flex justify-between items-start">
                 <div>
-                    <h1 className="text-4xl font-extrabold text-text-primary tracking-tight">
+                    <h1 className="text-4xl font-extrabold text-[#e9edef] tracking-tight">
                         {user.username}
                     </h1>
-                    <p className="text-text-secondary text-lg mt-1">{user.email}</p>
+                    <p className="text-[#8696a0] text-lg mt-1">{user.email}</p>
                 </div>
                 <div className="flex gap-3">
                     <Button variant="outline">Edit Profile</Button>
@@ -52,24 +52,24 @@ export const ProfilePage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
-                <Card className="p-6 md:col-span-2 space-y-4">
-                    <h2 className="text-xl font-bold text-text-primary">About</h2>
-                    <p className="text-text-secondary leading-relaxed">
+                <Card className="p-6 md:col-span-2 space-y-4 bg-[#202c33] border-none shadow-sm">
+                    <h2 className="text-xl font-bold text-[#e9edef]">About</h2>
+                    <p className="text-[#8696a0] leading-relaxed">
                         {user.bio || "This user hasn't added a bio yet."}
                     </p>
                 </Card>
-                <Card className="p-6 space-y-4">
-                    <h2 className="text-xl font-bold text-text-primary">Details</h2>
+                <Card className="p-6 space-y-4 bg-[#202c33] border-none shadow-sm">
+                    <h2 className="text-xl font-bold text-[#e9edef]">Details</h2>
                     <div className="space-y-3">
                         <div className="flex justify-between text-sm">
-                            <span className="text-text-secondary">Joined</span>
-                            <span className="text-text-primary font-medium">
+                            <span className="text-[#8696a0]">Joined</span>
+                            <span className="text-[#e9edef] font-medium">
                                 {new Date(user.createdAt).toLocaleDateString()}
                             </span>
                         </div>
                         <div className="flex justify-between text-sm">
-                            <span className="text-text-secondary">Status</span>
-                            <span className="text-green-500 font-bold uppercase tracking-wide">
+                            <span className="text-[#8696a0]">Status</span>
+                            <span className="text-[#F97316] font-bold uppercase tracking-wide">
                                 Active
                             </span>
                         </div>

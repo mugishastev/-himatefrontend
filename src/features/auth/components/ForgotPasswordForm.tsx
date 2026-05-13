@@ -38,7 +38,7 @@ export const ForgotPasswordForm: React.FC = () => {
     if (isSubmitted) {
         return (
             <div className="text-center space-y-6">
-                <div className="w-16 h-16 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto animate-bounce">
+                <div className="w-16 h-16 bg-[#F97316]/10 text-[#F97316] rounded-full flex items-center justify-center mx-auto animate-bounce">
                     <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
                     </svg>
@@ -51,13 +51,13 @@ export const ForgotPasswordForm: React.FC = () => {
                 </div>
                 <Link
                     to={`/reset-password?email=${encodeURIComponent(register('email').name)}`}
-                    className="block w-full py-4 bg-brand text-white rounded-xl font-black text-lg shadow-lg hover:bg-brand-dark transition-all"
+                    className="block w-full py-4 bg-[#F97316] text-[#111b21] rounded-xl font-black text-lg shadow-lg hover:bg-[#EA6C0A] transition-all"
                 >
                     Continue to Reset
                 </Link>
                 <button
                     onClick={() => setIsSubmitted(false)}
-                    className="text-brand font-bold hover:underline text-sm"
+                    className="text-[#F97316] font-bold hover:underline text-sm"
                 >
                     Didn't get a code? Try again.
                 </button>
@@ -70,7 +70,7 @@ export const ForgotPasswordForm: React.FC = () => {
             <Input
                 type="email"
                 placeholder="Email address"
-                className="py-4 text-lg bg-white border-gray-200 focus:border-brand focus:ring-1 focus:ring-brand"
+                className="py-4 text-lg bg-[#202c33] border-[#2a3942] text-[#e9edef] focus:border-[#F97316] focus:ring-1 focus:ring-[#F97316]"
                 error={errors.email?.message}
                 {...register('email')}
             />
@@ -81,7 +81,7 @@ export const ForgotPasswordForm: React.FC = () => {
             )}
             <Button
                 type="submit"
-                className="w-full py-4 bg-brand hover:bg-brand-dark text-white rounded-xl font-black text-xl shadow-lg transform transition-transform active:scale-95"
+                className="w-full py-4 bg-[#F97316] hover:bg-[#EA6C0A] text-[#111b21] rounded-xl font-black text-xl shadow-lg transform transition-transform active:scale-95"
                 isLoading={isLoading}
             >
                 Search

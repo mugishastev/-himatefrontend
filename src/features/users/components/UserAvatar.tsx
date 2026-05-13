@@ -29,7 +29,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({ user, size = 'md', showS
                 )}
             </div>
             {showStatus && (
-                <span className="absolute bottom-0.5 right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                <span className="absolute bottom-0.5 right-0.5 w-3 h-3 bg-[#F97316] border-2 border-[#202c33] rounded-full"></span>
             )}
         </div>
     );

@@ -49,7 +49,7 @@ export const StatusComposer: React.FC<StatusComposerProps> = ({ onCreated }) => 
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white p-4 space-y-3">
+        <form onSubmit={handleSubmit} className="bg-[#111b21] p-4 space-y-3">
             {/* Media preview */}
             {preview && (
                 <div className="relative rounded-xl overflow-hidden bg-black">
@@ -68,7 +68,7 @@ export const StatusComposer: React.FC<StatusComposerProps> = ({ onCreated }) => 
 
             {/* Text input */}
             <div className="flex items-end gap-3">
-                <div className="w-9 h-9 rounded-full bg-brand/10 flex items-center justify-center text-brand shrink-0 text-sm font-bold">
+                <div className="w-9 h-9 rounded-full bg-[#1F2937] flex items-center justify-center text-[#aebac1] shrink-0 text-sm font-bold">
                     {(user?.username || 'M').charAt(0).toUpperCase()}
                 </div>
                 <textarea
@@ -78,7 +78,7 @@ export const StatusComposer: React.FC<StatusComposerProps> = ({ onCreated }) => 
                     placeholder="Share a photo, link, or thought..."
                     rows={2}
                     maxLength={500}
-                    className="flex-1 px-4 py-2.5 bg-[#f0f2f5] rounded-xl outline-none resize-none text-[15px] text-[#111b21] placeholder:text-[#667781] focus:bg-white border border-transparent focus:border-brand/20 transition-all"
+                    className="flex-1 px-4 py-2.5 bg-[#2a3942] rounded-xl outline-none resize-none text-[15px] text-[#e9edef] placeholder:text-[#8696a0] focus:bg-[#202c33] border border-transparent focus:border-[#F97316]/50 transition-all"
                 />
             </div>
 
@@ -90,7 +90,7 @@ export const StatusComposer: React.FC<StatusComposerProps> = ({ onCreated }) => 
                         id="status-camera-trigger"
                         type="button"
                         onClick={() => fileRef.current?.click()}
-                        className="w-9 h-9 flex items-center justify-center rounded-full text-[#54656f] hover:bg-[#f0f2f5] transition-colors"
+                        className="w-9 h-9 flex items-center justify-center rounded-full text-[#aebac1] hover:bg-[#202c33] transition-colors"
                         title="Add photo or video"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,7 +104,7 @@ export const StatusComposer: React.FC<StatusComposerProps> = ({ onCreated }) => 
                         accept="image/*,video/*"
                         onChange={handleFileChange}
                     />
-                    <span className="text-xs text-[#667781]">{content.length}/500</span>
+                    <span className="text-xs text-[#8696a0]">{content.length}/500</span>
                 </div>
 
                 <button

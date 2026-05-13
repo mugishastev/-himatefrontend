@@ -28,17 +28,17 @@ export const CreatePageModal: React.FC = () => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-            <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl p-8 transform transition-all">
+            <div className="bg-[#202c33] rounded-3xl w-full max-w-lg shadow-2xl p-8 transform transition-all border border-[#2a3942]">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-black text-text-primary">Create a Page</h2>
-                    <button onClick={closeModal} className="text-text-secondary hover:text-red-500 rounded-full p-1 transition-colors">
+                    <h2 className="text-2xl font-black text-[#e9edef]">Create a Page</h2>
+                    <button onClick={closeModal} className="text-[#8696a0] hover:text-red-500 rounded-full p-1 transition-colors">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
                 
-                <p className="text-text-secondary mb-6 text-sm">
+                <p className="text-[#8696a0] mb-6 text-sm">
                     Build a verified profile to broadcast blogs to your fans and manage customer support directly in Himate.
                 </p>
 
@@ -46,26 +46,26 @@ export const CreatePageModal: React.FC = () => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-bold text-text-primary mb-1">Page Name</label>
+                        <label className="block text-sm font-bold text-[#e9edef] mb-1">Page Name</label>
                         <input
                             required
                             type="text"
                             placeholder="e.g. Nike Support"
-                            className="w-full p-3 bg-bg-secondary rounded-xl border border-border-light focus:outline-none focus:ring-2 focus:ring-brand font-medium placeholder:font-normal"
+                            className="w-full p-3 bg-[#111b21] rounded-xl border border-[#2a3942] text-[#e9edef] focus:outline-none focus:ring-2 focus:ring-[#F97316] font-medium placeholder:font-normal placeholder:text-[#8696a0]"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
                     
                     <div>
-                        <label className="block text-sm font-bold text-text-primary mb-1">Handle</label>
+                        <label className="block text-sm font-bold text-[#e9edef] mb-1">Handle</label>
                         <div className="flex items-center">
-                            <span className="p-3 bg-gray-100 border border-border-light border-r-0 rounded-l-xl text-text-secondary font-bold">@</span>
+                            <span className="p-3 bg-[#182229] border border-[#2a3942] border-r-0 rounded-l-xl text-[#8696a0] font-bold">@</span>
                             <input
                                 required
                                 type="text"
                                 placeholder="nikesupport"
-                                className="w-full p-3 bg-bg-secondary rounded-r-xl border border-border-light focus:outline-none focus:ring-2 focus:ring-brand font-medium placeholder:font-normal"
+                                className="w-full p-3 bg-[#111b21] rounded-r-xl border border-[#2a3942] text-[#e9edef] focus:outline-none focus:ring-2 focus:ring-[#F97316] font-medium placeholder:font-normal placeholder:text-[#8696a0]"
                                 value={handle}
                                 onChange={(e) => setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
                             />
@@ -73,9 +73,9 @@ export const CreatePageModal: React.FC = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-text-primary mb-1">Category</label>
+                        <label className="block text-sm font-bold text-[#e9edef] mb-1">Category</label>
                         <select
-                            className="w-full p-3 bg-bg-secondary rounded-xl border border-border-light focus:outline-none focus:ring-2 focus:ring-brand font-medium"
+                            className="w-full p-3 bg-[#111b21] rounded-xl border border-[#2a3942] text-[#e9edef] focus:outline-none focus:ring-2 focus:ring-[#F97316] font-medium"
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                         >
@@ -87,10 +87,10 @@ export const CreatePageModal: React.FC = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-text-primary mb-1">Short Bio</label>
+                        <label className="block text-sm font-bold text-[#e9edef] mb-1">Short Bio</label>
                         <textarea
                             placeholder="Tell the world what your page is about..."
-                            className="w-full p-3 bg-bg-secondary rounded-xl border border-border-light focus:outline-none focus:ring-2 focus:ring-brand font-medium placeholder:font-normal"
+                            className="w-full p-3 bg-[#111b21] rounded-xl border border-[#2a3942] text-[#e9edef] focus:outline-none focus:ring-2 focus:ring-[#F97316] font-medium placeholder:font-normal placeholder:text-[#8696a0]"
                             rows={3}
                             value={bio}
                             onChange={(e) => setBio(e.target.value)}
@@ -100,7 +100,7 @@ export const CreatePageModal: React.FC = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-brand text-white font-bold p-4 rounded-xl hover:bg-brand-dark transition-colors disabled:opacity-50 mt-4 shadow-lg shadow-brand/30"
+                        className="w-full bg-[#F97316] text-[#111b21] font-bold p-4 rounded-xl hover:bg-[#EA6C0A] transition-colors disabled:opacity-50 mt-4 shadow-lg shadow-[#F97316]/20"
                     >
                         {loading ? 'Registering...' : 'Create Verified Page'}
                     </button>
