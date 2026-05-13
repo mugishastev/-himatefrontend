@@ -57,7 +57,7 @@ export const setupInterceptors = (instance: AxiosInstance) => {
             const path = window.location.pathname;
             const config = error.config as AxiosRequestConfigWithRetry | undefined;
 
-            if (status === 401 && config && !config._retry) {
+            if (status === 401 && config && !config._retry && !config.url?.includes('/auth/refresh')) {
                 config._retry = true;
 
                 const refreshToken = tokenStorage.getRefreshToken();
