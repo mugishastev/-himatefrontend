@@ -4,10 +4,19 @@ import { useMessageStore } from '../store/message.store';
 import { useConversationStore } from '../store/conversation.store';
 import { useAuthStore } from '../store/auth.store';
 
+const EMPTY_ARRAY: any[] = [];
+
 export const useMessages = () => {
-    const { activeConversationId, updateConversationLastMessage } = useConversationStore();
-    const { user } = useAuthStore();
-    const { messages, setMessages, addMessage, removeMessage, updateMessage: updateMessageInStore, setLoading } = useMessageStore();
+    // Use granular selectors to get STABLE references — prevents infinite re-render loops
+    const activeConversationId = useConversationStore((s) => s.activeConversationId);
+    const updateConversationLastMessage = useConversationStore((s) => s.updateConversationLastMessage);
+    const userId = useAuthStore((s) => s.user?.id);
+    const messages = useMessageStore((s) => s.messages);
+    const setMessages = useMessageStore((s) => s.setMessages);
+    const addMessage = useMessageStore((s) => s.addMessage);
+    const removeMessage = useMessageStore((s) => s.removeMessage);
+    const updateMessageInStore = useMessageStore((s) => s.updateMessage);
+    const setLoading = useMessageStore((s) => s.setLoading);
     const [error, setError] = useState<string | null>(null);
 
     const fetchMessages = useCallback(async (conversationId: string) => {
@@ -30,10 +39,10 @@ export const useMessages = () => {
     }, [setMessages, setLoading]);
 
     const sendMessage = async (content: string, file?: File | null) => {
-        if (!activeConversationId || !user?.id) return;
+        if (!activeConversationId || !userId) return;
         try {
             let data: any;
-            const senderId = Number(user.id);
+            const senderId = Number(userId);
             const conversationId = Number(activeConversationId);
 
             if (file) {
@@ -80,7 +89,7 @@ export const useMessages = () => {
     };
 
     return {
-        messages: activeConversationId ? messages[String(activeConversationId)] || [] : [],
+        messages: activeConversationId ? messages[String(activeConversationId)] || EMPTY_ARRAY : EMPTY_ARRAY,
         fetchMessages,
         sendMessage,
         deleteMessage,

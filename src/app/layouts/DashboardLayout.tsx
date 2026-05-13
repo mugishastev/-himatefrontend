@@ -1,6 +1,5 @@
 import React from 'react';
 import { ConversationList } from '../../features/conversations/components/ConversationList';
-import { ContactList } from '../../features/contacts/components/ContactList';
 import { ProfileView } from '../../features/users/components/ProfileView';
 import { SettingsView } from '../../features/settings/components/SettingsView';
 import { CallsView } from '../../features/calls/components/CallsView';
@@ -8,7 +7,6 @@ import { ChatWindow } from '../../features/messages/components/ChatWindow';
 import { SidebarNav } from './SidebarNav';
 import { NewConversationModal } from '../../features/conversations/components/NewConversationModal';
 import { CreateGroupModal } from '../../features/conversations/components/CreateGroupModal';
-import { AddContactModal } from '../../features/contacts/components/AddContactModal';
 import { UserProfileModal } from '../../features/users/components/UserProfileModal';
 import { useUIStore } from '../../store/ui.store';
 import { NotificationList } from '../../features/notifications/components/NotificationList';
@@ -131,12 +129,7 @@ export const DashboardLayout: React.FC = () => {
                         </main>
                     </>
                 );
-            case 'CONTACTS':
-                return (
-                    <div className="flex-1 bg-white overflow-y-auto w-full">
-                        <ContactList />
-                    </div>
-                );
+
             case 'STATUS':
                 return (
                     <div className="flex-1 bg-[#111b21]">
@@ -222,15 +215,7 @@ export const DashboardLayout: React.FC = () => {
             {activeModal === 'CREATE_GROUP' && (
                 <CreateGroupModal onClose={closeModal} />
             )}
-            {activeModal === 'ADD_CONTACT' && (
-                <AddContactModal
-                    onClose={closeModal}
-                    onSuccess={() => {
-                        // ContactList will re-fetch contacts next time it mounts/re-renders
-                        closeModal();
-                    }}
-                />
-            )}
+
             {activeModal === 'USER_PROFILE' && viewingUserId && (
                 <UserProfileModal userId={viewingUserId} onClose={closeModal} />
             )}

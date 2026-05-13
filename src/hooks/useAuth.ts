@@ -6,7 +6,10 @@ import { ROUTES } from '../app/routes.config';
 import { extractErrorMessage } from '../utils/error-handler';
 
 export const useAuth = () => {
-    const { setAuth, logout: clearAuth, user, isAuthenticated } = useAuthStore();
+    const setAuth = useAuthStore((s) => s.setAuth);
+    const clearAuth = useAuthStore((s) => s.logout);
+    const user = useAuthStore((s) => s.user);
+    const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();

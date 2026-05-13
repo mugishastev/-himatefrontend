@@ -9,8 +9,9 @@ import { messagesApi } from "../../../api/messages.api";
 
 export const ConversationList: React.FC = () => {
     const { conversations, fetchConversations, isLoading } = useConversations();
-    const { isSidebarOpen, openModal } = useUIStore();
-    const { favoriteConversationIds } = useFavoritesStore();
+    const isSidebarOpen = useUIStore((s) => s.isSidebarOpen);
+    const openModal = useUIStore((s) => s.openModal);
+    const favoriteConversationIds = useFavoritesStore((s) => s.favoriteConversationIds);
     const setConversations = useConversationStore((s) => s.setConversations);
     const [query, setQuery] = useState("");
     const [filter, setFilter] = useState<"ALL" | "UNREAD" | "FAVORITES">("ALL");

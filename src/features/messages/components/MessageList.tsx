@@ -9,8 +9,9 @@ import { formatChatDayDivider } from '../../../utils/chat';
 import { messagesApi } from '../../../api/messages.api';
 
 export const MessageList: React.FC = () => {
-    const { activeConversationId, typingUsers } = useConversationStore();
-    const clearUnreadCount = useConversationStore((state) => state.clearUnreadCount);
+    const activeConversationId = useConversationStore((s) => s.activeConversationId);
+    const typingUsers = useConversationStore((s) => s.typingUsers);
+    const clearUnreadCount = useConversationStore((s) => s.clearUnreadCount);
     const { messages, fetchMessages } = useMessages();
     const bottomRef = useRef<HTMLDivElement>(null);
 

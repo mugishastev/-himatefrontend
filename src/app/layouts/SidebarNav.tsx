@@ -2,8 +2,7 @@ import React from 'react';
 import { 
     MessageSquare, 
     Phone, 
-    CircleDashed, 
-    Users, 
+    CircleFadingPlus, 
     Layout, 
     Bell, 
     Settings, 
@@ -37,13 +36,8 @@ export const SidebarNav: React.FC = () => {
         },
         {
             id: 'STATUS',
-            Icon: CircleDashed,
+            Icon: CircleFadingPlus,
             label: 'Status'
-        },
-        {
-            id: 'CONTACTS',
-            Icon: Users,
-            label: 'Contacts'
         },
         {
             id: 'PAGES',

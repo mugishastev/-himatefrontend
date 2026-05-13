@@ -5,7 +5,7 @@ import { UserAvatar } from '../../users/components/UserAvatar';
 
 export const SettingsView: React.FC = () => {
     const { setView } = useUIStore();
-    const { user } = useAuthStore();
+    const { user, logout } = useAuthStore();
 
     if (!user) return null;
 
@@ -96,6 +96,17 @@ export const SettingsView: React.FC = () => {
                         </div>
 
                     </div>
+
+                    {/* Logout Button for Mobile */}
+                    <button
+                        onClick={() => logout()}
+                        className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-white shadow-sm border border-transparent hover:border-red-500/20 text-[#667781] hover:text-red-500 font-bold transition-all group mt-4"
+                    >
+                        <svg className="w-5 h-5 text-[#8696a0] group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Logout
+                    </button>
                 </div>
             </div>
         </div>

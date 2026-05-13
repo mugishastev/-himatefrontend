@@ -28,14 +28,14 @@ export const LoginForm: React.FC = () => {
                 <Input
                     type="email"
                     placeholder="Email address or phone number"
-                    className="py-4 text-lg bg-white border-gray-200 focus:border-brand focus:ring-1 focus:ring-brand"
+                    className="py-4 text-lg bg-white border-gray-300 focus:border-brand focus:ring-1 focus:ring-brand placeholder:opacity-100"
                     error={errors.email?.message}
                     {...register('email')}
                 />
                 <Input
                     type="password"
                     placeholder="Password"
-                    className="py-4 text-lg bg-white border-gray-200 focus:border-brand focus:ring-1 focus:ring-brand"
+                    className="py-4 text-lg bg-white border-gray-300 focus:border-brand focus:ring-1 focus:ring-brand placeholder:opacity-100"
                     error={errors.password?.message}
                     {...register('password')}
                 />
@@ -49,14 +49,14 @@ export const LoginForm: React.FC = () => {
 
             <Button
                 type="submit"
-                className="w-full py-4 text-xl font-black bg-brand hover:bg-brand-dark text-white rounded-lg shadow-lg"
+                className="w-full py-4 text-xl font-bold bg-[#F97316] hover:bg-[#EA6C0A] text-white rounded-xl shadow-xl transition-all hover:scale-[1.01] active:scale-[0.98] border-none"
                 isLoading={isLoading}
             >
                 Log In
             </Button>
 
-            <div className="text-center">
-                <Link to="/forgot-password" className="text-brand text-sm hover:underline font-medium">
+            <div className="text-center pt-2">
+                <Link to="/forgot-password" title="Recover your password" className="text-brand-dark text-sm hover:underline font-semibold transition-colors">
                     Forgotten password?
                 </Link>
             </div>

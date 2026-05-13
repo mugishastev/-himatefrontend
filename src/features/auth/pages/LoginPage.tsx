@@ -14,7 +14,11 @@ export const LoginPage: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-bg-secondary flex flex-col lg:flex-row items-center justify-center p-4 lg:p-0">
+        <div className="min-h-screen bg-[#111827] bg-gradient-to-br from-[#111827] via-[#1e293b] to-[#111827] flex flex-col lg:flex-row items-center justify-center p-4 lg:p-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-brand blur-[120px] animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600 blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+            </div>
             {/* Branding Section (Left on Desktop) */}
             <div className="w-full lg:w-1/2 max-w-lg lg:max-w-none lg:pr-24 flex flex-col items-center lg:items-start text-center lg:text-left mb-12 lg:mb-0">
                 <div className="mb-6">
@@ -54,8 +58,8 @@ export const LoginPage: React.FC = () => {
             </div>
 
             {/* Login Form Section (Right on Desktop) */}
-            <div className="w-full max-w-[400px] flex flex-col">
-                <Card className="p-6 shadow-xl border-none ring-1 ring-gray-100 bg-white rounded-2xl">
+            <div className="w-full max-w-[400px] flex flex-col relative z-10">
+                <Card className="p-6 shadow-2xl border border-gray-200 bg-white rounded-2xl">
                     <LoginForm />
 
                     <div className="mt-6 pt-6 border-t border-gray-100 text-center">

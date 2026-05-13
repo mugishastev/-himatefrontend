@@ -13,12 +13,18 @@ interface ConversationItemProps {
 }
 
 export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation }) => {
-    const { activeConversationId, setActiveConversation, conversations, setConversations } = useConversationStore();
-    const { openImage } = useUIStore();
-    const { user } = useAuthStore();
-    const { isFavoriteConversation, toggleFavoriteConversation } = useFavoritesStore();
+    const activeConversationId = useConversationStore((s) => s.activeConversationId);
+    const setActiveConversation = useConversationStore((s) => s.setActiveConversation);
+    const conversations = useConversationStore((s) => s.conversations);
+    const setConversations = useConversationStore((s) => s.setConversations);
+    
+    const openImage = useUIStore((s) => s.openImage);
+    const user = useAuthStore((s) => s.user);
+    
+    const isFavorite = useFavoritesStore((s) => !!s.favoriteConversationIds[String(conversation.id)]);
+    const toggleFavoriteConversation = useFavoritesStore((s) => s.toggleFavoriteConversation);
+    
     const isActive = String(activeConversationId) === String(conversation.id);
-    const isFavorite = isFavoriteConversation(conversation.id);
 
     const [isDeleting, setIsDeleting] = useState(false);
     const [isBlocking, setIsBlocking] = useState(false);

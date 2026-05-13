@@ -3,7 +3,8 @@ import { socketService, setupSocketListeners } from '../socket';
 import { useAuthStore } from '../store/auth.store';
 
 export const useSocket = () => {
-    const { accessToken, isAuthenticated } = useAuthStore();
+    const accessToken = useAuthStore((s) => s.accessToken);
+    const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
     useEffect(() => {
         if (isAuthenticated && accessToken) {

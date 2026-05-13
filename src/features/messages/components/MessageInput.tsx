@@ -26,7 +26,9 @@ export const MessageInput: React.FC = () => {
     const [recordSeconds, setRecordSeconds] = useState(0);
 
     const { sendMessage, updateMessage } = useMessages();
-    const { activeConversationId, editingMessage, setEditingMessage } = useConversationStore();
+    const activeConversationId = useConversationStore((s) => s.activeConversationId);
+    const editingMessage = useConversationStore((s) => s.editingMessage);
+    const setEditingMessage = useConversationStore((s) => s.setEditingMessage);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const mediaInputRef = useRef<HTMLInputElement>(null);

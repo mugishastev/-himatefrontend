@@ -5,9 +5,14 @@ import { useAuthStore } from '../../../store/auth.store';
 import { UserAvatar } from '../../users/components/UserAvatar';
 
 export const InfoSidebar: React.FC = () => {
-    const { isInfoPaneOpen, infoPaneType, setInfoPane } = useUIStore();
-    const { activeConversationId, conversations } = useConversationStore();
-    const { user: currentUser } = useAuthStore();
+    const isInfoPaneOpen = useUIStore((s) => s.isInfoPaneOpen);
+    const infoPaneType = useUIStore((s) => s.infoPaneType);
+    const setInfoPane = useUIStore((s) => s.setInfoPane);
+    
+    const activeConversationId = useConversationStore((s) => s.activeConversationId);
+    const conversations = useConversationStore((s) => s.conversations);
+    
+    const currentUser = useAuthStore((s) => s.user);
 
     const activeConversation = conversations.find(c => String(c.id) === String(activeConversationId));
 

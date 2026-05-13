@@ -3,7 +3,6 @@ import { create } from 'zustand';
 export type ModalType =
     | 'NEW_CONVERSATION'
     | 'CREATE_GROUP'
-    | 'ADD_CONTACT'
     | 'USER_PROFILE'
     | 'IMAGE_VIEWER'
     | 'START_CALL'
@@ -17,7 +16,7 @@ interface UIState {
     activeModal: ModalType;
     viewingUserId: string | number | null;
     viewingImageUrl: string | null;
-    currentView: 'CHATS' | 'CALLS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES' | 'CREATOR_STUDIO' | 'PAGE_INBOX';
+    currentView: 'CHATS' | 'CALLS' | 'STATUS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES' | 'CREATOR_STUDIO' | 'PAGE_INBOX';
     viewingPageHandle: string | null;
     isInfoPaneOpen: boolean;
     infoPaneType: 'CONTACT' | 'GROUP' | null;
@@ -27,7 +26,7 @@ interface UIState {
     openImage: (url: string) => void;
     setInfoPane: (isOpen: boolean, type?: 'CONTACT' | 'GROUP' | null) => void;
     closeModal: () => void;
-    setView: (view: 'CHATS' | 'CALLS' | 'STATUS' | 'CONTACTS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES' | 'CREATOR_STUDIO' | 'PAGE_INBOX') => void;
+    setView: (view: 'CHATS' | 'CALLS' | 'STATUS' | 'NOTIFICATIONS' | 'PROFILE' | 'SETTINGS' | 'PAGES' | 'CREATOR_STUDIO' | 'PAGE_INBOX') => void;
     openPage: (handle: string | null) => void;
 }
 

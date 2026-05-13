@@ -16,9 +16,9 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
     const [searchResults, setSearchResults] = useState<User[]>([]);
     const [isSearching, setIsSearching] = useState(false);
     const { conversations, createConversation, isLoading: isCreating } = useConversations();
-    const { openModal } = useUIStore();
-    const { user: currentUser } = useAuthStore();
-    const { setActiveConversation: storeSetActive } = useConversationStore();
+    const openModal = useUIStore((s) => s.openModal);
+    const currentUser = useAuthStore((s) => s.user);
+    const storeSetActive = useConversationStore((s) => s.setActiveConversation);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -125,17 +125,6 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
                         <button className="w-full flex items-center px-4 py-3 hover:bg-[#1F2937]/50 transition-colors group cursor-pointer">
                             <div className="w-12 h-12 rounded-full bg-[#00a884] text-white flex items-center justify-center shrink-0">
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                                </svg>
-                            </div>
-                            <div className="ml-4 flex-1 text-left border-b border-[#1F2937]/0 group-hover:border-transparent py-3">
-                                <p className="text-[17px] text-white">New contact</p>
-                            </div>
-                        </button>
-
-                        <button className="w-full flex items-center px-4 py-3 hover:bg-[#1F2937]/50 transition-colors group cursor-pointer">
-                            <div className="w-12 h-12 rounded-full bg-[#00a884] text-white flex items-center justify-center shrink-0">
-                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
                                 </svg>
                             </div>
@@ -148,7 +137,7 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
 
                 <div className="pt-2">
                     <h3 className="text-[#00a884] text-[15px] px-8 py-4 uppercase font-medium tracking-wide">
-                        {searchQuery ? 'Search Results' : 'Contacts on Himate'}
+                        {searchQuery ? 'Search Results' : 'Users on Himate'}
                     </h3>
 
                     {isSearching ? (

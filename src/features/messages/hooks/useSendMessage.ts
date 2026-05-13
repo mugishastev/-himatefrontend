@@ -6,9 +6,9 @@ import { useAuthStore } from '../../../store/auth.store';
 
 export const useSendMessage = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const { addMessage } = useMessageStore();
-    const { updateConversationLastMessage } = useConversationStore();
-    const { user } = useAuthStore();
+    const addMessage = useMessageStore((s) => s.addMessage);
+    const updateConversationLastMessage = useConversationStore((s) => s.updateConversationLastMessage);
+    const user = useAuthStore((s) => s.user);
 
     const sendMessage = async (conversationId: string, content: string) => {
         if (!user) return;

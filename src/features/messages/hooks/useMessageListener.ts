@@ -5,8 +5,8 @@ import { useConversationStore } from '../../../store/conversation.store';
 import type { Message } from '../../../types/message.types';
 
 export const useMessageListener = () => {
-    const { addMessage } = useMessageStore();
-    const { updateConversationLastMessage } = useConversationStore();
+    const addMessage = useMessageStore((s) => s.addMessage);
+    const updateConversationLastMessage = useConversationStore((s) => s.updateConversationLastMessage);
 
     useEffect(() => {
         const handleNewMessage = (message: Message) => {
@@ -19,5 +19,6 @@ export const useMessageListener = () => {
         return () => {
             socketService.off(SOCKET_EVENTS.NEW_MESSAGE, handleNewMessage);
         };
-    }, [addMessage, updateConversationLastMessage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 };

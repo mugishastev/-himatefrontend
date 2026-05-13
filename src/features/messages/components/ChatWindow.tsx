@@ -29,11 +29,21 @@ import { WallpaperPicker, WALLPAPER_OPTIONS, WALLPAPER_STORAGE_KEY } from './Wal
 import { useDocumentTitle } from '../../../hooks/useDocumentTitle';
 import { useMessageStore } from '../../../store/message.store';
 
+const EMPTY_ARRAY: any[] = [];
+
 export const ChatWindow: React.FC = () => {
-    const { activeConversationId, conversations, setActiveConversation, setConversations } = useConversationStore();
-    const { user } = useAuthStore();
-    const { setInfoPane, isInfoPaneOpen } = useUIStore();
-    const { startCall } = useCallStore();
+    const activeConversationId = useConversationStore((s) => s.activeConversationId);
+    const conversations = useConversationStore((s) => s.conversations);
+    const setActiveConversation = useConversationStore((s) => s.setActiveConversation);
+    const setConversations = useConversationStore((s) => s.setConversations);
+    
+    const user = useAuthStore((s) => s.user);
+    
+    const setInfoPane = useUIStore((s) => s.setInfoPane);
+    const isInfoPaneOpen = useUIStore((s) => s.isInfoPaneOpen);
+    
+    const startCall = useCallStore((s) => s.startCall);
+    
     const activeConversation = conversations.find(c => c.id === activeConversationId);
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,8 +54,8 @@ export const ChatWindow: React.FC = () => {
     const searchInputRef = useRef<HTMLInputElement>(null);
 
     const conversationMessages = useMessageStore((s) => {
-        if (!activeConversationId) return [];
-        return s.messages[String(activeConversationId)] || [];
+        if (!activeConversationId) return EMPTY_ARRAY;
+        return s.messages[String(activeConversationId)] || EMPTY_ARRAY;
     });
 
     const searchResults = useMemo(() => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNotificationStore } from '../../../store/notification.store';
 
 export const NotificationBadge: React.FC = () => {
-    const { unreadCount } = useNotificationStore();
+    const unreadCount = useNotificationStore((s) => s.unreadCount);
 
     if (unreadCount === 0) return null;
 

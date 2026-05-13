@@ -3,7 +3,8 @@ import { useConversationStore } from '../../../store/conversation.store';
 import { conversationsApi } from '../../../api/conversations.api';
 
 export const useConversationList = () => {
-    const { setConversations, setLoading } = useConversationStore();
+    const setConversations = useConversationStore((s) => s.setConversations);
+    const setLoading = useConversationStore((s) => s.setLoading);
 
     useEffect(() => {
         const fetchConversations = async () => {
@@ -19,5 +20,6 @@ export const useConversationList = () => {
         };
 
         fetchConversations();
-    }, [setConversations, setLoading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 };

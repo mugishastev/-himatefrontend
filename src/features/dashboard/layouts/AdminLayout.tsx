@@ -73,7 +73,8 @@ const navGroups: NavGroup[] = [
 ];
 
 export const AdminLayout: React.FC = () => {
-    const { user, logout } = useAuthStore();
+    const user = useAuthStore((s) => s.user);
+    const logout = useAuthStore((s) => s.logout);
     const navigate = useNavigate();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);

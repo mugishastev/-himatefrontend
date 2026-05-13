@@ -408,6 +408,19 @@ export const ProfileView: React.FC = () => {
             </div>
           </div>
 
+          {/* ── 6. Log Out ── */}
+          <div className="pt-2">
+            <button
+              onClick={() => logout()}
+              className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 text-white hover:text-red-400 font-bold transition-all group"
+            >
+              <svg className="w-5 h-5 text-[#9CA3AF] group-hover:text-red-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Log Out of Himate
+            </button>
+          </div>
+
           <div className="pb-6" />
         </div>
       </div>

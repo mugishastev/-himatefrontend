@@ -4,7 +4,8 @@ import { useConversationStore } from '../store/conversation.store';
 import { SOCKET_EVENTS } from '../socket/socket.events';
 
 export const useTypingIndicator = (conversationId: string | number | null) => {
-    const { addTypingUser, removeTypingUser } = useConversationStore();
+    const addTypingUser = useConversationStore((s) => s.addTypingUser);
+    const removeTypingUser = useConversationStore((s) => s.removeTypingUser);
 
     useEffect(() => {
         if (!conversationId) return;
