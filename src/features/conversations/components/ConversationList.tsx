@@ -145,7 +145,7 @@ export const ConversationList: React.FC = () => {
                     onClick={() => setFilter('UNREAD')}
                     className={`px-4 py-1.5 rounded-full text-[14px] font-medium transition-colors ${filter === 'UNREAD' ? 'bg-[#374248] text-white' : 'bg-[#1F2937] hover:bg-[#374248] text-[#d1d7db]'}`}
                 >
-                    Unread {globalUnreadCount > 0 && <span className="text-[#00a884] ml-1">{globalUnreadCount}</span>}
+                    Unread {globalUnreadCount > 0 && <span className="text-[#F97316] ml-1">{globalUnreadCount}</span>}
                 </button>
                 <button 
                     onClick={() => setFilter('FAVORITES')}

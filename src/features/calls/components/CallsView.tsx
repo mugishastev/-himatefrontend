@@ -106,7 +106,7 @@ export const CallsView: React.FC = () => {
                         onClick={handleCreateLink}
                         className="flex items-center px-4 py-2.5 hover:bg-[#1F2937]/50 cursor-pointer transition-colors group/item relative"
                     >
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors ${copied ? 'bg-emerald-500/20 text-emerald-400' : 'bg-[#00a884] text-white'}`}>
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors ${copied ? 'bg-emerald-500/20 text-emerald-400' : 'bg-[#F97316] text-white'}`}>
                             {copied ? (
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
@@ -129,7 +129,7 @@ export const CallsView: React.FC = () => {
                     </div>
                     {/* View all text */}
                     <div className="px-4 py-3">
-                        <button className="text-[#00a884] text-[14px] hover:underline">View all</button>
+                        <button className="text-[#F97316] text-[14px] hover:underline">View all</button>
                     </div>
                 </div>
 
@@ -138,7 +138,7 @@ export const CallsView: React.FC = () => {
 
                     {isLoading ? (
                         <div className="flex justify-center p-4">
-                            <div className="w-6 h-6 border-2 border-t-transparent border-[#00a884] rounded-full animate-spin"></div>
+                            <div className="w-6 h-6 border-2 border-t-transparent border-[#F97316] rounded-full animate-spin"></div>
                         </div>
                     ) : calls.length === 0 ? (
                         <div className="flex flex-col items-center justify-center text-center py-16 px-4">

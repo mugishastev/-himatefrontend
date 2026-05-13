@@ -88,7 +88,7 @@ export const CallOverlay: React.FC = () => {
     return (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#111827]/95 backdrop-blur-md animate-in fade-in duration-300">
             {/* Background elements to add depth */}
-            <div className="absolute w-96 h-96 bg-[#00a884]/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute w-96 h-96 bg-[#F97316]/10 rounded-full blur-[100px] pointer-events-none" />
 
             <div className="z-10 flex flex-col items-center max-w-sm w-full p-8 text-center text-white relative">
                 
@@ -103,7 +103,7 @@ export const CallOverlay: React.FC = () => {
                         <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#1F2937] shadow-2xl relative">
                             {/* Glowing rings effect while outgoing */}
                             {!isConnected && (
-                                <div className="absolute inset-0 rounded-full border border-[#00a884] animate-ping opacity-75" style={{ animationDuration: '2s' }} />
+                                <div className="absolute inset-0 rounded-full border border-[#F97316] animate-ping opacity-75" style={{ animationDuration: '2s' }} />
                             )}
                             <UserAvatar user={participant.user} size="lg" />
                         </div>
@@ -144,9 +144,9 @@ export const CallOverlay: React.FC = () => {
                                 ) : (
                                     <div className="flex gap-2 items-end h-8">
                                         <div className="w-1.5 h-3 bg-white/40 rounded-full animate-pulse" style={{ animationDelay: '0ms' }}></div>
-                                        <div className="w-1.5 h-6 bg-[#00a884] rounded-full justify-self-end animate-pulse" style={{ animationDelay: '150ms' }}></div>
+                                        <div className="w-1.5 h-6 bg-[#F97316] rounded-full justify-self-end animate-pulse" style={{ animationDelay: '150ms' }}></div>
                                         <div className="w-1.5 h-4 bg-white/40 rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></div>
-                                        <div className="w-1.5 h-8 bg-[#00a884] rounded-full animate-pulse" style={{ animationDelay: '450ms' }}></div>
+                                        <div className="w-1.5 h-8 bg-[#F97316] rounded-full animate-pulse" style={{ animationDelay: '450ms' }}></div>
                                         <div className="w-1.5 h-5 bg-white/40 rounded-full animate-pulse" style={{ animationDelay: '600ms' }}></div>
                                     </div>
                                 )}
@@ -173,7 +173,7 @@ export const CallOverlay: React.FC = () => {
 
                             <button 
                                 onClick={handleAccept}
-                                className="w-16 h-16 rounded-full bg-[#00a884] hover:bg-[#00c99e] flex items-center justify-center text-white transition-all shadow-xl hover:scale-105 active:scale-95 animate-bounce"
+                                className="w-16 h-16 rounded-full bg-[#F97316] hover:bg-[#EA6C0A] flex items-center justify-center text-white transition-all shadow-xl hover:scale-105 active:scale-95 animate-bounce"
                             >
                                 <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8.3 4h7.4c.5 0 .9.5.6.9l-2.6 4.6c-.3.4-1 .4-1.3 0L9.8 4.9C9.5 4.5 9.9 4 10.4 4zm14.8 17l-4.7-6.5c-.3-.4-1-.5-1.4-.2l-2.4 1.7L10.3 8.8l1.7-2.4c.3-.4.2-1.1-.3-1.4L5.2.3c-.5-.4-1.2-.2-1.5.3L1.5 5c-.7 1.1-.9 2.4-.6 3.7 1.7 6.1 6.5 11 12.6 12.6 1.3.3 2.6.1 3.7-.6l4.4-2.2c.4-.3.6-1 .2-1.5z"/></svg>
                             </button>

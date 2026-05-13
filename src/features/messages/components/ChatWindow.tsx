@@ -225,7 +225,7 @@ export const ChatWindow: React.FC = () => {
                             {otherParticipant?.user ? (
                                 <UserAvatar user={otherParticipant.user} size="sm" />
                             ) : (
-                                <div className="w-10 h-10 rounded-full bg-[#005c4b] flex items-center justify-center font-bold text-white shadow-sm shrink-0">
+                                <div className="w-10 h-10 rounded-full bg-[#F97316] flex items-center justify-center font-bold text-white shadow-sm shrink-0">
                                     {(displayName || 'C').charAt(0).toUpperCase()}
                                 </div>
                             )}
@@ -258,7 +258,7 @@ export const ChatWindow: React.FC = () => {
                                                 {otherParticipant?.user ? (
                                                     <UserAvatar user={otherParticipant.user} size="sm" />
                                                 ) : (
-                                                    <div className="w-8 h-8 rounded-full bg-[#005c4b] flex items-center justify-center text-white text-xs">
+                                                    <div className="w-8 h-8 rounded-full bg-[#F97316] flex items-center justify-center text-white text-xs">
                                                         {(displayName || 'C').charAt(0).toUpperCase()}
                                                     </div>
                                                 )}
@@ -266,11 +266,11 @@ export const ChatWindow: React.FC = () => {
                                             </div>
 
                                             <div className="flex gap-2 px-4 mb-4">
-                                                <button onClick={() => { setIsCallMenuOpen(false); handleCall('AUDIO'); }} className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-[#111b21] py-2.5 rounded-xl font-medium hover:bg-[#20c25a] transition-colors">
+                                                <button onClick={() => { setIsCallMenuOpen(false); handleCall('AUDIO'); }} className="flex-1 flex items-center justify-center gap-2 bg-[#F97316] text-[#111b21] py-2.5 rounded-xl font-medium hover:bg-[#EA6C0A] transition-colors">
                                                     <Phone className="w-4 h-4" />
                                                     Voice
                                                 </button>
-                                                <button onClick={() => { setIsCallMenuOpen(false); handleCall('VIDEO'); }} className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-[#111b21] py-2.5 rounded-xl font-medium hover:bg-[#20c25a] transition-colors">
+                                                <button onClick={() => { setIsCallMenuOpen(false); handleCall('VIDEO'); }} className="flex-1 flex items-center justify-center gap-2 bg-[#F97316] text-[#111b21] py-2.5 rounded-xl font-medium hover:bg-[#EA6C0A] transition-colors">
                                                     <Video className="w-4 h-4" />
                                                     Video
                                                 </button>

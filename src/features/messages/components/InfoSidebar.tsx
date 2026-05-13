@@ -94,7 +94,7 @@ export const InfoSidebar: React.FC = () => {
                                                 {Number(p.userId) === Number(currentUser?.id) ? 'You' : p.user.username}
                                             </h5>
                                             {p.isAdmin && (
-                                                <span className="text-[10px] text-[#00a884] border border-[#00a884] px-1 rounded font-medium">Group Admin</span>
+                                                <span className="text-[10px] text-[#F97316] border border-[#F97316] px-1 rounded font-medium">Group Admin</span>
                                             )}
                                         </div>
                                         <p className="text-xs text-[#667781] truncate">Available</p>

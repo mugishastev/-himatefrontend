@@ -295,7 +295,7 @@ export const MessageInput: React.FC = () => {
                                         Document
                                     </button>
                                     <button type="button" className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#111b21] text-sm font-medium text-[#d1d7db] flex items-center gap-3" onClick={handleSendLocation}>
-                                        <MapPin className="w-4 h-4 text-[#00a884]" />
+                                        <MapPin className="w-4 h-4 text-[#F97316]" />
                                         Live Location
                                     </button>
                                 </div>
@@ -357,7 +357,7 @@ export const MessageInput: React.FC = () => {
                     <button
                         type="button"
                         onClick={stopAndSendRecording}
-                        className="w-10 h-10 rounded-full bg-[#00a884] text-white flex items-center justify-center transition-transform shrink-0 hover:scale-105"
+                        className="w-10 h-10 rounded-full bg-[#F97316] text-white flex items-center justify-center transition-transform shrink-0 hover:scale-105"
                         title="Send Voice Note"
                     >
                         <Send className="w-4 h-4 -ml-0.5" />

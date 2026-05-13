@@ -75,7 +75,7 @@ export const ScheduleCallModal: React.FC = () => {
                 <div className="p-6 flex flex-col space-y-6">
                     {/* User Selection */}
                     <div>
-                        <label className="block text-[#00a884] text-[13px] font-semibold uppercase tracking-wide mb-3">Participant</label>
+                        <label className="block text-[#F97316] text-[13px] font-semibold uppercase tracking-wide mb-3">Participant</label>
                         {!selectedUser ? (
                             <div className="max-h-48 overflow-y-auto no-scrollbar space-y-1 bg-[#1F2937]/50 rounded-xl p-2 border border-[#2a3942]">
                                 {users.map(u => {
@@ -98,7 +98,7 @@ export const ScheduleCallModal: React.FC = () => {
                                     <UserAvatar user={selectedUser} size="md" />
                                     <span className="text-white font-medium text-[16px]">{selectedUser.username}</span>
                                 </div>
-                                <button onClick={() => setSelectedUser(null)} className="text-[#00a884] hover:text-[#00c99e] text-sm font-semibold">Change</button>
+                                <button onClick={() => setSelectedUser(null)} className="text-[#F97316] hover:text-[#EA6C0A] text-sm font-semibold">Change</button>
                             </div>
                         )}
                     </div>
@@ -111,7 +111,7 @@ export const ScheduleCallModal: React.FC = () => {
                                 type="date" 
                                 value={scheduledDate}
                                 onChange={(e) => setScheduledDate(e.target.value)}
-                                className="w-full bg-[#1F2937] border border-[#2a3942] text-white rounded-lg p-2.5 outline-none focus:border-[#00a884] transition-colors" 
+                                className="w-full bg-[#1F2937] border border-[#2a3942] text-white rounded-lg p-2.5 outline-none focus:border-[#F97316] transition-colors" 
                             />
                         </div>
                         <div>
@@ -120,7 +120,7 @@ export const ScheduleCallModal: React.FC = () => {
                                 type="time" 
                                 value={scheduledTime}
                                 onChange={(e) => setScheduledTime(e.target.value)}
-                                className="w-full bg-[#1F2937] border border-[#2a3942] text-white rounded-lg p-2.5 outline-none focus:border-[#00a884] transition-colors" 
+                                className="w-full bg-[#1F2937] border border-[#2a3942] text-white rounded-lg p-2.5 outline-none focus:border-[#F97316] transition-colors" 
                             />
                         </div>
                     </div>
@@ -129,7 +129,7 @@ export const ScheduleCallModal: React.FC = () => {
                 <div className="p-6 bg-[#202c33] border-t border-[#2a3942] flex justify-end gap-3 mt-auto">
                     <button 
                         onClick={closeModal}
-                        className="px-6 py-2.5 rounded-full text-[#00a884] font-medium hover:bg-white/5 transition-colors"
+                        className="px-6 py-2.5 rounded-full text-[#F97316] font-medium hover:bg-white/5 transition-colors"
                     >
                         Cancel
                     </button>
@@ -137,7 +137,7 @@ export const ScheduleCallModal: React.FC = () => {
                         onClick={handleSchedule}
                         disabled={!selectedUser || isLoading}
                         className={`px-8 py-2.5 rounded-full font-medium shadow-lg transition-colors flex items-center justify-center
-                            ${selectedUser && !isLoading ? 'bg-[#00a884] text-[#111b21] hover:bg-[#00c99e]' : 'bg-[#1F2937] text-[#aebac1] cursor-not-allowed opacity-70'}`}
+                            ${selectedUser && !isLoading ? 'bg-[#F97316] text-[#111b21] hover:bg-[#EA6C0A]' : 'bg-[#1F2937] text-[#aebac1] cursor-not-allowed opacity-70'}`}
                     >
                         {isLoading ? (
                            <div className="w-5 h-5 border-2 border-t-transparent border-[#111b21] rounded-full animate-spin"></div>

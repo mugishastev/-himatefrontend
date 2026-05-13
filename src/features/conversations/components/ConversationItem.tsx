@@ -158,7 +158,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
                         )}
                     </h3>
                     {/* Show time normally, hide it when menu button is visible on hover */}
-                    <span className={`text-[12px] shrink-0 group-hover:hidden ${showUnread ? 'text-[#00a884] font-medium' : 'text-[#aebac1]'}`}>
+                    <span className={`text-[12px] shrink-0 group-hover:hidden ${showUnread ? 'text-[#F97316] font-medium' : 'text-[#aebac1]'}`}>
                         {previewTime}
                     </span>
                     {/* 3-dot menu button — appears on hover */}

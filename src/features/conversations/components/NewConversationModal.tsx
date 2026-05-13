@@ -110,7 +110,7 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
                             }}
                             className="w-full flex items-center px-4 py-3 hover:bg-[#1F2937]/50 transition-colors group cursor-pointer"
                         >
-                            <div className="w-12 h-12 rounded-full bg-[#00a884] text-white flex items-center justify-center shrink-0">
+                            <div className="w-12 h-12 rounded-full bg-[#F97316] text-white flex items-center justify-center shrink-0">
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M13 13h-2v2h2v-2zm-1-8a4 4 0 00-4 4h2a2 2 0 014 0v2h2a4 4 0 00-4-6zm-4 6H7v-2h1v2zm9-3v3h3v2h-3v3h-2v-3h-3v-2h3V8h2zm-3-1l-1 1-1-1v1l1 1 1-1V7zm-6-2C6.48 5 2 9.48 2 15h2c0-4.42 3.58-8 8-8v-2z" />
                                     {/* Roughly drawing people icon */}
@@ -123,7 +123,7 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
                         </button>
 
                         <button className="w-full flex items-center px-4 py-3 hover:bg-[#1F2937]/50 transition-colors group cursor-pointer">
-                            <div className="w-12 h-12 rounded-full bg-[#00a884] text-white flex items-center justify-center shrink-0">
+                            <div className="w-12 h-12 rounded-full bg-[#F97316] text-white flex items-center justify-center shrink-0">
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
                                 </svg>
@@ -136,13 +136,13 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
                 )}
 
                 <div className="pt-2">
-                    <h3 className="text-[#00a884] text-[15px] px-8 py-4 uppercase font-medium tracking-wide">
+                    <h3 className="text-[#F97316] text-[15px] px-8 py-4 uppercase font-medium tracking-wide">
                         {searchQuery ? 'Search Results' : 'Users on Himate'}
                     </h3>
 
                     {isSearching ? (
                         <div className="py-8 text-center text-[#aebac1]">
-                            <div className="animate-spin w-6 h-6 border-2 border-[#00a884] border-t-transparent rounded-full mx-auto mb-4"></div>
+                            <div className="animate-spin w-6 h-6 border-2 border-[#F97316] border-t-transparent rounded-full mx-auto mb-4"></div>
                         </div>
                     ) : searchResults.length === 0 ? (
                         <div className="py-8 text-center text-[#aebac1] px-4">
@@ -163,7 +163,7 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
                                         <p className="text-[17px] text-white font-normal">{user.username}</p>
                                         <p className="text-[14px] text-[#aebac1] truncate mt-1">Hey there! I am using Himate.</p>
                                     </div>
-                                    {isCreating && <div className="animate-spin w-4 h-4 border-2 border-[#00a884] border-t-transparent rounded-full"></div>}
+                                    {isCreating && <div className="animate-spin w-4 h-4 border-2 border-[#F97316] border-t-transparent rounded-full"></div>}
                                 </div>
                             </div>
                         ))

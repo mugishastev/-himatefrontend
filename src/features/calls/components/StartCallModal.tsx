@@ -98,7 +98,7 @@ export const StartCallModal: React.FC = () => {
                 <div className="flex-1 overflow-y-auto">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center h-full gap-3 text-[#aebac1]">
-                            <div className="w-8 h-8 border-[3px] border-t-transparent border-[#00a884] rounded-full animate-spin" />
+                            <div className="w-8 h-8 border-[3px] border-t-transparent border-[#F97316] rounded-full animate-spin" />
                             <span className="text-sm">Loading users…</span>
                         </div>
                     ) : filteredUsers.length === 0 ? (
@@ -124,7 +124,7 @@ export const StartCallModal: React.FC = () => {
                                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-150">
                                         <button
                                             onClick={() => handlePlaceCall(u, 'AUDIO')}
-                                            className="w-10 h-10 rounded-full hover:bg-[#00a884]/20 flex items-center justify-center text-[#00a884] transition-colors"
+                                            className="w-10 h-10 rounded-full hover:bg-[#F97316]/20 flex items-center justify-center text-[#F97316] transition-colors"
                                             title="Voice call"
                                         >
                                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -133,7 +133,7 @@ export const StartCallModal: React.FC = () => {
                                         </button>
                                         <button
                                             onClick={() => handlePlaceCall(u, 'VIDEO')}
-                                            className="w-10 h-10 rounded-full hover:bg-[#00a884]/20 flex items-center justify-center text-[#00a884] transition-colors"
+                                            className="w-10 h-10 rounded-full hover:bg-[#F97316]/20 flex items-center justify-center text-[#F97316] transition-colors"
                                             title="Video call"
                                         >
                                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
