@@ -5,20 +5,14 @@ import {
     Phone, 
     Search, 
     MoreVertical, 
-    Image as ImageIcon, 
     X, 
-    Info, 
-    Trash2, 
-    Ban, 
     Lock,
     Zap,
     Paperclip,
     ChevronDown,
     UserPlus,
     Link as LinkIcon,
-    Calendar,
-    Check,
-    CheckSquare
+    Calendar
 } from 'lucide-react';
 import { MessageList } from './MessageList';
 import { MessageInput } from './MessageInput';
