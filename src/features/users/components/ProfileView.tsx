@@ -356,10 +356,10 @@ export const ProfileView: React.FC = () => {
 
           {/* ── 3. Privacy ── */}
           <Section title="Privacy" subtitle="Control who can see your information">
-            <ToggleRow label="Show Last Seen" description="Let contacts see when you were last active"
+            <ToggleRow label="Show Last Seen" description="Let others see when you were last active"
               value={privacy.showLastSeen} onChange={v => setPrivacy(p => ({ ...p, showLastSeen: v }))} />
             <div className="border-t border-white/5" />
-            <ToggleRow label="Profile Photo Visibility" description="Allow contacts to see your profile picture"
+            <ToggleRow label="Profile Photo Visibility" description="Allow others to see your profile picture"
               value={privacy.showProfilePhoto} onChange={v => setPrivacy(p => ({ ...p, showProfilePhoto: v }))} />
             <div className="border-t border-white/5" />
             <ToggleRow label="Read Receipts" description="Send and receive read receipts on messages"
@@ -386,7 +386,7 @@ export const ProfileView: React.FC = () => {
             </div>
             <div className="p-6 space-y-4">
               <p className="text-sm text-[#9CA3AF]">
-                Deleting your account is <span className="text-white font-semibold">permanent and irreversible</span>. All your messages, contacts and data will be erased.
+                Deleting your account is <span className="text-white font-semibold">permanent and irreversible</span>. All your messages, connections and data will be erased.
               </p>
               <div>
                 <label className="text-xs font-semibold text-red-400 uppercase tracking-wider block mb-1.5">

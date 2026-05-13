@@ -233,7 +233,7 @@ export const StatusFeed: React.FC<StatusFeedProps> = ({ refreshKey }) => {
                                 </svg>
                             </div>
                             <p className="text-[#111b21] font-medium mb-1">No updates yet</p>
-                            <p className="text-[13px] text-[#667781]">Status updates from your contacts appear here.</p>
+                            <p className="text-[13px] text-[#667781]">Status updates from people you know appear here.</p>
                         </div>
                     )}
                 </div>
