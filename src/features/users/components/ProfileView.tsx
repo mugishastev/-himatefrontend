@@ -3,6 +3,7 @@ import { useAuthStore } from '../../../store/auth.store';
 import { UserAvatar } from './UserAvatar';
 import { usersApi } from '../../../api/users.api';
 import { useUIStore } from '../../../store/ui.store';
+import { type UpdateUserDto } from '../../../types/user.types';
 
 // ── Section wrapper ──────────────────────────────────────────────────────────
 const Section: React.FC<{ title: string; subtitle: string; id?: string; children: React.ReactNode }> = ({ title, subtitle, id, children }) => (
@@ -130,19 +131,15 @@ export const ProfileView: React.FC = () => {
   const [pwSuccess, setPwSuccess] = useState(false);
   const [pwSaving, setPwSaving] = useState(false);
 
-  // Privacy toggles (stored locally — backend extension point)
-  const [privacy, setPrivacy] = useState({
-    showLastSeen: true,
-    showProfilePhoto: true,
-    readReceipts: true,
-  });
-
-  // Notification prefs
-  const [notifs, setNotifs] = useState({
-    messageNotifs: true,
-    soundEnabled: true,
-    desktopNotifs: true,
-  });
+  const handlePreferenceChange = (field: keyof UpdateUserDto) => async (value: any) => {
+    if (!user?.id) return;
+    try {
+      const updated = await usersApi.update(Number(user.id), { [field]: value });
+      updateUser({ [field]: updated[field] });
+    } catch (err) {
+      console.error(`Failed to update ${field}`, err);
+    }
+  };
 
   // Delete confirm
   const [deleteConfirm, setDeleteConfirm] = useState('');
@@ -369,32 +366,32 @@ export const ProfileView: React.FC = () => {
             <ToggleRow 
               label="Two-Step Verification" 
               description="Add an extra layer of security to your account"
-              value={false} onChange={() => {}} 
+              value={user.twoStepEnabled ?? false} onChange={handlePreferenceChange('twoStepEnabled')} 
             />
           </Section>
 
           {/* ── 3. Privacy ── */}
           <Section id="section-privacy" title="Privacy" subtitle="Control who can see your information">
             <ToggleRow label="Show Last Seen" description="Let others see when you were last active"
-              value={privacy.showLastSeen} onChange={v => setPrivacy(p => ({ ...p, showLastSeen: v }))} />
+              value={user.showLastSeen ?? true} onChange={handlePreferenceChange('showLastSeen')} />
             <div className="border-t border-white/5" />
             <ToggleRow label="Profile Photo Visibility" description="Allow others to see your profile picture"
-              value={privacy.showProfilePhoto} onChange={v => setPrivacy(p => ({ ...p, showProfilePhoto: v }))} />
+              value={user.showProfilePhoto ?? true} onChange={handlePreferenceChange('showProfilePhoto')} />
             <div className="border-t border-white/5" />
             <ToggleRow label="Read Receipts" description="Send and receive read receipts on messages"
-              value={privacy.readReceipts} onChange={v => setPrivacy(p => ({ ...p, readReceipts: v }))} />
+              value={user.readReceipts ?? true} onChange={handlePreferenceChange('readReceipts')} />
           </Section>
 
           {/* ── 4. Notifications & Preferences ── */}
           <Section id="section-notifications" title="Notifications & Preferences" subtitle="Customize your notification and sound settings">
             <ToggleRow label="Message Notifications" description="Show notifications for new messages"
-              value={notifs.messageNotifs} onChange={v => setNotifs(p => ({ ...p, messageNotifs: v }))} />
+              value={user.messageNotifs ?? true} onChange={handlePreferenceChange('messageNotifs')} />
             <div className="border-t border-white/5" />
             <ToggleRow label="Notification Sounds" description="Play a sound when new messages arrive"
-              value={notifs.soundEnabled} onChange={v => setNotifs(p => ({ ...p, soundEnabled: v }))} />
+              value={user.soundEnabled ?? true} onChange={handlePreferenceChange('soundEnabled')} />
             <div className="border-t border-white/5" />
             <ToggleRow label="Desktop Notifications" description="Show browser notifications when Himate is in background"
-              value={notifs.desktopNotifs} onChange={v => setNotifs(p => ({ ...p, desktopNotifs: v }))} />
+              value={user.desktopNotifs ?? true} onChange={handlePreferenceChange('desktopNotifs')} />
           </Section>
 
           {/* ── 5. Chats ── */}
@@ -403,7 +400,7 @@ export const ProfileView: React.FC = () => {
               <ToggleRow 
                 label="Enter to Send" 
                 description="Enter key will send your message"
-                value={true} onChange={() => {}} 
+                value={user.enterToSend ?? true} onChange={handlePreferenceChange('enterToSend')} 
               />
               <div>
                 <p className="text-sm font-medium text-white mb-3">App Theme</p>
@@ -411,7 +408,8 @@ export const ProfileView: React.FC = () => {
                   {['Light', 'Dark', 'System'].map((t) => (
                     <button
                       key={t}
-                      className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all ${t === 'Dark' ? 'bg-[#F97316] text-white shadow-lg' : 'text-[#9CA3AF] hover:text-white'}`}
+                      onClick={() => handlePreferenceChange('theme')(t)}
+                      className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all ${user.theme === t ? 'bg-[#F97316] text-white shadow-lg' : 'text-[#9CA3AF] hover:text-white'}`}
                     >
                       {t}
                     </button>
@@ -423,7 +421,11 @@ export const ProfileView: React.FC = () => {
                 <p className="text-sm font-medium text-white">Chat Wallpaper</p>
                 <div className="grid grid-cols-4 gap-2 mt-3">
                   {['bg-[#0b141a]', 'bg-brand/10', 'bg-blue-500/10', 'bg-purple-500/10'].map((bg, i) => (
-                    <button key={i} className={`h-12 rounded-lg ${bg} border border-white/5 hover:border-brand/40 transition-all`} />
+                    <button 
+                      key={i} 
+                      onClick={() => handlePreferenceChange('chatWallpaper')(bg)}
+                      className={`h-12 rounded-lg ${bg} border ${user.chatWallpaper === bg ? 'border-brand ring-2 ring-brand/20' : 'border-white/5'} hover:border-brand/40 transition-all`} 
+                    />
                   ))}
                 </div>
               </div>

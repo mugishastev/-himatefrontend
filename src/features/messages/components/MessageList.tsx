@@ -3,6 +3,7 @@ import { MessageItem } from './MessageItem';
 import { TypingIndicator } from './TypingIndicator';
 import { useMessages } from '../../../hooks/useMessages';
 import { useConversationStore } from '../../../store/conversation.store';
+import { useAuthStore } from '../../../store/auth.store';
 import { useTypingIndicator } from '../../../hooks/useTypingIndicator';
 import { socketEmitters } from '../../../socket';
 import { formatChatDayDivider } from '../../../utils/chat';
@@ -12,6 +13,7 @@ export const MessageList: React.FC = () => {
     const activeConversationId = useConversationStore((s) => s.activeConversationId);
     const typingUsers = useConversationStore((s) => s.typingUsers);
     const clearUnreadCount = useConversationStore((s) => s.clearUnreadCount);
+    const user = useAuthStore((s) => s.user);
     const { messages, fetchMessages } = useMessages();
     const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -35,8 +37,10 @@ export const MessageList: React.FC = () => {
 
             // Instantly clear unread count in frontend state
             clearUnreadCount(activeConversationId);
-            // Tell backend messages are read
-            messagesApi.markConversationAsRead(activeConversationId).catch(console.error);
+            // Tell backend messages are read ONLY if read receipts are enabled
+            if (user?.readReceipts !== false) {
+                messagesApi.markConversationAsRead(activeConversationId).catch(console.error);
+            }
         }
         return () => {
             if (activeConversationId) {

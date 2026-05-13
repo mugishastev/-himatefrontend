@@ -25,7 +25,7 @@ import { conversationsApi } from '../../../api/conversations.api';
 import { usersApi } from '../../../api/users.api';
 import { callsApi } from '../../../api/calls.api';
 import { socketEmitters } from '../../../socket/socket.emitters';
-import { WallpaperPicker, WALLPAPER_OPTIONS, WALLPAPER_STORAGE_KEY } from './WallpaperPicker';
+import { WallpaperPicker, WALLPAPER_OPTIONS } from './WallpaperPicker';
 import { useDocumentTitle } from '../../../hooks/useDocumentTitle';
 import { useMessageStore } from '../../../store/message.store';
 
@@ -83,21 +83,20 @@ export const ChatWindow: React.FC = () => {
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
 
-    // ── Wallpaper persistence ──────────────────────────────────
-    const savedWallpaper = (() => {
-        try {
-            const raw = localStorage.getItem(WALLPAPER_STORAGE_KEY);
-            return raw ? JSON.parse(raw) : null;
-        } catch { return null; }
-    })();
-    const defaultWallpaper = WALLPAPER_OPTIONS.find(w => w.id === 'dark-default')!;
-    const [wallpaper, setWallpaper] = useState<{ id: string; style: React.CSSProperties }>(
-        savedWallpaper ?? { id: defaultWallpaper.id, style: defaultWallpaper.style }
-    );
+    // ── Wallpaper persistence (now synced with backend) ──
+    const activeWallpaper = useMemo(() => {
+        const id = user?.chatWallpaper || 'dark-default';
+        return WALLPAPER_OPTIONS.find(w => w.id === id) || WALLPAPER_OPTIONS[0];
+    }, [user?.chatWallpaper]);
 
-    const handleWallpaperSelect = (next: { id: string; style: React.CSSProperties }) => {
-        setWallpaper(next);
-        localStorage.setItem(WALLPAPER_STORAGE_KEY, JSON.stringify(next));
+    const handleWallpaperSelect = async (next: { id: string; style: React.CSSProperties }) => {
+        if (!user?.id) return;
+        try {
+            await usersApi.update(Number(user.id), { chatWallpaper: next.id });
+            useAuthStore.getState().updateUser({ chatWallpaper: next.id });
+        } catch (err) {
+            console.error('Failed to save wallpaper preference', err);
+        }
     };
 
     // Close menu when clicking outside
@@ -182,7 +181,7 @@ export const ChatWindow: React.FC = () => {
 
     return (
         <>
-        <div className="flex-1 flex flex-col h-full min-w-0 relative" style={wallpaper.style}>
+        <div className="flex-1 flex flex-col h-full min-w-0 relative" style={activeWallpaper.style}>
             {activeConversationId ? (
                 <>
                     <header className="h-[60px] bg-[#f0f2f5] border-b border-gray-200 flex items-center justify-between px-4 shrink-0 z-20 sticky top-0">
@@ -433,7 +432,7 @@ export const ChatWindow: React.FC = () => {
         {/* Wallpaper picker modal */}
         {isWallpaperOpen && (
             <WallpaperPicker
-                currentId={wallpaper.id}
+                currentId={activeWallpaper.id}
                 onSelect={handleWallpaperSelect}
                 onClose={() => setIsWallpaperOpen(false)}
             />

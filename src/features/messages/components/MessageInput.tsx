@@ -15,6 +15,7 @@ import {
 import { useMessages } from '../../../hooks/useMessages';
 import { AttachmentPreview } from './AttachmentPreview';
 import { useConversationStore } from '../../../store/conversation.store';
+import { useAuthStore } from '../../../store/auth.store';
 import { socketEmitters } from '../../../socket';
 
 export const MessageInput: React.FC = () => {
@@ -29,6 +30,7 @@ export const MessageInput: React.FC = () => {
     const activeConversationId = useConversationStore((s) => s.activeConversationId);
     const editingMessage = useConversationStore((s) => s.editingMessage);
     const setEditingMessage = useConversationStore((s) => s.setEditingMessage);
+    const user = useAuthStore((s) => s.user);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const mediaInputRef = useRef<HTMLInputElement>(null);
@@ -328,9 +330,12 @@ export const MessageInput: React.FC = () => {
                                 rows={1}
                                 className="w-full px-4 py-2.5 bg-[#1F2937] border border-white/10 rounded-xl outline-none focus:border-[#F97316]/60 resize-none transition-all duration-200 text-white placeholder:text-[#9CA3AF] text-[15px] overflow-y-auto max-h-40"
                                 onKeyDown={(e) => {
+                                    const enterToSend = user?.enterToSend ?? true;
                                     if (e.key === 'Enter' && !e.shiftKey) {
-                                        e.preventDefault();
-                                        handleSend(e);
+                                        if (enterToSend) {
+                                            e.preventDefault();
+                                            handleSend(e);
+                                        }
                                     }
                                 }}
                             />
