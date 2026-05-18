@@ -37,7 +37,7 @@ export const NewConversationModal: React.FC<NewConversationModalProps> = ({ onCl
             });
             // Handle both response.data (wrapped) or response (direct array)
             const users = response.data || (Array.isArray(response) ? response : []);
-            setSearchResults(users);
+            setSearchResults(users.filter((u: User) => Number(u.id) !== Number(currentUser?.id)));
         } catch (error) {
             console.error('Failed to search users', error);
         } finally {

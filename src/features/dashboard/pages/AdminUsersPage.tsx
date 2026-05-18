@@ -113,70 +113,70 @@ export const AdminUsersPage: React.FC = () => {
             <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-md">
                 <div className="w-full overflow-x-auto">
                     <table className="min-w-[900px] w-full text-sm">
-                    <thead className="border-b border-slate-800 bg-slate-900/50">
-                        <tr>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">User</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Email</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Role</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Reason (If Banned)</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Joined</th>
-                            <th className="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-800">
-                        {loading ? (
-                            Array.from({ length: 8 }).map((_, i) => (
-                                <tr key={i}>
-                                    <td colSpan={7} className="px-6 py-4">
-                                        <div className="h-4 bg-slate-800 rounded animate-pulse" />
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (data?.data ?? []).length === 0 ? (
+                        <thead className="border-b border-slate-800 bg-slate-900/50">
                             <tr>
-                                <td colSpan={7} className="px-6 py-16 text-center text-slate-500">
-                                    <svg className="w-10 h-10 mx-auto mb-3 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                                    <p className="text-sm">No users found matching filters</p>
-                                </td>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">User</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Email</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Role</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Reason (If Banned)</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Joined</th>
+                                <th className="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
                             </tr>
-                        ) : (
-                            (data?.data ?? []).map((user: any) => (
-                                <tr key={user.id} className="hover:bg-slate-800/50 transition-colors">
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-brand/10 border border-brand/20 overflow-hidden flex items-center justify-center text-brand font-bold text-xs flex-shrink-0">
-                                                {user.profileImage ? (
-                                                    <img src={user.profileImage} alt="" className="w-full h-full object-cover" />
-                                                ) : user.username?.charAt(0).toUpperCase()}
-                                            </div>
-                                            <span className="font-medium text-slate-200">{user.username}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 text-slate-400">{user.email}</td>
-                                    <td className="px-6 py-4"><RoleBadge isAdmin={user.isAdmin} /></td>
-                                    <td className="px-6 py-4"><VerifiedBadge isVerified={user.isVerified} isBanned={user.isBanned} /></td>
-                                    <td className="px-6 py-4 text-slate-400 max-w-xs truncate">
-                                        {user.isBanned ? (
-                                            <span className="text-red-400 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded text-xs">
-                                                {user.banReason || 'No reason provided'}
-                                            </span>
-                                        ) : '—'}
-                                    </td>
-                                    <td className="px-6 py-4 text-slate-500 text-xs">{new Date(user.createdAt).toLocaleDateString()}</td>
-                                    <td className="px-6 py-4 text-right">
-                                        {!user.isAdmin && (
-                                            user.isBanned ? (
-                                                <button onClick={() => handleUnbanClick(user.id)} className="text-xs font-bold text-emerald-450 hover:text-emerald-350 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 px-2.5 py-1 rounded transition-colors">Unban</button>
-                                            ) : (
-                                                <button onClick={() => handleBanClick(user.id)} className="text-xs font-bold text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/25 px-2.5 py-1 rounded transition-colors">Suspend</button>
-                                            )
-                                        )}
+                        </thead>
+                        <tbody className="divide-y divide-slate-800">
+                            {loading ? (
+                                Array.from({ length: 8 }).map((_, i) => (
+                                    <tr key={i}>
+                                        <td colSpan={7} className="px-6 py-4">
+                                            <div className="h-4 bg-slate-800 rounded animate-pulse" />
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (data?.data ?? []).length === 0 ? (
+                                <tr>
+                                    <td colSpan={7} className="px-6 py-16 text-center text-slate-500">
+                                        <svg className="w-10 h-10 mx-auto mb-3 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                        <p className="text-sm">No users found matching filters</p>
                                     </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
+                            ) : (
+                                (data?.data ?? []).map((user: any) => (
+                                    <tr key={user.id} className="hover:bg-slate-800/50 transition-colors">
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 rounded-full bg-brand/10 border border-brand/20 overflow-hidden flex items-center justify-center text-brand font-bold text-xs flex-shrink-0">
+                                                    {user.profileImage ? (
+                                                        <img src={user.profileImage} alt="" className="w-full h-full object-cover" />
+                                                    ) : user.username?.charAt(0).toUpperCase()}
+                                                </div>
+                                                <span className="font-medium text-slate-200">{user.username}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-slate-400">{user.email}</td>
+                                        <td className="px-6 py-4"><RoleBadge isAdmin={user.isAdmin} /></td>
+                                        <td className="px-6 py-4"><VerifiedBadge isVerified={user.isVerified} isBanned={user.isBanned} /></td>
+                                        <td className="px-6 py-4 text-slate-400 max-w-xs truncate">
+                                            {user.isBanned ? (
+                                                <span className="text-red-400 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded text-xs">
+                                                    {user.banReason || 'No reason provided'}
+                                                </span>
+                                            ) : '—'}
+                                        </td>
+                                        <td className="px-6 py-4 text-slate-500 text-xs">{new Date(user.createdAt).toLocaleDateString()}</td>
+                                        <td className="px-6 py-4 text-right">
+                                            {!user.isAdmin && (
+                                                user.isBanned ? (
+                                                    <button onClick={() => handleUnbanClick(user.id)} className="text-xs font-bold text-emerald-500 hover:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 px-2.5 py-1 rounded transition-colors">Unban</button>
+                                                ) : (
+                                                    <button onClick={() => handleBanClick(user.id)} className="text-xs font-bold text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/25 px-2.5 py-1 rounded transition-colors">Suspend</button>
+                                                )
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
                     </table>
                 </div>
             </div>

@@ -6,7 +6,7 @@ export const AdminReportsPage: React.FC = () => {
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
-    
+
     // Suspension modal state
     const [suspendModalOpen, setSuspendModalOpen] = useState(false);
     const [suspendUserId, setSuspendUserId] = useState<number | null>(null);
@@ -69,72 +69,72 @@ export const AdminReportsPage: React.FC = () => {
             <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-md">
                 <div className="w-full overflow-x-auto">
                     <table className="min-w-[1000px] w-full text-sm">
-                    <thead className="border-b border-slate-800 bg-slate-900/50">
-                        <tr>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Reporter</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Reported Target User</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Reason / Report Details</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Flagged At</th>
-                            <th className="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Moderation Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-800">
-                        {loading ? (
-                            Array.from({ length: 6 }).map((_, i) => (
-                                <tr key={i}><td colSpan={5} className="px-6 py-4"><div className="h-4 bg-slate-800 rounded animate-pulse" /></td></tr>
-                            ))
-                        ) : reports.length === 0 ? (
+                        <thead className="border-b border-slate-800 bg-slate-900/50">
                             <tr>
-                                <td colSpan={5} className="px-6 py-16 text-center text-slate-500">
-                                    <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-450 flex items-center justify-center mx-auto mb-3">
-                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    </div>
-                                    <p className="text-sm font-semibold text-slate-200">No active flags</p>
-                                    <p className="text-xs text-slate-500 mt-1">Excellent! All reported content has been resolved.</p>
-                                </td>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Reporter</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Reported Target User</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Reason / Report Details</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Flagged At</th>
+                                <th className="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Moderation Actions</th>
                             </tr>
-                        ) : (
-                            reports.map((report: any) => (
-                                <tr key={report.id} className="hover:bg-slate-800/50 transition-colors">
-                                    <td className="px-6 py-4">
-                                        {report.user ? (
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-6 h-6 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center text-brand text-[10px] font-bold overflow-hidden flex-shrink-0">
-                                                    {report.user.profileImage ? <img src={report.user.profileImage} alt="" className="w-full h-full object-cover" /> : report.user.username?.charAt(0).toUpperCase()}
-                                                </div>
-                                                <span className="text-slate-300 font-semibold">{report.user.username}</span>
-                                            </div>
-                                        ) : (
-                                            <span className="text-slate-500">Anonymous Reporter</span>
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <span className="text-xs bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded font-mono">
-                                            User ID: {report.targetId || 'Unknown'}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 text-slate-350 max-w-sm truncate text-xs font-mono">{report.details || 'No reason specified'}</td>
-                                    <td className="px-6 py-4 text-slate-500 text-xs whitespace-nowrap">{new Date(report.createdAt).toLocaleString()}</td>
-                                    <td className="px-6 py-4 text-right space-x-2 whitespace-nowrap">
-                                        {report.targetId && (
-                                            <button
-                                                onClick={() => handleSuspendClick(report.targetId)}
-                                                className="text-xs font-bold text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/25 px-2.5 py-1 rounded transition-colors"
-                                            >
-                                                Suspend Target
-                                            </button>
-                                        )}
-                                        <button
-                                            onClick={() => handleDismissReport(report.id)}
-                                            className="text-xs font-bold text-slate-400 hover:text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2.5 py-1 rounded transition-colors"
-                                        >
-                                            Dismiss Flag
-                                        </button>
+                        </thead>
+                        <tbody className="divide-y divide-slate-800">
+                            {loading ? (
+                                Array.from({ length: 6 }).map((_, i) => (
+                                    <tr key={i}><td colSpan={5} className="px-6 py-4"><div className="h-4 bg-slate-800 rounded animate-pulse" /></td></tr>
+                                ))
+                            ) : reports.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-16 text-center text-slate-500">
+                                        <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto mb-3">
+                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        </div>
+                                        <p className="text-sm font-semibold text-slate-200">No active flags</p>
+                                        <p className="text-xs text-slate-500 mt-1">Excellent! All reported content has been resolved.</p>
                                     </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
+                            ) : (
+                                reports.map((report: any) => (
+                                    <tr key={report.id} className="hover:bg-slate-800/50 transition-colors">
+                                        <td className="px-6 py-4">
+                                            {report.user ? (
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-6 h-6 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center text-brand text-[10px] font-bold overflow-hidden flex-shrink-0">
+                                                        {report.user.profileImage ? <img src={report.user.profileImage} alt="" className="w-full h-full object-cover" /> : report.user.username?.charAt(0).toUpperCase()}
+                                                    </div>
+                                                    <span className="text-slate-300 font-semibold">{report.user.username}</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-slate-500">Anonymous Reporter</span>
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="text-xs bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded font-mono">
+                                                User ID: {report.targetId || 'Unknown'}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-slate-350 max-w-sm truncate text-xs font-mono">{report.details || 'No reason specified'}</td>
+                                        <td className="px-6 py-4 text-slate-500 text-xs whitespace-nowrap">{new Date(report.createdAt).toLocaleString()}</td>
+                                        <td className="px-6 py-4 text-right space-x-2 whitespace-nowrap">
+                                            {report.targetId && (
+                                                <button
+                                                    onClick={() => handleSuspendClick(report.targetId)}
+                                                    className="text-xs font-bold text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/25 px-2.5 py-1 rounded transition-colors"
+                                                >
+                                                    Suspend Target
+                                                </button>
+                                            )}
+                                            <button
+                                                onClick={() => handleDismissReport(report.id)}
+                                                className="text-xs font-bold text-slate-400 hover:text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2.5 py-1 rounded transition-colors"
+                                            >
+                                                Dismiss Flag
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
                     </table>
                 </div>
             </div>

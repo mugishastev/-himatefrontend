@@ -4,7 +4,7 @@ import { useAuthStore } from '../../../store/auth.store';
 import { useCallStore } from '../../../store/call.store';
 import { UserAvatar } from '../../users/components/UserAvatar';
 import { socketEmitters } from '../../../socket/socket.emitters';
-import { useUIStore } from '../../../store/ui.store';
+import { Video, Link as LinkIcon, Plus, Calendar, Keyboard } from 'lucide-react';
 
 export const CallsView: React.FC = () => {
     const [copied, setCopied] = useState(false);
@@ -12,14 +12,15 @@ export const CallsView: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const { user } = useAuthStore();
     const { startCall } = useCallStore();
-    const { openModal } = useUIStore();
+    const [callCode, setCallCode] = useState('');
+    const [isNewMenuOpen, setIsNewMenuOpen] = useState(false);
+    const [createdLink, setCreatedLink] = useState('');
 
     useEffect(() => {
         const fetchCalls = async () => {
             if (!user?.id) return;
             try {
                 const response = await callsApi.getCalls(Number(user.id));
-                // response is { data: [...], total, page, limit }
                 setCalls(response.data || []);
             } catch (err) {
                 console.error("Failed to fetch calls:", err);
@@ -33,18 +34,21 @@ export const CallsView: React.FC = () => {
     const handleCreateLink = () => {
         const callId = Math.random().toString(36).substring(2, 12);
         const url = `${window.location.origin}/call/${callId}`;
+        setCreatedLink(url);
+        setIsNewMenuOpen(false);
+    };
 
-        navigator.clipboard.writeText(url).then(() => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 3000);
-        });
+    const handleInstantCall = () => {
+        setIsNewMenuOpen(false);
+        const callId = Math.random().toString(36).substring(2, 12);
+        startCall({ user: { username: `Meeting: ${callId}` }, userId: 9999 }, 'VIDEO');
     };
 
     const handleCallAgain = async (call: any) => {
         const participantId = call.callerId === Number(user?.id) ? call.receiverId : call.callerId;
         const participantUser = call.callerId === Number(user?.id) ? call.receiver : call.caller;
         const callType = call.type || 'AUDIO';
-        
+
         try {
             await callsApi.createCall({
                 callerId: Number(user?.id),
@@ -52,89 +56,113 @@ export const CallsView: React.FC = () => {
                 startedAt: new Date().toISOString(),
                 type: callType
             });
-            
-            // Emit via WebSocket
-            socketEmitters.initiateCall(participantId, callType, 0); // conversationId is 0 or ignored
-            
-            // Start local UI
+            socketEmitters.initiateCall(participantId, callType, 0);
             startCall({ user: participantUser, userId: participantId }, callType);
         } catch (err) {
             console.error('Failed to replay call', err);
         }
     };
 
+    const handleJoinWithCode = () => {
+        if (!callCode.trim()) return;
+        startCall({ user: { username: `Room: ${callCode}` }, userId: 9999 }, 'VIDEO');
+        setCallCode('');
+    };
+
     return (
         <div className="flex flex-col h-full bg-[#111827] w-full text-[#d1d7db]">
-            {/* Header */}
             <header className="h-[60px] flex items-center justify-between px-4 shrink-0 mt-2 sticky top-0 bg-[#111827] z-20">
-                <h1 className="text-[22px] font-bold text-white">Calls</h1>
-                <div className="flex items-center gap-3 text-[#aebac1]">
-                    <button
-                        className="p-2 hover:bg-white/5 rounded-full transition-colors group"
-                        title="New call"
-                        onClick={() => openModal('START_CALL')}
-                    >
-                        <svg className="w-5 h-5 text-[#aebac1] group-hover:text-[#d1d7db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                    </button>
-                </div>
+                <h1 className="text-[22px] font-bold text-white">Calls & Meetings</h1>
             </header>
 
-            {/* Search Bar */}
-            <div className="px-3 py-2 flex items-center gap-2 shrink-0">
-                <div className="flex-1 relative bg-[#1F2937] rounded-lg h-9">
-                    <input
-                        type="text"
-                        placeholder="Search name or number"
-                        className="w-full h-full bg-transparent pl-12 pr-4 text-[14px] text-white outline-none placeholder:text-[#aebac1]"
-                    />
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#aebac1]">
-                        <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
+            <div className="px-4 py-6 border-b border-[#1F2937]/50 flex flex-col gap-4 shrink-0">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <div className="relative">
+                        <button
+                            onClick={() => setIsNewMenuOpen(!isNewMenuOpen)}
+                            className="w-full sm:w-auto h-11 px-5 bg-[#F97316] hover:bg-[#EA6C0A] text-white text-[15px] font-medium rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg"
+                        >
+                            <Video className="w-5 h-5" />
+                            New meeting
+                        </button>
 
-            {/* List */}
-            <div className="flex-1 overflow-y-auto no-scrollbar pb-4 block">
-                <div className="pt-2">
-                    <h3 className="text-[#aebac1] font-medium px-4 mb-2 text-[14px]">Favourites</h3>
-                    {/* Start call button */}
-                    <div
-                        onClick={handleCreateLink}
-                        className="flex items-center px-4 py-2.5 hover:bg-[#1F2937]/50 cursor-pointer transition-colors group/item relative"
-                    >
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors ${copied ? 'bg-emerald-500/20 text-emerald-400' : 'bg-[#F97316] text-white'}`}>
-                            {copied ? (
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                            ) : (
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                                </svg>
-                            )}
-                        </div>
-                        <div className="ml-3 flex-1 min-w-0 py-1">
-                            <h2 className="text-[17px] font-medium text-white truncate break-all leading-tight">Create call link</h2>
-                            <p className="text-[13px] text-[#aebac1] truncate">Share a link for your Himate call</p>
-                        </div>
-                        {copied && (
-                            <div className="absolute right-4 bg-[#202c33] border border-[#313d45] text-[#d1d7db] text-xs py-1.5 px-3 rounded-lg shadow-lg animate-in fade-in slide-in-from-bottom-2 z-10">
-                                Link copied!
-                            </div>
+                        {isNewMenuOpen && (
+                            <>
+                                <div className="fixed inset-0 z-40" onClick={() => setIsNewMenuOpen(false)}></div>
+                                <div className="absolute top-14 left-0 w-72 bg-[#202c33] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
+                                    <button onClick={handleCreateLink} className="w-full px-4 py-3 flex items-center gap-4 hover:bg-white/5 transition-colors text-left">
+                                        <LinkIcon className="w-5 h-5 text-[#aebac1]" />
+                                        <div>
+                                            <div className="text-white text-[15px] font-medium">Create a meeting for later</div>
+                                            <div className="text-[#aebac1] text-[13px]">Get a link you can share</div>
+                                        </div>
+                                    </button>
+                                    <button onClick={handleInstantCall} className="w-full px-4 py-3 flex items-center gap-4 hover:bg-white/5 transition-colors text-left border-t border-white/5">
+                                        <Plus className="w-5 h-5 text-[#aebac1]" />
+                                        <div>
+                                            <div className="text-white text-[15px] font-medium">Start an instant meeting</div>
+                                            <div className="text-[#aebac1] text-[13px]">Join a room immediately</div>
+                                        </div>
+                                    </button>
+                                    <button className="w-full px-4 py-3 flex items-center gap-4 hover:bg-white/5 transition-colors text-left border-t border-white/5 opacity-50 cursor-not-allowed">
+                                        <Calendar className="w-5 h-5 text-[#aebac1]" />
+                                        <div className="text-white text-[15px] font-medium">Schedule in Calendar</div>
+                                    </button>
+                                </div>
+                            </>
                         )}
                     </div>
-                    {/* View all text */}
-                    <div className="px-4 py-3">
-                        <button className="text-[#F97316] text-[14px] hover:underline">View all</button>
+
+                    <div className="flex-1 flex items-center gap-2 h-11">
+                        <div className="flex-1 relative bg-transparent rounded-lg h-full border border-[#374248] focus-within:border-[#F97316] transition-colors flex items-center overflow-hidden">
+                            <div className="pl-4 pr-2 text-[#aebac1]">
+                                <Keyboard className="w-5 h-5" />
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Enter a code or link"
+                                value={callCode}
+                                onChange={(e) => setCallCode(e.target.value)}
+                                className="w-full h-full bg-transparent pr-4 text-[15px] text-white outline-none placeholder:text-[#aebac1]"
+                            />
+                        </div>
+                        <button
+                            onClick={handleJoinWithCode}
+                            disabled={!callCode.trim()}
+                            className="h-full px-6 text-[#F97316] hover:bg-[#F97316]/10 disabled:text-[#aebac1] disabled:bg-transparent disabled:opacity-50 disabled:cursor-not-allowed text-[15px] font-medium rounded-lg transition-colors"
+                        >
+                            Join
+                        </button>
                     </div>
                 </div>
 
-                <div className="pt-2 border-t border-[#1F2937]/50 mt-2">
-                    <h3 className="text-[#aebac1] font-medium px-4 mb-2 text-[14px]">Recent</h3>
+                {createdLink && (
+                    <div className="mt-2 bg-[#202c33] border border-white/10 p-4 rounded-lg flex items-center justify-between shadow-md animate-in fade-in slide-in-from-bottom-2">
+                        <div className="flex-1 min-w-0 pr-4">
+                            <p className="text-[14px] text-white font-medium mb-1">Here's the link to your meeting</p>
+                            <p className="text-[13px] text-[#aebac1] truncate">Copy this link and send it to people you want to meet with.</p>
+                            <div className="mt-2 bg-black/20 p-2 rounded text-[14px] text-white truncate select-all">{createdLink}</div>
+                        </div>
+                        <button
+                            onClick={() => {
+                                navigator.clipboard.writeText(createdLink);
+                                setCopied(true);
+                                setTimeout(() => setCopied(false), 3000);
+                            }}
+                            className="w-10 h-10 shrink-0 rounded-full hover:bg-white/10 flex items-center justify-center text-[#aebac1] hover:text-white transition-colors relative"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                            {copied && (
+                                <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#F97316] text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg">Copied</span>
+                            )}
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            <div className="flex-1 overflow-y-auto no-scrollbar pb-4 block">
+                <div className="pt-4">
+                    <h3 className="text-[#aebac1] font-medium px-4 mb-2 text-[14px]">Recent calls</h3>
 
                     {isLoading ? (
                         <div className="flex justify-center p-4">
@@ -158,12 +186,10 @@ export const CallsView: React.FC = () => {
                                 const isOutgoing = call.callerId === Number(user?.id);
                                 const otherUser = isOutgoing ? call.receiver : call.caller;
                                 const isVideo = call.type === 'VIDEO';
-                                // In a real app we'd differentiate missed vs answered. 
-                                // For now, if no endedAt and not currently active, it might be missed or ongoing.
-                                const isMissed = isOutgoing ? false : !call.endedAt; 
+                                const isMissed = isOutgoing ? false : !call.endedAt;
 
                                 return (
-                                    <div 
+                                    <div
                                         key={call.id}
                                         className="flex items-center px-4 py-3 hover:bg-[#1F2937]/50 cursor-pointer transition-colors"
                                         onClick={() => handleCallAgain(call)}

@@ -5,6 +5,7 @@ import { Input } from '../../../components/ui/Input';
 import { useConversations } from '../../../hooks/useConversations';
 import { usersApi } from '../../../api/users.api';
 import { UserAvatar } from '../../users/components/UserAvatar';
+import { useAuthStore } from '../../../store/auth.store';
 import type { User } from '../../../types/user.types';
 
 interface CreateGroupModalProps {
@@ -18,6 +19,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose }) =
     const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
     const [isSearching, setIsSearching] = useState(false);
     const { createConversation, isLoading: isCreating } = useConversations();
+    const currentUser = useAuthStore((s) => s.user);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -40,7 +42,10 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose }) =
             });
             const users = response.data || (Array.isArray(response) ? response : []);
             // Filter out already selected users
-            setSearchResults(users.filter((u: User) => !selectedUsers.find((su: User) => su.id === u.id)));
+            setSearchResults(users.filter((u: User) =>
+                !selectedUsers.find((su: User) => su.id === u.id) &&
+                Number(u.id) !== Number(currentUser?.id)
+            ));
         } catch (error) {
             console.error('Failed to search users', error);
         } finally {

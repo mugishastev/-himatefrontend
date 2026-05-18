@@ -18,7 +18,7 @@ export const ForgotPasswordForm: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    const { register, handleSubmit, getValues, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
     });
 
@@ -50,7 +50,7 @@ export const ForgotPasswordForm: React.FC = () => {
                     </p>
                 </div>
                 <Link
-                    to={`/reset-password?email=${encodeURIComponent(register('email').name)}`}
+                    to={`/reset-password?email=${encodeURIComponent(getValues('email'))}`}
                     className="block w-full py-4 bg-[#F97316] text-[#111b21] rounded-xl font-black text-lg shadow-lg hover:bg-[#EA6C0A] transition-all"
                 >
                     Continue to Reset

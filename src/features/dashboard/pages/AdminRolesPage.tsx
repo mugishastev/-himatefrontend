@@ -138,7 +138,7 @@ export const AdminRolesPage: React.FC = () => {
                                     ) : null}
                                     <div>
                                         <span className={`text-sm font-bold block ${active ? 'text-slate-200' : 'text-slate-500'}`}>{PERMISSION_LABELS[perm] || perm}</span>
-                                        <span className="text-[10px] text-slate-650 block mt-0.5">Key identifier: {perm}</span>
+                                        <span className="text-[10px] text-slate-600 block mt-0.5">Key identifier: {perm}</span>
                                     </div>
                                 </label>
                             );

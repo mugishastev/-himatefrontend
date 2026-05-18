@@ -27,7 +27,7 @@ const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
         return (
             <div className="bg-slate-950 border border-slate-800 p-3 rounded-xl shadow-xl font-medium text-xs">
-                <p className="text-slate-450 mb-1">{payload[0].payload.date}</p>
+                <p className="text-slate-400 mb-1">{payload[0].payload.date}</p>
                 <p className="text-white font-bold flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-brand"></span>
                     {payload[0].value.toLocaleString()} messages
@@ -40,7 +40,7 @@ const CustomTooltip = ({ active, payload }: any) => {
 
 const ActivityChart: React.FC<{ data: { date: string; messages: number }[] }> = ({ data }) => {
     const totalMessages = data.reduce((acc, d) => acc + d.messages, 0);
-    
+
     if (totalMessages === 0) {
         return (
             <div className="flex flex-col items-center justify-center py-10 text-slate-500 bg-slate-950/20 border border-slate-850 rounded-xl min-h-[240px]">
@@ -56,35 +56,35 @@ const ActivityChart: React.FC<{ data: { date: string; messages: number }[] }> = 
                 <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                         <linearGradient id="colorMsgs" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#F97316" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#F97316" stopOpacity={0}/>
+                            <stop offset="5%" stopColor="#F97316" stopOpacity={0.3} />
+                            <stop offset="95%" stopColor="#F97316" stopOpacity={0} />
                         </linearGradient>
                     </defs>
                     <CartesianGrid stroke="#1e293b" strokeDasharray="3 3" vertical={false} />
-                    <XAxis 
-                        dataKey="date" 
-                        stroke="#4b5563" 
-                        fontSize={11} 
-                        tickLine={false} 
-                        axisLine={false} 
-                        dy={10} 
+                    <XAxis
+                        dataKey="date"
+                        stroke="#4b5563"
+                        fontSize={11}
+                        tickLine={false}
+                        axisLine={false}
+                        dy={10}
                     />
-                    <YAxis 
-                        stroke="#4b5563" 
-                        fontSize={11} 
-                        tickLine={false} 
-                        axisLine={false} 
-                        dx={-5} 
+                    <YAxis
+                        stroke="#4b5563"
+                        fontSize={11}
+                        tickLine={false}
+                        axisLine={false}
+                        dx={-5}
                         allowDecimals={false}
                     />
                     <Tooltip content={<CustomTooltip />} />
-                    <Area 
-                        type="monotone" 
-                        dataKey="messages" 
-                        stroke="#F97316" 
+                    <Area
+                        type="monotone"
+                        dataKey="messages"
+                        stroke="#F97316"
                         strokeWidth={2.5}
-                        fillOpacity={1} 
-                        fill="url(#colorMsgs)" 
+                        fillOpacity={1}
+                        fill="url(#colorMsgs)"
                     />
                 </AreaChart>
             </ResponsiveContainer>
@@ -124,12 +124,12 @@ export const AdminOverviewPage: React.FC = () => {
             const now = new Date();
             const diffMs = now.getTime() - date.getTime();
             const diffMins = Math.max(1, Math.floor(diffMs / 60000));
-            
+
             if (diffMins < 60) return `${diffMins}m ago`;
-            
+
             const diffHours = Math.floor(diffMins / 60);
             if (diffHours < 24) return `${diffHours}h ago`;
-            
+
             const diffDays = Math.floor(diffHours / 24);
             return `${diffDays}d ago`;
         } catch {
@@ -150,7 +150,7 @@ export const AdminOverviewPage: React.FC = () => {
 
     // Baselines subtext formatting
     const userToday = stats?.users?.today ?? 0;
-    const userSubtext = userToday > 0 
+    const userSubtext = userToday > 0
         ? `+${userToday} today (+${((userToday / Math.max(1, (stats?.users?.total ?? 0) - userToday)) * 100).toFixed(1)}%)`
         : '0% change today';
 
@@ -241,7 +241,7 @@ export const AdminOverviewPage: React.FC = () => {
                 <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 cursor-pointer hover:border-slate-700 transition-colors" onClick={() => setSelectedDiag(true)}>
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-base font-semibold text-slate-200">System Health</h2>
-                        <button 
+                        <button
                             onClick={(e) => { e.stopPropagation(); setSelectedDiag(true); }}
                             className="text-[10px] text-brand hover:text-brand/80 font-bold flex items-center gap-1 bg-brand/10 px-2 py-1 rounded border border-brand/20 transition-all hover:scale-105"
                         >
