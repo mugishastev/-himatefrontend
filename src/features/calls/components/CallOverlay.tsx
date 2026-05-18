@@ -2,17 +2,19 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useCallStore } from '../../../store/call.store';
 import { UserAvatar } from '../../users/components/UserAvatar';
 import { socketEmitters } from '../../../socket/socket.emitters';
+import { Phone, PhoneOff, Mic, MicOff, Video as VideoIcon, VideoOff, Volume2, MonitorUp, MessageSquare, UserPlus, Copy } from 'lucide-react';
 
 export const CallOverlay: React.FC = () => {
     const { status, type, participant, startTime, acceptCall, endCall, isIncoming } = useCallStore();
     const [durationText, setDurationText] = useState('00:00');
     
-    // Real media stream references
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const [hasStream, setHasStream] = useState(false);
+    // Toggles for UI
+    const [isMuted, setIsMuted] = useState(false);
+    const [isVideoOff, setIsVideoOff] = useState(false);
 
-    // Remove the 4-second automatic answer to prevent unwanted recording
-    // The call will now only connect when manually picked up (simulated)
+    // Real media stream references
+    const localVideoRef = useRef<HTMLVideoElement>(null);
+    const remoteVideoRef = useRef<HTMLVideoElement>(null);
 
     // Timer logic
     useEffect(() => {
@@ -42,10 +44,13 @@ export const CallOverlay: React.FC = () => {
                         audio: true
                     });
                     activeStream = mediaStream;
-                    setHasStream(true);
                     
-                    if (videoRef.current) {
-                        videoRef.current.srcObject = mediaStream;
+                    if (localVideoRef.current) {
+                        localVideoRef.current.srcObject = mediaStream;
+                    }
+                    // Simulating remote stream for UI demonstration purposes
+                    if (remoteVideoRef.current) {
+                         remoteVideoRef.current.srcObject = mediaStream;
                     }
                 } catch (err) {
                     console.error('Failed to access camera or microphone:', err);
@@ -56,10 +61,8 @@ export const CallOverlay: React.FC = () => {
         startMediaCapture();
 
         return () => {
-            // Stop recording / capturing when the component unmounts or status changes
             if (activeStream) {
                 activeStream.getTracks().forEach(track => track.stop());
-                setHasStream(false);
             }
         };
     }, [status, type]);
@@ -82,122 +85,192 @@ export const CallOverlay: React.FC = () => {
 
     const isVideo = type === 'VIDEO';
     const isConnected = status === 'CONNECTED';
-    
     const displayName = participant?.user?.username || 'Contact';
 
     return (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#111827]/95 backdrop-blur-md animate-in fade-in duration-300">
-            {/* Background elements to add depth */}
-            <div className="absolute w-96 h-96 bg-[#F97316]/10 rounded-full blur-[100px] pointer-events-none" />
-
-            <div className="z-10 flex flex-col items-center max-w-sm w-full p-8 text-center text-white relative">
-                
-                {/* Developer testing button removed, real sockets are implemented now */}
-                
-                <span className="text-[#aebac1] uppercase tracking-widest text-[12px] font-semibold mb-6">
-                    {isVideo ? 'End-to-end encrypted video call' : 'End-to-end encrypted voice call'}
-                </span>
-
-                <div className="relative mb-6">
-                    {participant?.user ? (
-                        <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#1F2937] shadow-2xl relative">
-                            {/* Glowing rings effect while outgoing */}
-                            {!isConnected && (
-                                <div className="absolute inset-0 rounded-full border border-[#F97316] animate-ping opacity-75" style={{ animationDuration: '2s' }} />
-                            )}
-                            <UserAvatar user={participant.user} size="lg" />
-                        </div>
-                    ) : (
-                        <div className="w-32 h-32 rounded-full bg-[#1F2937] border-4 border-[#374248] shadow-2xl flex items-center justify-center text-4xl font-medium">
-                            {displayName.charAt(0).toUpperCase()}
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-between bg-[#111827]/95 backdrop-blur-md animate-in fade-in duration-300 overflow-hidden">
+            
+            {/* Full Screen Remote Video Background */}
+            {isConnected && isVideo && (
+                <div className="absolute inset-0 z-0 bg-black">
+                    <video 
+                        ref={remoteVideoRef}
+                        autoPlay 
+                        playsInline 
+                        className="w-full h-full object-cover"
+                    />
+                    {isVideoOff && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
+                             <div className="relative">
+                                 <div className="absolute inset-0 rounded-full border-2 border-green-500 animate-ping opacity-75" style={{ animationDuration: '2s' }} />
+                                 {participant?.user ? (
+                                     <UserAvatar user={participant.user} size="lg" className="w-40 h-40 border-4 border-gray-800" />
+                                 ) : (
+                                     <div className="w-40 h-40 rounded-full bg-gray-800 border-4 border-gray-700 flex items-center justify-center text-5xl font-medium text-white shadow-2xl z-10 relative">
+                                        <span className="z-10 relative">{displayName.charAt(0).toUpperCase()}</span>
+                                     </div>
+                                 )}
+                             </div>
                         </div>
                     )}
                 </div>
+            )}
 
-                <h1 className="text-3xl font-normal leading-tight mb-2 tracking-wide">
-                    {displayName}
-                </h1>
+            {/* Non-Video or Non-Connected Background Elements */}
+            {(!isConnected || !isVideo) && (
+                <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
+                    <div className="w-96 h-96 bg-[#F97316]/10 rounded-full blur-[100px]" />
+                </div>
+            )}
+
+            {/* Top Header */}
+            <div className="z-10 w-full p-6 flex justify-between items-start relative">
+                <div className="flex gap-4">
+                    {isConnected && (
+                        <button className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors backdrop-blur-sm shadow-xl" title="Copy Link">
+                            <Copy className="w-5 h-5" />
+                        </button>
+                    )}
+                </div>
                 
-                <p className="text-[#aebac1] text-[15px] font-medium h-6">
-                    {status === 'OUTGOING' && !isIncoming && 'Calling...'}
-                    {status === 'INCOMING' && 'Incoming call...'}
-                    {status === 'CONNECTED' && durationText}
-                </p>
+                <div className="flex flex-col items-center">
+                    <span className="text-[#aebac1] uppercase tracking-widest text-[12px] font-semibold mb-1 drop-shadow-md">
+                        {isVideo ? 'End-to-end encrypted video call' : 'End-to-end encrypted voice call'}
+                    </span>
+                    {isConnected && (
+                        <span className="text-white/90 text-sm font-medium bg-black/30 px-3 py-1 rounded-full backdrop-blur-md">
+                            {durationText}
+                        </span>
+                    )}
+                </div>
 
-                {/* Live Media Interface */}
-                {isConnected && (
-                    <div className="mt-8 mb-4 w-full h-48 bg-black/50 rounded-2xl border border-white/10 flex items-center justify-center shadow-inner relative overflow-hidden backdrop-blur-sm">
-                        {/* The actual video element (hidden via styling if audio only, or shown if video) */}
-                        <video 
-                            ref={videoRef}
-                            autoPlay 
-                            playsInline 
-                            muted // Muted locally so you don't hear your own echo
-                            className={`w-full h-full object-cover ${(!isVideo || !hasStream) ? 'hidden' : 'block'}`}
-                        />
-                        
-                        {/* Fallback visual if no stream yet or if audio-only */}
-                        {(!hasStream || !isVideo) && (
-                            <div className="flex flex-col items-center justify-center">
-                                {isVideo ? (
-                                    <svg className="w-8 h-8 text-white/20 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                                ) : (
-                                    <div className="flex gap-2 items-end h-8">
-                                        <div className="w-1.5 h-3 bg-white/40 rounded-full animate-pulse" style={{ animationDelay: '0ms' }}></div>
-                                        <div className="w-1.5 h-6 bg-[#F97316] rounded-full justify-self-end animate-pulse" style={{ animationDelay: '150ms' }}></div>
-                                        <div className="w-1.5 h-4 bg-white/40 rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></div>
-                                        <div className="w-1.5 h-8 bg-[#F97316] rounded-full animate-pulse" style={{ animationDelay: '450ms' }}></div>
-                                        <div className="w-1.5 h-5 bg-white/40 rounded-full animate-pulse" style={{ animationDelay: '600ms' }}></div>
-                                    </div>
+                <div className="flex gap-4">
+                    {isConnected && (
+                        <button className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors backdrop-blur-sm shadow-xl" title="Add Participant">
+                            <UserPlus className="w-5 h-5" />
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            {/* Center Content (Avatar/Status when not in active video) */}
+            {(!isConnected || (!isVideo && isConnected)) && (
+                <div className="z-10 flex flex-col items-center text-white flex-1 justify-center">
+                    <div className="relative mb-6">
+                        {participant?.user ? (
+                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#1F2937] shadow-2xl relative">
+                                {!isConnected && (
+                                    <div className="absolute inset-0 rounded-full border border-[#F97316] animate-ping opacity-75" style={{ animationDuration: '2s' }} />
                                 )}
+                                {isConnected && !isVideo && (
+                                    <div className="absolute inset-0 rounded-full border-2 border-green-500 animate-pulse opacity-75" />
+                                )}
+                                <UserAvatar user={participant.user} size="lg" />
+                            </div>
+                        ) : (
+                            <div className="w-32 h-32 rounded-full bg-[#1F2937] border-4 border-[#374248] shadow-2xl flex items-center justify-center text-4xl font-medium relative">
+                                {!isConnected && (
+                                    <div className="absolute inset-0 rounded-full border border-[#F97316] animate-ping opacity-75" style={{ animationDuration: '2s' }} />
+                                )}
+                                {isConnected && !isVideo && (
+                                    <div className="absolute inset-0 rounded-full border-2 border-green-500 animate-pulse opacity-75" />
+                                )}
+                                <span className="z-10 relative">{displayName.charAt(0).toUpperCase()}</span>
                             </div>
                         )}
-                        
-                        {/* Live indicator overlay */}
-                        <span className="absolute bottom-3 left-4 text-[12px] text-white/50 bg-black/40 px-2 pl-3 pb-[1px] rounded-full backdrop-blur-md flex items-center gap-2">
-                           <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse"></div> Live
-                        </span>
                     </div>
-                )}
 
-                <div className="flex items-center justify-center gap-8 mt-12 w-full">
-                    {/* INCOMING CALL ACTIONS */}
-                    {status === 'INCOMING' ? (
-                        <>
-                            <button 
-                                onClick={handleEnd}
-                                className="w-16 h-16 rounded-full bg-[#ef4444] hover:bg-[#dc2626] flex items-center justify-center text-white transition-all shadow-xl hover:scale-105 active:scale-95"
-                            >
-                                <svg className="w-7 h-7 rotate-[135deg]" fill="currentColor" viewBox="0 0 24 24"><path d="M8.3 4h7.4c.5 0 .9.5.6.9l-2.6 4.6c-.3.4-1 .4-1.3 0L9.8 4.9C9.5 4.5 9.9 4 10.4 4zm14.8 17l-4.7-6.5c-.3-.4-1-.5-1.4-.2l-2.4 1.7L10.3 8.8l1.7-2.4c.3-.4.2-1.1-.3-1.4L5.2.3c-.5-.4-1.2-.2-1.5.3L1.5 5c-.7 1.1-.9 2.4-.6 3.7 1.7 6.1 6.5 11 12.6 12.6 1.3.3 2.6.1 3.7-.6l4.4-2.2c.4-.3.6-1 .2-1.5z"/></svg>
-                            </button>
-
-                            <button 
-                                onClick={handleAccept}
-                                className="w-16 h-16 rounded-full bg-[#F97316] hover:bg-[#EA6C0A] flex items-center justify-center text-white transition-all shadow-xl hover:scale-105 active:scale-95 animate-bounce"
-                            >
-                                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8.3 4h7.4c.5 0 .9.5.6.9l-2.6 4.6c-.3.4-1 .4-1.3 0L9.8 4.9C9.5 4.5 9.9 4 10.4 4zm14.8 17l-4.7-6.5c-.3-.4-1-.5-1.4-.2l-2.4 1.7L10.3 8.8l1.7-2.4c.3-.4.2-1.1-.3-1.4L5.2.3c-.5-.4-1.2-.2-1.5.3L1.5 5c-.7 1.1-.9 2.4-.6 3.7 1.7 6.1 6.5 11 12.6 12.6 1.3.3 2.6.1 3.7-.6l4.4-2.2c.4-.3.6-1 .2-1.5z"/></svg>
-                            </button>
-                        </>
-                    ) : (
-                    /* OUTGOING OR CONNECTED ACTIONS */
-                        <>
-                            <button className="w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors backdrop-blur-sm shadow-xl">
-                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.91.41-.91.91C17 14.86 14.77 17 12 17s-5-2.14-5-5.09c0-.5-.42-.91-.91-.91s-.91.41-.91.91C5.18 15.53 8.36 18.6 12 18.92V21h-1c-.55 0-1 .45-1 1s.45 1 1 1h2c.55 0 1-.45 1-1s-.45-1-1-1h-1v-2.08c3.64-.32 6.82-3.39 6.82-7.01 0-.5-.41-.91-.91-.91z"/></svg>
-                            </button>
-                            {isVideo && (
-                                <button className="w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors backdrop-blur-sm shadow-xl">
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                                </button>
-                            )}
-                            <button 
-                                onClick={handleEnd}
-                                className="w-16 h-16 rounded-full bg-[#ef4444] hover:bg-[#dc2626] flex items-center justify-center text-white transition-all shadow-xl hover:scale-105 active:scale-95"
-                            >
-                                <svg className="w-7 h-7 rotate-[135deg]" fill="currentColor" viewBox="0 0 24 24"><path d="M8.3 4h7.4c.5 0 .9.5.6.9l-2.6 4.6c-.3.4-1 .4-1.3 0L9.8 4.9C9.5 4.5 9.9 4 10.4 4zm14.8 17l-4.7-6.5c-.3-.4-1-.5-1.4-.2l-2.4 1.7L10.3 8.8l1.7-2.4c.3-.4.2-1.1-.3-1.4L5.2.3c-.5-.4-1.2-.2-1.5.3L1.5 5c-.7 1.1-.9 2.4-.6 3.7 1.7 6.1 6.5 11 12.6 12.6 1.3.3 2.6.1 3.7-.6l4.4-2.2c.4-.3.6-1 .2-1.5z"/></svg>
-                            </button>
-                        </>
+                    <h1 className="text-3xl font-normal leading-tight mb-2 tracking-wide drop-shadow-lg">
+                        {displayName}
+                    </h1>
+                    
+                    {!isConnected && (
+                        <p className="text-[#aebac1] text-[15px] font-medium h-6">
+                            {status === 'OUTGOING' && !isIncoming && 'Calling...'}
+                            {status === 'INCOMING' && 'Incoming call...'}
+                        </p>
                     )}
                 </div>
+            )}
+
+            {/* Local PIP Video */}
+            {isConnected && isVideo && (
+                <div className="absolute bottom-32 right-6 w-32 h-48 sm:w-40 sm:h-60 bg-gray-900 rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 z-20 transition-transform hover:scale-105 cursor-pointer">
+                    <video 
+                        ref={localVideoRef}
+                        autoPlay 
+                        playsInline 
+                        muted 
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+            )}
+
+            {/* Bottom Controls */}
+            <div className="z-20 w-full pb-8 pt-4 flex justify-center bg-gradient-to-t from-black/80 to-transparent">
+                {status === 'INCOMING' ? (
+                    <div className="flex items-center gap-12">
+                        <button 
+                            onClick={handleEnd}
+                            className="w-16 h-16 rounded-full bg-[#ef4444] hover:bg-[#dc2626] flex items-center justify-center text-white transition-all shadow-xl hover:scale-105 active:scale-95"
+                        >
+                            <PhoneOff className="w-7 h-7" />
+                        </button>
+                        <button 
+                            onClick={handleAccept}
+                            className="w-16 h-16 rounded-full bg-[#F97316] hover:bg-[#EA6C0A] flex items-center justify-center text-white transition-all shadow-xl hover:scale-105 active:scale-95 animate-bounce"
+                        >
+                            <Phone className="w-7 h-7" />
+                        </button>
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-4 bg-slate-800/80 backdrop-blur-md px-6 py-3 rounded-full shadow-2xl border border-white/10">
+                        
+                        <button 
+                            onClick={() => setIsMuted(!isMuted)}
+                            className={`w-12 h-12 rounded-full flex items-center justify-center text-white transition-colors ${isMuted ? 'bg-red-500/80 hover:bg-red-600/80' : 'bg-white/10 hover:bg-white/20'}`}
+                            title="Toggle Microphone"
+                        >
+                            {isMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                        </button>
+
+                        {isVideo && (
+                            <button 
+                                onClick={() => setIsVideoOff(!isVideoOff)}
+                                className={`w-12 h-12 rounded-full flex items-center justify-center text-white transition-colors ${isVideoOff ? 'bg-red-500/80 hover:bg-red-600/80' : 'bg-white/10 hover:bg-white/20'}`}
+                                title="Toggle Video"
+                            >
+                                {isVideoOff ? <VideoOff className="w-5 h-5" /> : <VideoIcon className="w-5 h-5" />}
+                            </button>
+                        )}
+
+                        <div className="w-px h-8 bg-white/20 mx-2"></div>
+
+                        <button className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors" title="Audio Output">
+                            <Volume2 className="w-5 h-5" />
+                        </button>
+
+                        {isVideo && (
+                            <button className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors" title="Share Screen">
+                                <MonitorUp className="w-5 h-5" />
+                            </button>
+                        )}
+
+                        <button className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors" title="Chat Overlay">
+                            <MessageSquare className="w-5 h-5" />
+                        </button>
+
+                        <div className="w-px h-8 bg-white/20 mx-2"></div>
+
+                        <button 
+                            onClick={handleEnd}
+                            className="w-14 h-14 rounded-full bg-[#ef4444] hover:bg-[#dc2626] flex items-center justify-center text-white transition-all shadow-xl hover:scale-105 active:scale-95 ml-2"
+                            title="End Call"
+                        >
+                            <PhoneOff className="w-6 h-6" />
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
