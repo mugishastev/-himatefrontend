@@ -37,8 +37,8 @@ export const adminApi = {
         const response = await api.post(`/admin/users/${userId}/unban`);
         return response.data;
     },
-    getAuditLogs: async (page = 1, limit = 30, action?: string) => {
-        const response = await api.get('/admin/audit-logs', { params: { page, limit, action } });
+    getAuditLogs: async (page = 1, limit = 30, action?: string, category?: string, search?: string) => {
+        const response = await api.get('/admin/audit-logs', { params: { page, limit, action, category, search } });
         return response.data;
     },
     sendBroadcast: async (title: string, message: string) => {

@@ -22,6 +22,7 @@ import { AdminSupportTicketsPage } from '../features/dashboard/pages/AdminSuppor
 import { AdminAnnouncementsPage } from '../features/dashboard/pages/AdminAnnouncementsPage';
 import { AdminMediaGalleryPage } from '../features/dashboard/pages/AdminMediaGalleryPage';
 import { AdminRolesPage } from '../features/dashboard/pages/AdminRolesPage';
+import { AdminAuditLogsPage } from '../features/dashboard/pages/AdminAuditLogsPage';
 import PrivacyPolicyPage from '../pages/PrivacyPolicyPage';
 import SupportFaqPage from '../pages/SupportFaqPage';
 import UserGuidePage from '../pages/UserGuidePage';
@@ -61,6 +62,7 @@ export const router = createBrowserRouter([
             { path: 'media', element: <AdminMediaGalleryPage /> },
             { path: 'settings', element: <AdminSettingsPage /> },
             { path: 'roles', element: <AdminRolesPage /> },
+            { path: 'audit-logs', element: <AdminAuditLogsPage /> },
         ],
     },
     {
@@ -126,6 +128,7 @@ const TITLE_MAP: Record<string, string> = {
     '/admin/media': 'Media Gallery',
     '/admin/settings': 'Admin Configuration',
     '/admin/roles': 'Manage Roles',
+    '/admin/audit-logs': 'System Audit Logs',
 };
 
 router.subscribe((state) => {
