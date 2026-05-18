@@ -198,7 +198,7 @@ export const MessageInput: React.FC = () => {
     };
 
     return (
-        <div className="shrink-0 bg-[#202c33] px-4 py-3 flex items-center gap-2">
+        <div className="shrink-0 bg-[#202c33] px-4 py-2 flex items-center gap-2 border-t border-[#2a3942]/20 shadow-inner">
             {editingMessage && (
                 <div className="flex items-center justify-between bg-[#F97316]/5 border border-[#F97316]/10 p-2 rounded-xl animate-in fade-in slide-in-from-top-1 duration-200">
                     <div className="flex items-center gap-2 text-[#F97316]">
@@ -328,7 +328,7 @@ export const MessageInput: React.FC = () => {
                                 }}
                                 placeholder="Type a message"
                                 rows={1}
-                                className="w-full px-4 py-2.5 bg-[#2a3942] rounded-lg outline-none resize-none text-[#d1d7db] placeholder:text-[#8696a0] text-[15px] overflow-y-auto max-h-32"
+                                className="w-full px-4 py-2 bg-[#2a3942] rounded-xl outline-none resize-none text-[#d1d7db] placeholder:text-[#8696a0] text-[15px] overflow-y-auto max-h-32 align-middle font-medium"
                                 onKeyDown={(e) => {
                                     const enterToSend = user?.enterToSend ?? true;
                                     if (e.key === 'Enter' && !e.shiftKey) {

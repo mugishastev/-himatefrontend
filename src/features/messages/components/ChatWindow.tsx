@@ -233,9 +233,17 @@ export const ChatWindow: React.FC = () => {
                                 <h3 className="font-medium text-[#e9edef] leading-tight truncate">
                                     {displayName || 'Chat'}
                                 </h3>
-                                <p className="text-[13px] text-[#8696a0] truncate">
-                                    {activeConversation?.isGroup ? subtitle : 'click here for contact info'}
-                                </p>
+                                <div className="flex items-center gap-1.5 mt-0.5">
+                                    {!activeConversation?.isGroup && (
+                                        <span className={`w-1.5 h-1.5 rounded-full ${subtitle?.toLowerCase() === 'online' || subtitle?.toLowerCase() === 'active' ? 'bg-[#4ade80]' : 'bg-[#94a3b8]'} shrink-0`} />
+                                    )}
+                                    <p className="text-[12px] text-[#8696a0] truncate leading-none">
+                                        {activeConversation?.isGroup 
+                                            ? subtitle 
+                                            : (subtitle?.toLowerCase() === 'active' ? 'Online' : (subtitle || 'Offline'))
+                                        }
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         <div className="flex items-center gap-3 text-[#aebac1] relative">

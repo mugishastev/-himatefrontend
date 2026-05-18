@@ -125,13 +125,15 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
     return (
         <div
             onClick={() => setActiveConversation(conversation.id)}
-            className={`group relative flex items-center px-3 py-2.5 cursor-pointer border-b border-[#1F2937]/50 transition-colors duration-150 ${
-                isActive ? 'bg-[#1F2937]' : 'bg-[#111827] hover:bg-[#1F2937]/50'
+            className={`group relative flex items-center px-3 py-3.5 cursor-pointer transition-all duration-150 border-l-4 ${
+                isActive 
+                    ? 'bg-[#202c33] border-[#F97316] shadow-inner' 
+                    : 'bg-[#111b21] border-transparent hover:bg-[#202c33]/50 border-b border-[#1F2937]/30'
             }`}
         >
             {/* Avatar */}
             <div
-                className={`w-[49px] h-[49px] rounded-full bg-[#374248] flex-shrink-0 flex items-center justify-center font-medium text-[#d1d7db] text-xl overflow-hidden ${avatarSrc ? 'cursor-pointer hover:opacity-90' : ''}`}
+                className={`w-[49px] h-[49px] rounded-full bg-[#374248] flex-shrink-0 flex items-center justify-center font-bold text-[#d1d7db] text-xl overflow-hidden ${avatarSrc ? 'cursor-pointer hover:opacity-90' : ''}`}
                 onClick={(e) => {
                     if (avatarSrc) {
                         e.stopPropagation();
@@ -142,7 +144,9 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({ conversation
                 {avatarSrc ? (
                     <img src={avatarSrc} alt={displayName} className="w-full h-full object-cover" />
                 ) : (
-                    avatarLetter
+                    <span className="flex items-center justify-center w-full h-full text-center leading-none select-none font-bold">
+                        {avatarLetter}
+                    </span>
                 )}
             </div>
 

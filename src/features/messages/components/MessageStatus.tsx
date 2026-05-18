@@ -3,9 +3,10 @@ import type { MessageStatus as Status } from '../../../types/message.types';
 
 interface MessageStatusProps {
     status: Status;
+    isOwn?: boolean;
 }
 
-export const MessageStatus: React.FC<MessageStatusProps> = ({ status }) => {
+export const MessageStatus: React.FC<MessageStatusProps> = ({ status, isOwn }) => {
     switch (status) {
         case 'SENDING':
             return (
@@ -16,13 +17,13 @@ export const MessageStatus: React.FC<MessageStatusProps> = ({ status }) => {
             );
         case 'SENT':
             return (
-                <svg className="w-4 h-4 text-[#8696a0]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className={`w-4 h-4 ${isOwn ? 'text-white/80' : 'text-[#8696a0]'}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17 9.00003L10.3 16L7.5 13.2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
             );
         case 'RECEIVED':
             return (
-                <svg className="w-4 h-4 text-[#8696a0]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className={`w-4 h-4 ${isOwn ? 'text-white/80' : 'text-[#8696a0]'}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 9.00003L6 15L3 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M21 9.00003L13.5 17.5L10.5 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -30,8 +31,8 @@ export const MessageStatus: React.FC<MessageStatusProps> = ({ status }) => {
         case 'READ':
             return (
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 9.00003L6 15L3 12" stroke="#53bdeb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M21 9.00003L13.5 17.5L10.5 14.5" stroke="#53bdeb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M12 9.00003L6 15L3 12" stroke={isOwn ? "#85e3ff" : "#53bdeb"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M21 9.00003L13.5 17.5L10.5 14.5" stroke={isOwn ? "#85e3ff" : "#53bdeb"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
             );
         case 'FAILED':

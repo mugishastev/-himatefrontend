@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import type { Message } from "../../../types/message.types";
 import { useAuthStore } from "../../../store/auth.store";
 import { MessageStatus } from "./MessageStatus";
@@ -18,32 +18,34 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
     const { setEditingMessage } = useConversationStore();
     const { openImage } = useUIStore();
     const isOwn = Number(message.senderId) === Number(user?.id);
-    const [showOptions, setShowOptions] = useState(false);
-    const optionsRef = useRef<HTMLDivElement>(null);
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                optionsRef.current &&
-                !optionsRef.current.contains(event.target as Node)
-            ) {
-                setShowOptions(false);
-            }
+        const handleClose = () => setContextMenu(null);
+        window.addEventListener("click", handleClose);
+        window.addEventListener("scroll", handleClose, true);
+        return () => {
+            window.removeEventListener("click", handleClose);
+            window.removeEventListener("scroll", handleClose, true);
         };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    const handleContextMenu = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setContextMenu({
+            x: e.clientX,
+            y: e.clientY
+        });
+    };
 
     const handleDelete = async () => {
         if (window.confirm("Delete this message?")) {
             await deleteMessage(Number(message.id));
-            setShowOptions(false);
         }
     };
 
     const handleEdit = () => {
         setEditingMessage(message);
-        setShowOptions(false);
     };
 
     const renderContent = (text?: string) => {
@@ -69,7 +71,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
     return (
         <div
             id={`message-${message.id}`}
-            className={`flex ${isOwn ? "justify-end" : "justify-start"} group mb-1.5 px-4 sm:px-12 relative`}
+            className={`flex ${isOwn ? "justify-end pl-12 sm:pl-32 pr-2" : "justify-start pr-12 sm:pr-32 pl-2"} group mb-1.5 relative`}
         >
             <div
                 className={`flex ${isOwn ? "flex-row-reverse" : "flex-row"} items-end gap-1`}
@@ -90,9 +92,10 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
 
                 <div
                     className={`flex flex-col ${isOwn ? "items-end" : "items-start"} relative group/msg max-w-[85%] sm:max-w-[70%]`}
+                    onContextMenu={handleContextMenu}
                 >
                     <div
-                        className={`relative px-3 py-2 rounded-lg text-[14.2px] leading-relaxed shadow-sm transition-all duration-300 ${isOwn
+                        className={`relative pl-3 pr-14 pt-2.5 pb-6 rounded-lg text-[14.2px] leading-relaxed shadow-sm transition-all duration-300 ${isOwn
                                 ? 'bg-[#F97316] text-[#e9edef] rounded-tr-none'
                                 : 'bg-[#202c33] text-[#e9edef] rounded-tl-none'
                             }`}
@@ -161,8 +164,8 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
                             </div>
                         )}
 
-                        <div className="flex items-center justify-end gap-1 mt-1 -mr-0.5 ml-4 float-right h-4">
-                            <span className="text-[11px] text-[#8696a0] font-normal lowercase">
+                        <div className="absolute bottom-1.5 right-2.5 flex items-center justify-end gap-1 select-none h-4">
+                            <span className={`text-[10px] font-normal lowercase ${isOwn ? 'text-white/80 font-medium' : 'text-[#8696a0]'}`}>
                                 {formatChatTime(message)}
                                 {message.createdAt !== message.updatedAt && " (edited)"}
                             </span>
@@ -176,48 +179,75 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
                                                 ? "RECEIVED"
                                                 : "SENT")
                                     }
+                                    isOwn={isOwn}
                                 />
                             )}
                         </div>
                     </div>
 
-                    {isOwn && (
-                        <div
-                            className="absolute top-0 -left-10 opacity-0 group-hover/msg:opacity-100 transition-opacity z-10"
-                            ref={optionsRef}
+                    {/* Desktop Hover Action Caret */}
+                    <div
+                        className="absolute top-1 right-2 opacity-0 group-hover/msg:opacity-100 transition-opacity z-10"
+                    >
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                const rect = e.currentTarget.getBoundingClientRect();
+                                setContextMenu({
+                                    x: rect.left,
+                                    y: rect.bottom + 5
+                                });
+                            }}
+                            className="p-1.5 hover:bg-black/10 rounded-full text-white/50 hover:text-white transition-colors cursor-pointer"
                         >
-                            <button
-                                onClick={() => setShowOptions(!showOptions)}
-                                className="p-2 hover:bg-black/5 rounded-full text-gray-500"
-                            >
-                                <svg
-                                    className="w-5 h-5 font-bold"
-                                    fill="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                                </svg>
-                            </button>
-                            {showOptions && (
-                                <div className="absolute top-10 left-0 bg-[#233138] border border-[#2a3942] rounded shadow-xl py-1 w-32 z-50">
-                                    <button
-                                        onClick={handleEdit}
-                                        className="w-full text-left px-4 py-2 text-sm hover:bg-[#111b21] text-[#d1d7db] flex items-center gap-2"
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        onClick={handleDelete}
-                                        className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-[#111b21] flex items-center gap-2"
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    )}
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            {/* Desktop / Mobile Universal Context Menu */}
+            {contextMenu && (
+                <div
+                    className="fixed bg-[#233138] border border-[#2a3942] rounded-xl shadow-2xl py-1.5 w-36 z-50 animate-in fade-in zoom-in-95 duration-100"
+                    style={{ left: contextMenu.x, top: contextMenu.y }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button
+                        onClick={() => {
+                            alert("Reply feature selected!");
+                            setContextMenu(null);
+                        }}
+                        className="w-full text-left px-4 py-2.5 text-sm hover:bg-[#111b21] text-[#d1d7db] flex items-center gap-2 transition-colors cursor-pointer"
+                    >
+                        Reply
+                    </button>
+                    {isOwn && !message.mediaUrl && (
+                        <button
+                            onClick={() => {
+                                handleEdit();
+                                setContextMenu(null);
+                            }}
+                            className="w-full text-left px-4 py-2.5 text-sm hover:bg-[#111b21] text-[#d1d7db] flex items-center gap-2 transition-colors cursor-pointer"
+                        >
+                            Edit
+                        </button>
+                    )}
+                    {isOwn && (
+                        <button
+                            onClick={() => {
+                                handleDelete();
+                                setContextMenu(null);
+                            }}
+                            className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-[#111b21] flex items-center gap-2 transition-colors cursor-pointer"
+                        >
+                            Delete
+                        </button>
+                    )}
+                </div>
+            )}
         </div>
     );
 };
