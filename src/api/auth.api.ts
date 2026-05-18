@@ -34,4 +34,8 @@ export const authApi = {
     resetPassword: async (email: string, otp: string, newPassword: string): Promise<void> => {
         await api.post('/auth/reset-password', { email, otp, newPassword });
     },
+    submitAppeal: async (email: string, statement: string): Promise<any> => {
+        const response = await api.post('/auth/appeal', { email, statement });
+        return response.data;
+    },
 };

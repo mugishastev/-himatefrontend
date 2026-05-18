@@ -29,6 +29,18 @@ export const adminApi = {
         const response = await api.get('/admin/messages', { params: { page, limit } });
         return response.data;
     },
+    deleteMessage: async (id: number) => {
+        const response = await api.delete(`/admin/messages/${id}`);
+        return response.data;
+    },
+    freezeConversation: async (id: number) => {
+        const response = await api.post(`/admin/conversations/${id}/freeze`);
+        return response.data;
+    },
+    terminateConversation: async (id: number) => {
+        const response = await api.post(`/admin/conversations/${id}/terminate`);
+        return response.data;
+    },
     banUser: async (userId: number, reason: string) => {
         const response = await api.post(`/admin/users/${userId}/ban`, { reason });
         return response.data;
@@ -77,5 +89,12 @@ export const adminApi = {
         const response = await api.delete(`/permissions/${id}`);
         return response.data;
     },
+    getSettings: async () => {
+        const response = await api.get('/admin/settings');
+        return response.data;
+    },
+    updateSetting: async (key: string, value: string) => {
+        const response = await api.patch('/admin/settings', { key, value });
+        return response.data;
+    },
 };
-

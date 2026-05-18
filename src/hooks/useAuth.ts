@@ -12,11 +12,13 @@ export const useAuth = () => {
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isBanned, setIsBanned] = useState(false);
     const navigate = useNavigate();
 
     const login = async (data: any) => {
         setIsLoading(true);
         setError(null);
+        setIsBanned(false);
         try {
             const response = await authApi.login(data);
             setAuth(response.user, response.accessToken, response.refreshToken);
@@ -28,7 +30,9 @@ export const useAuth = () => {
             }
         } catch (err: any) {
             setError(extractErrorMessage(err));
-            // Re-throw if needed, but the original code didn't
+            if (err.response?.status === 403) {
+                setIsBanned(true);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -93,5 +97,6 @@ export const useAuth = () => {
         isAuthenticated,
         isLoading,
         error,
+        isBanned,
     };
 };
